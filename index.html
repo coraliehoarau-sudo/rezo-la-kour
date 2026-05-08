@@ -484,32 +484,8 @@ label{
     <!-- Cycle -->
     <div class="card" style="margin-bottom:18px">
       <div class="card-title">Cycle de la semaine</div>
-      <div style="display:flex;gap:0;overflow-x:auto">
-        <div style="flex:1;text-align:center;min-width:72px">
-          <div style="width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 5px;font-size:11px;font-weight:700">✓</div>
-          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:0.1em">DISPO</div>
-          <div style="font-size:10px;color:var(--text3)">Lun–Mar</div>
-        </div>
-        <div style="flex:1;text-align:center;min-width:72px">
-          <div style="width:26px;height:26px;border-radius:50%;background:var(--black);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 5px;font-size:11px;font-weight:700">2</div>
-          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--text);letter-spacing:0.1em;font-weight:600">KOMPOZ</div>
-          <div style="font-size:10px;color:var(--text3)">Mèkredi</div>
-        </div>
-        <div style="flex:1;text-align:center;min-width:72px">
-          <div style="width:26px;height:26px;border-radius:50%;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 5px;font-size:11px;font-weight:600;color:var(--text3)">3</div>
-          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:0.1em">KOMANN</div>
-          <div style="font-size:10px;color:var(--text3)">Jeu minwi</div>
-        </div>
-        <div style="flex:1;text-align:center;min-width:72px">
-          <div style="width:26px;height:26px;border-radius:50%;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 5px;font-size:11px;font-weight:600;color:var(--text3)">4</div>
-          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:0.1em">ANVWA</div>
-          <div style="font-size:10px;color:var(--text3)">Vandredi</div>
-        </div>
-        <div style="flex:1;text-align:center;min-width:72px">
-          <div style="width:26px;height:26px;border-radius:50%;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 5px;font-size:11px;font-weight:600;color:var(--text3)">5</div>
-          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:0.1em">VIEN TRAPÉ</div>
-          <div style="font-size:10px;color:var(--text3)">Samdi</div>
-        </div>
+      <div style="display:flex;gap:0;overflow-x:auto" id="cycle-semaine">
+        <!-- Rendu dynamique par renderCycleSemaine() -->
       </div>
     </div>
 
@@ -715,13 +691,10 @@ label{
 
   <div class="sh" style="margin-top:20px">Point de retrait</div>
   <div id="retraits-grid" class="g2">
-    <div class="card" style="cursor:pointer;border:1.5px solid var(--accent);background:var(--accent-l)" onclick="selectRetrait(this,'Jardin Bois-de-Nèfles')">
-      <div style="font-size:0.88rem;font-weight:600">🏡 Jardin Bois-de-Nèfles</div>
-      <div style="font-size:0.78rem;color:var(--text3)">Point de retrait principal · Samdi 8h–12h</div>
+    <div class="card" style="cursor:pointer;border:1.5px solid var(--accent);background:var(--accent-l)" onclick="selectRetrait(this,'Point de retrait principal')">
+      <div style="font-size:0.88rem;font-weight:600">🏡 Point de retrait principal</div>
+      <div style="font-size:0.78rem;color:var(--text3)">Samdi 8h–12h · Géré par les administrateurs</div>
     </div>
-  </div>
-  <div id="retraits-admin" style="display:none;margin-top:10px">
-    <button class="btn btn-ghost btn-sm" onclick="ajouterPointRetrait()">+ Ajouter un point de retrait</button>
   </div>
 
   <div id="commandes-admin-section" style="display:none;margin-top:20px">
@@ -797,6 +770,13 @@ label{
 
   <!-- KOMPOZ -->
   <div id="reglaj-kompoz" style="display:none">
+    <!-- Sélecteur de type de panyé -->
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" onclick="selectTypePanye('standard',this)">Panyé Standard 20€</button>
+      <button class="btn btn-ghost btn-sm" onclick="selectTypePanye('premium',this)">Panyé Prémium 35€</button>
+      <button class="btn btn-ghost btn-sm" onclick="selectTypePanye('gros',this)">Fruits en gros (≥3kg)</button>
+    </div>
+    <div id="panye-type-label" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent2);margin-bottom:12px;letter-spacing:0.1em">PANYÉ STANDARD — 20€</div>
     <div class="g2">
       <div>
         <div class="card" style="margin-bottom:14px">
@@ -1325,10 +1305,7 @@ label{
       <div id="km-dispo-list" class="fr">
         <label>Produit disponible</label>
         <select id="km-produit-select">
-          <option>Avocats — Jardin (30 pcs)</option>
-          <option>Bananes figues — Jacques (8 régimes)</option>
-          <option>Ananas Victoria — Frédéric (20 pcs)</option>
-          <option>Miel 250g — Stock (12 pots)</option>
+          <option>Chargement des dispos…</option>
         </select>
       </div>
       <div id="km-libre-fields" style="display:none">
@@ -1349,6 +1326,10 @@ label{
 </div>
 
 <script>
+
+
+
+
 // ═══════════════════════════════════════════
 // SUPABASE + CONFIG
 // ═══════════════════════════════════════════
@@ -1445,15 +1426,6 @@ function loadProfile() {
 // UI UPDATE
 // ═══════════════════════════════════════════
 function updateUI() {
-  // Si connecté mais profil absent ou rôle manquant, recharger depuis Supabase
-  if (currentUser && (!profile || !profile.role)) {
-    loadProfile().then(function() { _renderUI(); });
-    return;
-  }
-  _renderUI();
-}
-
-function _renderUI() {
   var isLoggedIn = !!currentUser;
   var isAdmin = profile && profile.role === 'admin';
   var pill = document.getElementById('role-pill');
@@ -1482,10 +1454,9 @@ function _renderUI() {
   // Pages
   var visitor = document.getElementById('akey-visitor');
   var member = document.getElementById('akey-member');
-  if (visitor) visitor.style.display = isLoggedIn ? 'none' : 'block';
-  if (member) member.style.display = isLoggedIn ? 'block' : 'none';
+  if (visitor) visitor.style.display = (isLoggedIn && profile) ? 'none' : 'block';
+  if (member) member.style.display = (isLoggedIn && profile) ? 'block' : 'none';
 
-  // Onglet Réglaj visible seulement pour les admins
   var tabReglaj = document.getElementById('tab-reglaj');
   if (tabReglaj) tabReglaj.style.display = isAdmin ? 'flex' : 'none';
 
@@ -1503,8 +1474,8 @@ function _renderUI() {
   if (tchatAdmin) tchatAdmin.style.display = isAdmin ? 'block' : 'none';
   if (tchatPh) tchatPh.style.display = isAdmin ? 'none' : 'flex';
 
-  if (isLoggedIn && profile) updateDashboard();
-} // fin _renderUI
+  if (isLoggedIn && profile) { updateDashboard(); renderCycleSemaine(); }
+}
 
 function updateDashboard() {
   if (!profile) return;
@@ -1585,31 +1556,19 @@ function doLogout() {
 function navTo(pageId, el) {
   var tab = el || document.querySelector("[onclick*=\"'" + pageId + "'\"]");
   var access = tab && tab.dataset && tab.dataset.access;
-
-  // Recharger le profil si nécessaire avant de vérifier le rôle
-  function doNav() {
-    var isAdmin = profile && profile.role === 'admin';
-    if (access === 'member' && !currentUser) { toast('Connectez-vous pour accéder à cet onglet'); openModal('m-login'); return; }
-    if (access === 'admin' && !isAdmin) { toast('Réservé aux administrateurs'); return; }
-    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-    document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
-    var page = document.getElementById('page-' + pageId);
-    if (page) page.classList.add('active');
-    if (el) el.classList.add('active');
-    if (pageId === 'reglaj' && isAdmin) { loadAdherents(); loadDispoProducteurs(); showReglaj('zadéran'); }
-    if (pageId === 'dispo') loadStockTable();
-    if (pageId === 'panye') {
-      loadPanye();
-      var ra = document.getElementById('retraits-admin');
-      if (ra) ra.style.display = isAdmin ? 'block' : 'none';
-    }
-  }
-
-  // Si connecté mais profil pas encore chargé, recharger d'abord
-  if (currentUser && !profile) {
-    loadProfile().then(function() { updateUI(); doNav(); });
-  } else {
-    doNav();
+  if (access === 'member' && !currentUser) { toast('Connectez-vous pour accéder à cet onglet'); openModal('m-login'); return; }
+  if (access === 'admin' && (!profile || profile.role !== 'admin')) { toast('Réservé aux administrateurs'); return; }
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
+  var page = document.getElementById('page-' + pageId);
+  if (page) page.classList.add('active');
+  if (el) el.classList.add('active');
+  if (pageId === 'reglaj' && profile && profile.role === 'admin') { loadAdherents(); loadDispoProducteurs(); loadDisposForKompoz(); showReglaj('zadéran'); }
+  if (pageId === 'dispo') loadStockTable();
+  if (pageId === 'panye') {
+    loadPanye();
+    var ra = document.getElementById('retraits-admin');
+    if (ra) ra.style.display = (profile && profile.role === 'admin') ? 'block' : 'none';
   }
 }
 
@@ -1639,7 +1598,7 @@ function loadPanye() {
         + '<div style="font-size:1rem;font-weight:600">' + p.nom + ' — ' + Number(p.prix).toFixed(2) + '€</div></div>'
         + '<span class="badge" style="background:rgba(255,255,255,0.2);color:#fff">Publié</span></div>'
         + '<div style="padding:14px 16px">' + items
-        + '<div style="margin-top:14px"><button class="btn btn-primary btn-sm" onclick="commanderPanye(\'' + p.id + '\',' + p.prix + ')">Komann sa panyé la</button></div>'
+        + '<div style="margin-top:14px"><button class="btn btn-primary btn-sm" onclick="commanderPanye(\'' + p.id + '\',' + p.prix + ')">Komann so panyé la</button></div>'
         + '</div></div>';
     });
 }
@@ -1859,11 +1818,19 @@ function loadProduits() {
     var html = data.map(function(p) {
       var stockBadge = p.stock > 5 ? 'b-ok' : p.stock > 0 ? 'b-wait' : 'b-err';
       var btn = p.stock > 0 ? '<button class="btn btn-primary btn-xs" onclick="addToCart(\'' + p.nom.replace(/'/g,"\\'") + '\',' + p.prix + ',\'' + (p.emoji||'🫙') + '\')">+ Panier</button>' : '<span class="badge b-err">Épuisé</span>';
-      return '<div class="produit"><div class="produit-img">' + (p.emoji||'🫙') + '</div><div class="produit-body">'
+      var adminBtns = '';
+      if (isAdmin) {
+        adminBtns = '<div style="display:flex;gap:4px;margin-top:8px">'
+          + '<button class="btn btn-ghost btn-xs" onclick="modifierStock(this)">Stock</button>'
+          + '<button class="btn btn-ghost btn-xs" style="color:var(--red)" onclick="supprimerProduitById(this)">Retirer</button>'
+          + '</div>';
+      }
+      return '<div class="produit" data-id="' + p.id + '" data-nom="' + p.nom.replace(/"/g,'') + '" data-stock="' + p.stock + '">'
+        + '<div class="produit-img">' + (p.emoji||'🫙') + '</div><div class="produit-body">'
         + '<div class="produit-nom">' + p.nom + '</div><div class="produit-desc">' + (p.description||'') + '</div>'
         + '<div class="produit-footer"><div class="produit-prix">' + Number(p.prix).toFixed(2) + ' €</div>'
         + '<div style="display:flex;gap:6px;align-items:center"><span class="badge ' + stockBadge + '">Stock: ' + p.stock + '</span>' + btn + '</div>'
-        + '</div></div></div>';
+        + '</div>' + adminBtns + '</div></div>';
     }).join('');
     if (isAdmin) {
       html += '<div class="produit" style="border:1.5px dashed var(--border);cursor:pointer" onclick="openModal(\'m-add-produit\')">'
@@ -2005,9 +1972,7 @@ function validerDispos() {
     if (res.error) { toast('Erreur : ' + res.error.message); return; }
     toast('✓ Disponibilités enregistrées !');
     afficherStockLocal(inserts);
-    updateCompteurProducteurs();
-    // Recharger depuis Supabase sans effacer si résultat vide
-    loadStockTable(true);
+    setTimeout(loadStockTable, 1000);
   });
 }
 
@@ -2026,24 +1991,21 @@ function afficherStockLocal(inserts) {
   }
 }
 
-function loadStockTable(keepIfEmpty) {
+function loadStockTable() {
   sb.from('disponibilites').select('*, profiles(prenom,nom)').order('created_at', {ascending:false}).limit(30)
     .then(function(res) {
       var data = res.data;
       var wrap = document.getElementById('stock-table-wrap');
       if (!wrap) return;
-      // Si pas de données ET keepIfEmpty, ne pas effacer l'affichage local
-      if ((!data || !data.length) && keepIfEmpty) return;
       if (!data || !data.length) {
         wrap.innerHTML = '<div style="color:var(--text3);font-size:0.85rem;padding:12px">Aucune disponibilité saisie cette semaine.</div>';
         return;
       }
       wrap.innerHTML = '<table class="tbl"><thead><tr><th>Produit</th><th>Producteur</th><th>Qté</th><th>Unité</th><th>Statut</th></tr></thead><tbody>'
         + data.map(function(d) {
-          return '<tr><td class="tbl-nm">' + d.produit + '</td><td>'
-            + ((d.profiles && d.profiles.prenom)||'') + ' ' + ((d.profiles && d.profiles.nom)||'')
-            + '</td><td>' + d.quantite + '</td><td>' + d.unite
-            + '</td><td><span class="badge ' + (d.statut === 'disponible' ? 'b-ok' : 'b-wait') + '">' + d.statut + '</span></td></tr>';
+          var isAdm = profile && profile.role === 'admin';
+          var delBtn = isAdm ? '<td><button class="btn btn-ghost btn-xs" style="color:var(--red)" onclick="supprimerDispo(\'' + d.id + '\')">×</button></td>' : '';
+          return '<tr><td class="tbl-nm">' + d.produit + '</td><td>' + ((d.profiles && d.profiles.prenom)||'') + ' ' + ((d.profiles && d.profiles.nom)||'') + '</td><td>' + d.quantite + '</td><td>' + d.unite + '</td><td><span class="badge ' + (d.statut === 'disponible' ? 'b-ok' : 'b-wait') + '">' + d.statut + '</span></td>' + delBtn + '</tr>';
         }).join('') + '</tbody></table>';
     });
 }
@@ -2182,7 +2144,9 @@ function publierPanye() {
     items.push({ nom: el.querySelector('.p-nom').textContent, source: el.querySelector('.p-src').textContent, qty: el.querySelector('.p-qty').textContent });
   });
   var today = new Date().toISOString().split('T')[0];
-  sb.from('paniers').insert({ semaine: today, nom: 'Panyé Standard', prix: 20, publie: true, contenu: items }).then(function(res) {
+  var nomPanye = panyeTypeActuel ? panyeTypeActuel.nom : 'Panyé Standard';
+  var prixPanye = panyeTypeActuel ? panyeTypeActuel.prix : 20;
+  sb.from('paniers').insert({ semaine: today, nom: nomPanye, prix: prixPanye, publie: true, contenu: items }).then(function(res) {
     if (res.error) { toast('Erreur : ' + res.error.message); return; }
     var el = document.getElementById('kompoz-confirm');
     if (el) el.style.display = 'flex';
@@ -2218,6 +2182,7 @@ function showReglaj(section) {
     var el = document.getElementById('reglaj-' + s);
     if (el) el.style.display = (s === section) ? 'block' : 'none';
   });
+  if (section === 'kompoz') loadDisposForKompoz();
 }
 
 function sauverPrix(btn) {
@@ -2241,19 +2206,6 @@ function ajouterLignePrix() {
   tbody.appendChild(tr);
 }
 
-function ajouterPointRetrait() {
-  var nom = prompt('Nom du point de retrait :');
-  var adr = prompt('Adresse et horaires :');
-  if (!nom) return;
-  var grid = document.getElementById('retraits-grid');
-  var div = document.createElement('div');
-  div.className = 'card';
-  div.style.cssText = 'cursor:pointer';
-  div.onclick = function() { selectRetrait(this, nom); };
-  div.innerHTML = '<div style="font-size:0.88rem;font-weight:600">📍 ' + nom + '</div><div style="font-size:0.78rem;color:var(--text3)">' + (adr||'') + '</div>';
-  grid.appendChild(div);
-  toast('Point de retrait "' + nom + '" ajouté');
-}
 
 // ═══════════════════════════════════════════
 // TCHAT
@@ -2279,6 +2231,142 @@ function envoyerMsg(canal) {
 // ═══════════════════════════════════════════
 calcEquiv();
 
+// ═══════════════════════════════════════════
+// CYCLE SEMAINE DYNAMIQUE
+// ═══════════════════════════════════════════
+function renderCycleSemaine() {
+  var el = document.getElementById('cycle-semaine');
+  if (!el) return;
+  var jour = new Date().getDay();
+  var etapeActuelle = jour === 1 || jour === 2 ? 1 : jour === 3 ? 2 : jour === 4 ? 3 : jour === 5 ? 4 : jour === 6 ? 5 : 0;
+  var etapes = [
+    { nom:'DISPO', jour:'Lun-Mar', n:1 },
+    { nom:'KOMPOZ', jour:'Mèkredi', n:2 },
+    { nom:'KOMANN', jour:'Jeu minwi', n:3 },
+    { nom:'ANVWA', jour:'Vandredi', n:4 },
+    { nom:'VIEN TRAPÉ', jour:'Samdi', n:5 }
+  ];
+  el.innerHTML = etapes.map(function(e) {
+    var done = e.n < etapeActuelle;
+    var current = e.n === etapeActuelle;
+    var bg = done ? 'var(--accent)' : current ? 'var(--black)' : '#fff';
+    var color = done || current ? '#fff' : 'var(--text3)';
+    var border = done || current ? '' : 'border:2px solid var(--border);';
+    var txt = done ? '✓' : e.n;
+    var labelColor = done ? 'var(--accent2)' : current ? 'var(--text)' : 'var(--text3)';
+    var fw = current ? 'font-weight:600;' : '';
+    return '<div style="flex:1;text-align:center;min-width:72px">'
+      + '<div style="width:26px;height:26px;border-radius:50%;background:' + bg + ';color:' + color + ';' + border + 'display:flex;align-items:center;justify-content:center;margin:0 auto 5px;font-size:11px;font-weight:700">' + txt + '</div>'
+      + '<div style="font-family:monospace;font-size:8px;letter-spacing:0.1em;color:' + labelColor + ';' + fw + '">' + e.nom + '</div>'
+      + '<div style="font-size:10px;color:var(--text3)">' + e.jour + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+// ═══════════════════════════════════════════
+// SUPPRIMER DISPO (admin)
+// ═══════════════════════════════════════════
+function supprimerDispo(id) {
+  if (!confirm('Supprimer cette disponibilité ?')) return;
+  sb.from('disponibilites').delete().eq('id', id).then(function(res) {
+    if (res.error) { toast('Erreur : ' + res.error.message); return; }
+    toast('Disponibilité supprimée');
+    loadStockTable();
+    updateCompteurProducteurs();
+  });
+}
+
+// ═══════════════════════════════════════════
+// KOMPOZ — charger les dispos réelles
+// ═══════════════════════════════════════════
+function loadDisposForKompoz() {
+  var lundi = new Date();
+  lundi.setDate(lundi.getDate() - ((lundi.getDay() + 6) % 7));
+  lundi.setHours(0,0,0,0);
+  sb.from('disponibilites').select('*, profiles(prenom,nom)')
+    .gte('created_at', lundi.toISOString())
+    .then(function(res) {
+      var sel = document.getElementById('km-produit-select');
+      if (!sel) return;
+      var data = res.data || [];
+      if (!data.length) {
+        sel.innerHTML = '<option>Aucune dispo saisie cette semaine</option>';
+        return;
+      }
+      sel.innerHTML = data.map(function(d) {
+        var prod = (d.profiles && d.profiles.prenom ? d.profiles.prenom + ' ' : '') + (d.profiles && d.profiles.nom ? d.profiles.nom : 'Jardin');
+        return '<option value="' + d.id + '">' + d.produit + ' — ' + prod + ' (' + d.quantite + ' ' + d.unite + ')</option>';
+      }).join('');
+    });
+}
+
+// ═══════════════════════════════════════════
+// SUPPRIMER / MODIFIER PRODUIT (admin)
+// ═══════════════════════════════════════════
+function supprimerProduit(id, nom) {
+  if (!confirm('Retirer "' + nom + '" de la boutique ?')) return;
+  sb.from('produits').update({ actif: false }).eq('id', id).then(function(res) {
+    if (res.error) { toast('Erreur : ' + res.error.message); return; }
+    toast('"' + nom + '" retiré de la boutique');
+    loadProduits();
+  });
+}
+
+function modifierStock(id, nom, stockActuel) {
+  var nouveau = prompt('Nouveau stock pour "' + nom + '" (actuel: ' + stockActuel + ') :');
+  if (nouveau === null) return;
+  var n = parseInt(nouveau);
+  if (isNaN(n)) { toast('Valeur invalide'); return; }
+  sb.from('produits').update({ stock: n }).eq('id', id).then(function(res) {
+    if (res.error) { toast('Erreur : ' + res.error.message); return; }
+    toast('Stock mis à jour : ' + n);
+    loadProduits();
+  });
+}
+
+// ═══ Type de panyé ═══
+var panyeTypeActuel = { nom: 'Panyé Standard', prix: 20 };
+
+function selectTypePanye(type, btn) {
+  document.querySelectorAll('#reglaj-kompoz > div:first-child .btn').forEach(function(b) {
+    b.className = 'btn btn-ghost btn-sm';
+  });
+  if (btn) btn.className = 'btn btn-primary btn-sm';
+  var label = document.getElementById('panye-type-label');
+  if (type === 'standard') {
+    panyeTypeActuel = { nom: 'Panyé Standard', prix: 20 };
+    if (label) label.textContent = 'PANYÉ STANDARD — 20€';
+  } else if (type === 'premium') {
+    panyeTypeActuel = { nom: 'Panyé Prémium', prix: 35 };
+    if (label) label.textContent = 'PANYÉ PRÉMIUM — 35€';
+  } else if (type === 'gros') {
+    panyeTypeActuel = { nom: 'Fruits en gros', prix: 0 };
+    if (label) label.textContent = 'FRUITS EN GROS — Prix selon mercuriales (min. 3kg)';
+  }
+}
+
+
+
+function supprimerProduitById(btn) {
+  var card = btn.closest('[data-id]');
+  var id = card.dataset.id;
+  var nom = card.dataset.nom;
+  if (!confirm('Retirer "' + nom + '" de la boutique ?')) return;
+  sb.from('produits').update({ actif: false }).eq('id', id).then(function(res) {
+    if (res.error) { toast('Erreur : ' + res.error.message); return; }
+    toast('"' + nom + '" retiré de la boutique');
+    loadProduits();
+  });
+}
+
+
+
+
 </script>
+
+
+
+
+
 </body>
 </html>
