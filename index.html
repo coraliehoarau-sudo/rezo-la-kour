@@ -376,7 +376,7 @@ label{
     <button class="nav-tab" data-access="member" onclick="navTo('boutik',this)">Boutik</button>
     <button class="nav-tab" data-access="member" onclick="navTo('sakivo',this)">Sak y vo</button>
     <button class="nav-tab" data-access="member" onclick="navTo('abo',this)">Abo</button>
-    <button class="nav-tab" data-access="member" onclick="navTo('blog',this)">Recèt & Konsèy</button>
+    <button class="nav-tab" data-access="member" onclick="navTo('blog',this)">Resèt & Konsèy</button>
     <button class="nav-tab" data-access="member" onclick="navTo('tchat',this)">Tchat</button>
     <button class="nav-tab" data-access="admin" id="tab-reglaj" style="display:none" onclick="navTo('reglaj',this)">⚙ Réglaj</button>
   </nav>
@@ -659,7 +659,7 @@ label{
       <div class="dispo-line">
         <input type="text" list="produits-list" placeholder="Tapez les premières lettres…">
         <input type="number" placeholder="0" min="0">
-        <select><option>pièces</option><option>kg</option><option>régimes</option><option>bottes</option><option>pots</option><option>bouquets</option></select>
+        <select><option>pièces</option><option>kg</option><option>main</option><option>bottes</option><option>pots</option><option>bouquets</option></select>
         <button class="btn btn-ghost btn-sm" style="padding:8px;color:var(--text3);font-size:12px" title="Supprimer cette ligne" onclick="supprimerLigneDispo(this)">✕</button>
       </div>
     </div>
@@ -702,7 +702,7 @@ label{
     <div class="card">
       <div id="commandes-table"><div style="font-size:0.85rem;color:var(--text3)">Chargement…</div></div>
       <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-        <button class="btn btn-primary btn-sm" onclick="envoyerOrders()">Envoyer orders producteurs</button>
+        <button class="btn btn-primary btn-sm" onclick="aperçuOrders()">Envoy la komand bann planter</button>
         <button class="btn btn-ghost btn-sm" onclick="toast('Export CSV téléchargé')">Export CSV</button>
       </div>
     </div>
@@ -970,7 +970,7 @@ label{
 
 <!-- ══ BLOG ══ -->
 <div id="page-blog" class="page">
-  <div class="page-title">Recèt & Konsèy</div>
+  <div class="page-title">Resèt & Konsèy</div>
   <div class="page-sub">Recettes créoles, astuces de jardin, actualités du réseau</div>
 
   <div class="search-bar">
@@ -1315,7 +1315,7 @@ label{
       </div>
       <div class="fr2">
         <div><label>Quantité</label><input type="number" id="km-qte" placeholder="3" min="1"></div>
-        <div><label>Unité</label><select id="km-unite"><option>pièces</option><option>kg</option><option>régimes</option><option>pots</option></select></div>
+        <div><label>Unité</label><select id="km-unite"><option>pièces</option><option>kg</option><option>main</option><option>pots</option></select></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -1326,6 +1326,8 @@ label{
 </div>
 
 <script>
+
+
 
 
 
@@ -1992,7 +1994,12 @@ function afficherStockLocal(inserts) {
 }
 
 function loadStockTable() {
-  sb.from('disponibilites').select('*, profiles(prenom,nom)').order('created_at', {ascending:false}).limit(30)
+  var lundi = new Date();
+  lundi.setDate(lundi.getDate() - ((lundi.getDay() + 6) % 7));
+  lundi.setHours(0,0,0,0);
+  sb.from('disponibilites').select('*, profiles(prenom,nom)')
+    .gte('created_at', lundi.toISOString())
+    .order('created_at', {ascending:false}).limit(30)
     .then(function(res) {
       var data = res.data;
       var wrap = document.getElementById('stock-table-wrap');
@@ -2024,12 +2031,42 @@ function loadDispoProducteurs() {
 // ═══════════════════════════════════════════
 // ÉQUIVALENCES
 // ═══════════════════════════════════════════
+// Prix de gros — mis à jour depuis Réglaj
+var prixGros = {
+  'Mangues Josée': { prix: 2, unite: 'kg' },
+  'Avocats': { prix: 3, unite: 'pcs' },
+  'Caramboles': { prix: 1.5, unite: 'kg' },
+  'Goyaves roses': { prix: 1.5, unite: 'kg' },
+  'Ananas Victoria': { prix: 4, unite: 'pcs' },
+  'Bananes figues': { prix: 2, unite: 'main' },
+  'Fruits à pain': { prix: 5, unite: 'pcs' },
+  'Letchis': { prix: 3.5, unite: 'kg' }
+};
+
+function majPrixGros(produit, prix, unite) {
+  prixGros[produit] = { prix: parseFloat(prix), unite: unite };
+  updateSakYvo();
+}
+
+function updateSakYvo() {
+  var sel = document.getElementById('eq-fruit');
+  if (!sel) return;
+  var current = sel.value;
+  sel.innerHTML = Object.keys(prixGros).map(function(nom) {
+    var p = prixGros[nom];
+    return '<option value="' + nom + '|' + p.prix + '|' + p.unite + '">' + nom + ' (' + p.prix + '€/' + p.unite + ')</option>';
+  }).join('');
+  calcEquiv();
+}
+
 function calcEquiv() {
   var val = parseFloat(document.getElementById('eq-val').value) || 20;
   var sel = document.getElementById('eq-fruit');
+  if (!sel) return;
   var opt = sel.options[sel.selectedIndex].value.split('|');
-  var pu = parseFloat(opt[0]) || 2;
-  var unite = opt[1] || 'kg';
+  var nom = opt[0];
+  var pu = parseFloat(opt[1]) || 2;
+  var unite = opt[2] || 'kg';
   var qte = Math.ceil(val / pu);
   document.getElementById('eq-result').textContent = qte + ' ' + unite;
 }
@@ -2052,12 +2089,23 @@ function renderBlog(articles) {
     grid.innerHTML = '<div style="color:var(--text3);font-size:0.85rem;grid-column:1/-1">Aucun article pour l\'instant.</div>';
     return;
   }
+  var isAdm = profile && profile.role === 'admin';
   grid.innerHTML = articles.map(function(a) {
+    var adminBar = isAdm ? '<div style="display:flex;gap:6px;margin-top:8px">'
+      + '<button class="btn btn-ghost btn-xs" onclick="editerArticle(\'' + a.id + '\')">Éditer</button>'
+      + '<button class="btn btn-ghost btn-xs" style="color:var(--red)" onclick="supprimerArticle(\'' + a.id + '\')">Supprimer</button>'
+      + '</div>' : '';
     return '<div class="article-card"><div class="article-cat">' + (catEmoji[a.categorie]||'📄') + ' ' + a.categorie + '</div>'
       + '<div class="article-titre">' + a.titre + '</div>'
       + '<div class="article-extrait">' + (a.contenu||'').substring(0,120) + '…</div>'
-      + '<div style="margin-top:8px">' + (a.tags||[]).map(function(t) { return '<span class="article-tag">#' + t + '</span>'; }).join('') + '</div></div>';
+      + '<div style="margin-top:8px">' + (a.tags||[]).map(function(t) { return '<span class="article-tag">#' + t + '</span>'; }).join('') + '</div>'
+      + adminBar + '</div>';
   }).join('');
+  // Bouton ajouter article (admin)
+  if (isAdm) {
+    grid.innerHTML += '<div class="article-card" style="border:1.5px dashed var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;min-height:120px" onclick="nouvelArticle()">'
+      + '<div style="text-align:center;color:var(--text3)"><div style="font-size:2rem">+</div><div>Nouvel article</div></div></div>';
+  }
 }
 
 function filterBlog() {
@@ -2077,14 +2125,18 @@ function loadAdherents() {
     var data = res.data || [];
     var list = document.getElementById('adherents-list');
     if (list) {
-      list.innerHTML = data.map(function(p) {
-        var initiales = ((p.prenom||'?')[0] + (p.nom||'')[0]).toUpperCase();
-        var ok = p.cotisation_payee || p.est_fondateur;
-        return '<div class="client-row"><div class="avatar">' + initiales + '</div>'
-          + '<div style="flex:1"><div class="client-name">' + (p.prenom||'') + ' ' + (p.nom||'') + '</div>'
-          + '<div class="client-detail">' + (p.numero_adherent||'—') + ' · <span class="badge b-' + (p.role||'jardinier') + '">' + (p.role||'jardinier') + '</span></div></div>'
-          + '<span class="badge ' + (ok?'b-ok':'b-wait') + '">' + (ok?'À jour':'En attente') + '</span></div>';
-      }).join('');
+      if (!data.length) {
+        list.innerHTML = '<div style="color:var(--text3);font-size:0.85rem;padding:12px">Aucun adhérent pour le moment. Cliquez "+ Nouvel adhérent" pour commencer.</div>';
+      } else {
+        list.innerHTML = data.map(function(p) {
+          var initiales = ((p.prenom||'?')[0] + (p.nom||'')[0]).toUpperCase();
+          var ok = p.cotisation_payee || p.est_fondateur;
+          return '<div class="client-row"><div class="avatar">' + initiales + '</div>'
+            + '<div style="flex:1"><div class="client-name">' + (p.prenom||'') + ' ' + (p.nom||'') + '</div>'
+            + '<div class="client-detail">' + (p.numero_adherent||'—') + ' · <span class="badge b-' + (p.role||'jardinier') + '">' + (p.role||'jardinier') + '</span></div></div>'
+            + '<span class="badge ' + (ok?'b-ok':'b-wait') + '">' + (ok?'À jour':'En attente') + '</span></div>';
+        }).join('');
+      }
     }
     var donSel = document.getElementById('don-adherent');
     if (donSel) {
@@ -2150,7 +2202,22 @@ function publierPanye() {
     if (res.error) { toast('Erreur : ' + res.error.message); return; }
     var el = document.getElementById('kompoz-confirm');
     if (el) el.style.display = 'flex';
-    toast('Panyé publié ! ✓');
+    // Notification tchat
+    if (currentUser) {
+      var msg = '🧺 ' + nomPanye + (prixPanye > 0 ? ' (' + prixPanye + '€)' : '') + ' fin publié ! ' + items.length + ' produits. Komand avan jedi minwi.';
+      sb.from('messages').insert({ profile_id: currentUser.id, contenu: msg, canal: 'general' });
+      var msgs = document.getElementById('msgs-general');
+      if (msgs) {
+        var div = document.createElement('div');
+        div.className = 'msg-bubble msg-other';
+        div.innerHTML = '<div class="msg-author" style="color:var(--accent)">Rézo la Kour</div>' + msg;
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
+      }
+    }
+    toast(nomPanye + ' publié ! Notification dans lo tchat.');
+    // Actualiser onglet panyé
+    setTimeout(function() { loadPanye(); }, 500);
   });
 }
 
@@ -2187,10 +2254,13 @@ function showReglaj(section) {
 
 function sauverPrix(btn) {
   var row = btn.closest('tr');
-  var produit = row.cells[0].textContent;
-  var prix = row.querySelector('input').value;
+  var produit = row.cells[0].textContent.trim();
+  var prix = row.querySelector('input[type=number]').value;
+  var unite = row.cells[2].textContent.trim().replace('€/', '');
   row.cells[3].textContent = new Date().toLocaleDateString('fr-FR');
   row.cells[3].style.color = 'var(--accent2)';
+  // Mettre à jour le barème Sak y vo
+  majPrixGros(produit, prix, unite);
   toast('Prix ' + produit + ' mis à jour : ' + prix + ' €');
 }
 
@@ -2271,8 +2341,10 @@ function supprimerDispo(id) {
   sb.from('disponibilites').delete().eq('id', id).then(function(res) {
     if (res.error) { toast('Erreur : ' + res.error.message); return; }
     toast('Disponibilité supprimée');
-    loadStockTable();
-    updateCompteurProducteurs();
+    // Forcer rechargement complet
+    var wrap = document.getElementById('stock-table-wrap');
+    if (wrap) wrap.innerHTML = '<div style="color:var(--text3);padding:12px">Rechargement...</div>';
+    setTimeout(function() { loadStockTable(); updateCompteurProducteurs(); }, 300);
   });
 }
 
@@ -2362,7 +2434,81 @@ function supprimerProduitById(btn) {
 
 
 
+
+function aperçuOrders() {
+  // Charger les dispos de la semaine pour construire les orders
+  var lundi = new Date();
+  lundi.setDate(lundi.getDate() - ((lundi.getDay() + 6) % 7));
+  lundi.setHours(0,0,0,0);
+  sb.from('disponibilites').select('*, profiles(prenom,nom)')
+    .gte('created_at', lundi.toISOString())
+    .then(function(res) {
+      var data = res.data || [];
+      if (!data.length) {
+        toast('Aucune disponibilité cette semaine');
+        return;
+      }
+      // Grouper par producteur
+      var byProd = {};
+      data.forEach(function(d) {
+        var nom = (d.profiles && d.profiles.prenom ? d.profiles.prenom + ' ' : '') + (d.profiles && d.profiles.nom || 'Jardin');
+        if (!byProd[nom]) byProd[nom] = [];
+        byProd[nom].push(d.quantite + ' ' + d.unite + ' de ' + d.produit);
+      });
+      // Afficher dans une modale ou alert
+      var msg = 'ORDERS PRODUCTEURS\n\n';
+      Object.keys(byProd).forEach(function(nom) {
+        msg += nom + ':\n  - ' + byProd[nom].join('\n  - ') + '\n\n';
+      });
+      if (confirm(msg + 'Envoyer ces orders ?')) {
+        var conf = document.getElementById('orders-conf');
+        if (conf) conf.style.display = 'flex';
+        toast('Orders envoyés aux producteurs !');
+      }
+    });
+}
+function nouvelArticle() {
+  var titre = prompt('Titre de l\'article :');
+  if (!titre) return;
+  var contenu = prompt('Contenu (vous pourrez l\'éditer après) :');
+  var categorie = prompt('Catégorie (recette/jardin/astuce/actualite) :') || 'actualite';
+  if (!currentUser) return;
+  sb.from('articles').insert({
+    titre: titre, contenu: contenu || '', categorie: categorie,
+    auteur_id: currentUser.id, publie: true, tags: []
+  }).then(function(res) {
+    if (res.error) { toast('Erreur : ' + res.error.message); return; }
+    toast('Article publié !');
+    loadBlog();
+  });
+}
+
+function editerArticle(id) {
+  var article = blogArticles.find(function(a) { return a.id === id; });
+  if (!article) return;
+  var titre = prompt('Titre :', article.titre);
+  if (titre === null) return;
+  var contenu = prompt('Contenu :', article.contenu || '');
+  if (contenu === null) return;
+  sb.from('articles').update({ titre: titre, contenu: contenu }).eq('id', id).then(function(res) {
+    if (res.error) { toast('Erreur : ' + res.error.message); return; }
+    toast('Article mis à jour !');
+    loadBlog();
+  });
+}
+
+function supprimerArticle(id) {
+  if (!confirm('Supprimer cet article ?')) return;
+  sb.from('articles').update({ publie: false }).eq('id', id).then(function(res) {
+    if (res.error) { toast('Erreur : ' + res.error.message); return; }
+    toast('Article supprimé');
+    loadBlog();
+  });
+}
+
 </script>
+
+
 
 
 
