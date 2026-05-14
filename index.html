@@ -782,10 +782,7 @@ label{
         <div class="card" style="margin-bottom:14px">
           <div class="card-title">Panyé Standard — 20€</div>
           <div id="kompoz-items">
-            <div class="p-item"><div class="p-icon">🥑</div><div class="p-info"><div class="p-nom">Avocats</div><div class="p-src">Jardin</div></div><div class="p-qty">3 pcs</div><button class="p-rm" onclick="this.closest('.p-item').remove()">✕</button></div>
-            <div class="p-item"><div class="p-icon">🍌</div><div class="p-info"><div class="p-nom">Bananes figues</div><div class="p-src">Jacques</div></div><div class="p-qty">1 régime</div><button class="p-rm" onclick="this.closest('.p-item').remove()">✕</button></div>
-            <div class="p-item"><div class="p-icon">🍍</div><div class="p-info"><div class="p-nom">Ananas Victoria</div><div class="p-src">Frédéric</div></div><div class="p-qty">1 pcs</div><button class="p-rm" onclick="this.closest('.p-item').remove()">✕</button></div>
-            <div class="p-item"><div class="p-icon">🍯</div><div class="p-info"><div class="p-nom">Miel 250g</div><div class="p-src">Stock</div></div><div class="p-qty">1 pot</div><button class="p-rm" onclick="this.closest('.p-item').remove()">✕</button></div>
+            
           </div>
           <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="openModal('m-add-kompoz')">+ Ajouter un produit</button>
         </div>
@@ -936,10 +933,7 @@ label{
       <div class="card" style="margin-bottom:14px">
         <div class="card-title">Panyé Standard — 20€</div>
         <div id="kompoz-items">
-          <div class="p-item"><div class="p-icon">🥑</div><div class="p-info"><div class="p-nom">Avocats</div><div class="p-src">Jardin</div></div><div class="p-qty">3 pcs</div><button class="p-rm" onclick="this.closest('.p-item').remove()">✕</button></div>
-          <div class="p-item"><div class="p-icon">🍌</div><div class="p-info"><div class="p-nom">Bananes figues</div><div class="p-src">Jacques</div></div><div class="p-qty">1 régime</div><button class="p-rm" onclick="this.closest('.p-item').remove()">✕</button></div>
-          <div class="p-item"><div class="p-icon">🍍</div><div class="p-info"><div class="p-nom">Ananas Victoria</div><div class="p-src">Frédéric</div></div><div class="p-qty">1 pcs</div><button class="p-rm" onclick="this.closest('.p-item').remove()">✕</button></div>
-          <div class="p-item"><div class="p-icon">🍯</div><div class="p-info"><div class="p-nom">Miel 250g</div><div class="p-src">Stock</div></div><div class="p-qty">1 pot</div><button class="p-rm" onclick="this.closest('.p-item').remove()">✕</button></div>
+          
         </div>
         <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="openModal('m-add-kompoz')">+ Ajouter un produit</button>
       </div>
@@ -2080,11 +2074,24 @@ function loadStockTable() {
         wrap.innerHTML = '<div style="color:var(--text3);font-size:0.85rem;padding:12px">Aucune disponibilité saisie cette semaine.</div>';
         return;
       }
-      wrap.innerHTML = '<table class="tbl"><thead><tr><th>Produit</th><th>Producteur</th><th>Qté</th><th>Unité</th><th>Statut</th></tr></thead><tbody>'
+      var isAdm = profile && profile.role === 'admin';
+      wrap.innerHTML = '<table class="tbl"><thead><tr><th>Produit</th><th>Producteur</th><th>Qté</th><th>Unité</th><th>Statut</th><th></th></tr></thead><tbody>'
         + data.map(function(d) {
-          var isAdm = profile && profile.role === 'admin';
-          var delBtn = isAdm ? '<td><button class="btn btn-ghost btn-xs" style="color:var(--red)" onclick="supprimerDispo(\'' + d.id + '\')">×</button></td>' : '';
-          return '<tr><td class="tbl-nm">' + d.produit + '</td><td>' + ((d.profiles && d.profiles.prenom)||'') + ' ' + ((d.profiles && d.profiles.nom)||'') + '</td><td>' + d.quantite + '</td><td>' + d.unite + '</td><td><span class="badge ' + (d.statut === 'disponible' ? 'b-ok' : 'b-wait') + '">' + d.statut + '</span></td>' + delBtn + '</tr>';
+          var isOwn = currentUser && d.profile_id === currentUser.id;
+          var actions = '';
+          if (isAdm || isOwn) {
+            actions = '<td style="white-space:nowrap">'
+              + '<button class="btn btn-ghost btn-xs" onclick="modifierDispo(\'' + d.id + '\',\'' + (d.produit||'').replace(/'/g,"\\'") + '\',' + d.quantite + ',\'' + d.unite + '\')">Modifier</button> '
+              + '<button class="btn btn-ghost btn-xs" style="color:var(--red)" onclick="supprimerDispo(\'' + d.id + '\')">✕</button>'
+              + '</td>';
+          } else {
+            actions = '<td></td>';
+          }
+          return '<tr><td class="tbl-nm">' + d.produit + '</td><td>'
+            + ((d.profiles && d.profiles.prenom)||'') + ' ' + ((d.profiles && d.profiles.nom)||'')
+            + '</td><td>' + d.quantite + '</td><td>' + d.unite
+            + '</td><td><span class="badge ' + (d.statut === 'epuise' ? 'b-err' : 'b-ok') + '">' + d.statut + '</span></td>'
+            + actions + '</tr>';
         }).join('') + '</tbody></table>';
     });
 }
@@ -2471,6 +2478,18 @@ function renderCycleSemaine() {
 // ═══════════════════════════════════════════
 // SUPPRIMER DISPO (admin)
 // ═══════════════════════════════════════════
+function modifierDispo(id, produit, quantiteActuelle, uniteActuelle) {
+  var nouvelleQte = prompt('Nouvelle quantité pour "' + produit + '" (actuelle: ' + quantiteActuelle + ') :');
+  if (nouvelleQte === null) return;
+  var n = parseFloat(nouvelleQte);
+  if (isNaN(n) || n < 0) { toast('Quantité invalide'); return; }
+  sb.from('disponibilites').update({ quantite: n }).eq('id', id).then(function(res) {
+    if (res.error) { toast('Erreur : ' + res.error.message); return; }
+    toast('Disponibilité mise à jour : ' + n + ' ' + uniteActuelle);
+    loadStockTable();
+  });
+}
+
 function supprimerDispo(id) {
   if (!confirm('Supprimer cette disponibilité ?')) return;
   // Marquer comme épuisé plutôt que supprimer (contourne les restrictions RLS)
@@ -2589,36 +2608,52 @@ function supprimerProduitById(btn) {
 
 
 function aperçuOrders() {
-  // Charger les dispos de la semaine pour construire les orders
-  var lundi = new Date();
-  lundi.setDate(lundi.getDate() - ((lundi.getDay() + 6) % 7));
-  lundi.setHours(0,0,0,0);
-  sb.from('disponibilites').select('*, profiles(prenom,nom)')
-    .gte('created_at', lundi.toISOString())
-    .then(function(res) {
-      var data = res.data || [];
-      if (!data.length) {
-        toast('Aucune disponibilité cette semaine');
-        return;
-      }
-      // Grouper par producteur
-      var byProd = {};
-      data.forEach(function(d) {
-        var nom = (d.profiles && d.profiles.prenom ? d.profiles.prenom + ' ' : '') + (d.profiles && d.profiles.nom || 'Jardin');
-        if (!byProd[nom]) byProd[nom] = [];
-        byProd[nom].push(d.quantite + ' ' + d.unite + ' de ' + d.produit);
+  // Utiliser les produits du kompoz actuel ET les dispos
+  var kompozItems = document.querySelectorAll('#kompoz-items .p-item');
+  
+  if (!kompozItems.length) {
+    toast('Composez d\'abord le panyé avant d\'envoyer les orders');
+    return;
+  }
+
+  // Construire le récap par producteur depuis le panyé composé
+  var byProd = {};
+  kompozItems.forEach(function(el) {
+    var nom = el.querySelector('.p-nom') ? el.querySelector('.p-nom').textContent.trim() : '';
+    var src = el.querySelector('.p-src') ? el.querySelector('.p-src').textContent.trim() : 'Jardin';
+    var qty = el.querySelector('.p-qty') ? el.querySelector('.p-qty').textContent.trim() : '';
+    if (!nom) return;
+    if (!byProd[src]) byProd[src] = [];
+    byProd[src].push(qty + ' de ' + nom);
+  });
+
+  // Afficher dans une zone dédiée
+  var ordersZone = document.getElementById('orders-preview');
+  if (ordersZone) {
+    ordersZone.innerHTML = Object.keys(byProd).map(function(prod) {
+      return '<div class="alert a-ok" style="margin-bottom:6px">'
+        + '<strong>' + prod + '</strong> : ' + byProd[prod].join(', ')
+        + '</div>';
+    }).join('');
+  }
+
+  var msg = 'ORDERS PRODUCTEURS\n\n';
+  Object.keys(byProd).forEach(function(prod) {
+    msg += prod + ' :\n  - ' + byProd[prod].join('\n  - ') + '\n\n';
+  });
+
+  if (confirm(msg + 'Envoyer ces orders aux producteurs ?')) {
+    var conf = document.getElementById('orders-conf');
+    if (conf) conf.style.display = 'flex';
+    // Envoyer via tchat
+    if (currentUser) {
+      Object.keys(byProd).forEach(function(prod) {
+        var msgTchat = '📦 Order ' + prod + ' : ' + byProd[prod].join(', ');
+        sb.from('messages').insert({ profile_id: currentUser.id, contenu: msgTchat, canal: 'general' });
       });
-      // Afficher dans une modale ou alert
-      var msg = 'ORDERS PRODUCTEURS\n\n';
-      Object.keys(byProd).forEach(function(nom) {
-        msg += nom + ':\n  - ' + byProd[nom].join('\n  - ') + '\n\n';
-      });
-      if (confirm(msg + 'Envoyer ces orders ?')) {
-        var conf = document.getElementById('orders-conf');
-        if (conf) conf.style.display = 'flex';
-        toast('Orders envoyés aux producteurs !');
-      }
-    });
+    }
+    toast('Orders envoyés aux producteurs via lo tchat !');
+  }
 }
 function nouvelArticle() {
   var titre = prompt('Titre de l\'article :');
