@@ -813,19 +813,10 @@ label{
   <div id="reglaj-prix" style="display:none">
     <div class="card">
       <div class="card-title">Prix de gros — référentiel mercuriales DAAF</div>
-      <div class="alert a-warn" style="margin-bottom:16px">⚠ Mise à jour manuelle chaque dimanche soir en attendant le lien automatique avec les mercuriales de la DAAF Réunion.</div>
+      <div class="alert a-warn" style="margin-bottom:16px">⚠ À actualiser chaque dimanche soir selon les mercuriales DAAF Réunion.</div>
       <table class="tbl" id="prix-table">
-        <thead><tr><th>Produit</th><th>Prix (€)</th><th>Unité</th><th>MAJ</th><th></th></tr></thead>
-        <tbody id="prix-tbody">
-          <tr><td class="tbl-nm">Mangues Josée</td><td><input type="number" value="2.00" step="0.10" style="width:80px;padding:4px 8px;font-size:13px"></td><td>€/kg</td><td style="font-size:11px;color:var(--text3)">—</td><td><button class="btn btn-ghost btn-xs" onclick="sauverPrix(this)">✓</button></td></tr>
-          <tr><td class="tbl-nm">Avocats</td><td><input type="number" value="3.00" step="0.10" style="width:80px;padding:4px 8px;font-size:13px"></td><td>€/pièce</td><td style="font-size:11px;color:var(--text3)">—</td><td><button class="btn btn-ghost btn-xs" onclick="sauverPrix(this)">✓</button></td></tr>
-          <tr><td class="tbl-nm">Caramboles</td><td><input type="number" value="1.50" step="0.10" style="width:80px;padding:4px 8px;font-size:13px"></td><td>€/kg</td><td style="font-size:11px;color:var(--text3)">—</td><td><button class="btn btn-ghost btn-xs" onclick="sauverPrix(this)">✓</button></td></tr>
-          <tr><td class="tbl-nm">Ananas Victoria</td><td><input type="number" value="4.00" step="0.10" style="width:80px;padding:4px 8px;font-size:13px"></td><td>€/pièce</td><td style="font-size:11px;color:var(--text3)">—</td><td><button class="btn btn-ghost btn-xs" onclick="sauverPrix(this)">✓</button></td></tr>
-          <tr><td class="tbl-nm">Bananes figues</td><td><input type="number" value="2.00" step="0.10" style="width:80px;padding:4px 8px;font-size:13px"></td><td>€/régime</td><td style="font-size:11px;color:var(--text3)">—</td><td><button class="btn btn-ghost btn-xs" onclick="sauverPrix(this)">✓</button></td></tr>
-          <tr><td class="tbl-nm">Fruits à pain</td><td><input type="number" value="5.00" step="0.10" style="width:80px;padding:4px 8px;font-size:13px"></td><td>€/pièce</td><td style="font-size:11px;color:var(--text3)">—</td><td><button class="btn btn-ghost btn-xs" onclick="sauverPrix(this)">✓</button></td></tr>
-          <tr><td class="tbl-nm">Goyaves roses</td><td><input type="number" value="1.50" step="0.10" style="width:80px;padding:4px 8px;font-size:13px"></td><td>€/kg</td><td style="font-size:11px;color:var(--text3)">—</td><td><button class="btn btn-ghost btn-xs" onclick="sauverPrix(this)">✓</button></td></tr>
-          <tr><td class="tbl-nm">Letchis</td><td><input type="number" value="3.50" step="0.10" style="width:80px;padding:4px 8px;font-size:13px"></td><td>€/kg</td><td style="font-size:11px;color:var(--text3)">—</td><td><button class="btn btn-ghost btn-xs" onclick="sauverPrix(this)">✓</button></td></tr>
-        </tbody>
+        <thead><tr><th>Produit</th><th>Prix (€)</th><th>Unité</th><th>Dernière MAJ</th><th></th></tr></thead>
+        <tbody id="prix-tbody"></tbody>
       </table>
       <button class="btn btn-outline btn-sm" style="margin-top:12px" onclick="ajouterLignePrix()">+ Ajouter un produit</button>
     </div>
@@ -852,17 +843,7 @@ label{
       <div>
         <label>Fruit / Légume</label>
         <select id="eq-fruit" onchange="calcEquiv()">
-          <option value="2|kg">Mangues Josée (2€/kg)</option>
-          <option value="3|pièce">Avocats (3€/pièce)</option>
-          <option value="1.5|kg">Caramboles (1,50€/kg)</option>
-          <option value="1.5|kg">Goyaves roses (1,50€/kg)</option>
-          <option value="4|pièce">Ananas Victoria (4€/pièce)</option>
-          <option value="2|régime">Bananes figues (2€/régime)</option>
-          <option value="5|pièce">Fruits à pain (5€/pièce)</option>
-          <option value="3.5|kg">Letchis (3,50€/kg)</option>
-          <option value="1|kg">Bilimbi (1€/kg)</option>
-          <option value="2|kg">Zévi (2€/kg)</option>
-          <option value="2.5|kg">Fruits de la passion (2,50€/kg)</option>
+          <!-- Rempli dynamiquement par updateSakYvo() depuis prixGros -->
         </select>
       </div>
     </div>
@@ -1021,6 +1002,57 @@ label{
 </div>
 
 </main>
+
+<!-- ÉDITEUR BLOG -->
+<div class="modal-overlay" id="m-edit-article">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-hdr">
+      <div class="modal-title" id="edit-article-titre-modal">Nouvel article</div>
+      <button class="modal-close" onclick="closeModal('m-edit-article')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="fr"><label>Titre *</label><input type="text" id="edit-titre" placeholder="Titre de l'article"></div>
+      <div class="fr2">
+        <div>
+          <label>Catégorie</label>
+          <select id="edit-categorie">
+            <option value="recette">🍽️ Resèt (Recette)</option>
+            <option value="jardin">🌿 Jardin</option>
+            <option value="astuce">💡 Astuce</option>
+            <option value="actualite">📢 Actualité</option>
+          </select>
+        </div>
+        <div><label>Tags (séparés par des virgules)</label><input type="text" id="edit-tags" placeholder="mangue, confiture, recette"></div>
+      </div>
+      <label>Contenu</label>
+      <!-- Toolbar -->
+      <div style="display:flex;gap:4px;flex-wrap:wrap;padding:6px 8px;background:var(--bg);border:1.5px solid var(--border);border-bottom:none;border-radius:5px 5px 0 0">
+        <button type="button" class="btn btn-ghost btn-xs" onclick="formatBlog('bold')" title="Gras"><strong>G</strong></button>
+        <button type="button" class="btn btn-ghost btn-xs" onclick="formatBlog('italic')" title="Italique"><em>I</em></button>
+        <button type="button" class="btn btn-ghost btn-xs" onclick="insertBlogText('## ','',true)" title="Titre">H2</button>
+        <button type="button" class="btn btn-ghost btn-xs" onclick="insertBlogText('### ','',true)" title="Sous-titre">H3</button>
+        <button type="button" class="btn btn-ghost btn-xs" onclick="insertBlogText('• ','')" title="Puce">• liste</button>
+        <button type="button" class="btn btn-ghost btn-xs" onclick="insertBlogText('---\n','')" title="Séparateur">—</button>
+        <button type="button" class="btn btn-ghost btn-xs" onclick="insertBlogText('**⏱ ','**')" title="Durée">⏱</button>
+        <button type="button" class="btn btn-ghost btn-xs" onclick="insertBlogText('> ','')" title="Conseil">💬 conseil</button>
+        <span style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);margin-left:auto;align-self:center">Markdown</span>
+      </div>
+      <textarea id="edit-contenu" rows="12" placeholder="Écrivez votre article ici…&#10;&#10;## Titre de section&#10;&#10;Du texte normal avec **gras** et *italique*&#10;&#10;• Puce 1&#10;• Puce 2&#10;• Puce 3" style="border-radius:0 0 5px 5px;border-top:none;resize:vertical;font-family:'DM Mono',monospace;font-size:12px;line-height:1.7"></textarea>
+      <!-- Prévisualisation -->
+      <div style="margin-top:10px">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">Prévisualisation</div>
+        <div id="edit-preview" style="border:1px solid var(--border);border-radius:5px;padding:14px;min-height:80px;font-size:0.85rem;line-height:1.8;color:var(--text2);background:var(--bg)">
+          <em style="color:var(--text3)">La prévisualisation apparaît ici…</em>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('m-edit-article')">Annuler</button>
+      <button class="btn btn-outline btn-sm" onclick="previewBlog()">Prévisualiser</button>
+      <button class="btn btn-primary" onclick="sauverArticle()">Publier</button>
+    </div>
+  </div>
+</div>
 
 <!-- BTN INSCRY -->
 
@@ -2155,20 +2187,35 @@ function syncTableauPrix() {
 }
 
 function initTableauPrix() {
-  // Charger les prix sauvegardés dans le tableau Réglaj au chargement
   var tbody = document.getElementById('prix-tbody');
   if (!tbody) return;
-  var rows = tbody.querySelectorAll('tr');
-  rows.forEach(function(row) {
-    var produit = row.cells[0] && row.cells[0].textContent.trim();
-    if (produit && prixGros[produit]) {
-      var input = row.querySelector('input[type=number]');
-      if (input) input.value = prixGros[produit].prix.toFixed(2);
-      // Mettre à jour l'unité aussi
-      var uniteTd = row.cells[2];
-      if (uniteTd) uniteTd.textContent = '€/' + prixGros[produit].unite;
-    }
-  });
+  tbody.innerHTML = Object.keys(prixGros).map(function(nom) {
+    var p = prixGros[nom];
+    var maj = p.maj || '—';
+    return '<tr>'
+      + '<td class="tbl-nm">' + nom + '</td>'
+      + '<td><input type="number" value="' + p.prix.toFixed(2) + '" step="0.10" style="width:80px;padding:4px 8px;font-size:13px"></td>'
+      + '<td><select style="font-size:12px;padding:3px 5px">'
+      + ['kg','pcs','main','botte','pot','bouquet','régime'].map(function(u) {
+          return '<option value="' + u + '"' + (p.unite === u ? ' selected' : '') + '>' + u + '</option>';
+        }).join('')
+      + '</select></td>'
+      + '<td style="font-size:11px;color:var(--text3)">' + maj + '</td>'
+      + '<td style="white-space:nowrap">'
+      + '<button class="btn btn-ghost btn-xs" onclick="sauverPrix(this)">✓</button> '
+      + '<button class="btn btn-ghost btn-xs" style="color:var(--red)" onclick="supprimerLignePrix(this,\'' + nom.replace(/'/g,"\\'") + '\')">✕</button>'
+      + '</td>'
+      + '</tr>';
+  }).join('');
+}
+
+function supprimerLignePrix(btn, nom) {
+  if (!confirm('Supprimer "' + nom + '" du référentiel ?')) return;
+  delete prixGros[nom];
+  sauverPrixGros();
+  initTableauPrix();
+  updateSakYvo();
+  toast('"' + nom + '" supprimé du référentiel');
 }
 
 function updateSakYvo() {
@@ -2196,26 +2243,45 @@ function sauverPrix(btn) {
   var row = btn.closest('tr');
   var produit = row.cells[0].textContent.trim();
   var prix = parseFloat(row.querySelector('input[type=number]').value);
-  var uniteTd = row.cells[2].textContent.trim().replace('€/', '');
-  row.cells[3].textContent = new Date().toLocaleDateString('fr-FR');
+  var sel = row.querySelector('select');
+  var unite = sel ? sel.value : 'kg';
+  var today = new Date().toLocaleDateString('fr-FR');
+  row.cells[3].textContent = today;
   row.cells[3].style.color = 'var(--accent2)';
-  // Mettre à jour prixGros et sauvegarder
-  majPrixGros(produit, prix, uniteTd);
-  toast('Prix ' + produit + ' mis à jour : ' + prix + ' €');
+  // Mettre à jour avec la date de MAJ
+  prixGros[produit] = { prix: prix, unite: unite, maj: today };
+  sauverPrixGros();
+  updateSakYvo();
+  toast('Prix "' + produit + '" mis à jour : ' + prix + '€/' + unite);
 }
 
 function ajouterLignePrix() {
   var tbody = document.getElementById('prix-tbody');
   if (!tbody) return;
-  // Créer un select avec la datalist
   var tr = document.createElement('tr');
-  tr.innerHTML = '<td><input type="text" list="produits-list" placeholder="Choisir un produit…" style="font-size:13px;padding:4px 8px;width:100%" onchange="this.closest(\'tr\').dataset.produit=this.value"></td>'
+  tr.innerHTML = '<td><input type="text" list="produits-list" placeholder="Tapez un produit…" style="font-size:13px;padding:4px 8px;width:100%"></td>'
     + '<td><input type="number" value="1.00" step="0.10" style="width:80px;padding:4px 8px;font-size:13px"></td>'
-    + '<td><select style="font-size:13px;padding:4px 6px"><option>€/kg</option><option>€/pcs</option><option>€/main</option><option>€/botte</option><option>€/pot</option><option>€/bouquet</option></select></td>'
+    + '<td><select style="font-size:12px;padding:3px 5px"><option value="kg">kg</option><option value="pcs">pcs</option><option value="main">main</option><option value="botte">botte</option><option value="pot">pot</option><option value="bouquet">bouquet</option></select></td>'
     + '<td style="font-size:11px;color:var(--text3)">—</td>'
-    + '<td><button class="btn btn-ghost btn-xs" onclick="sauverPrix(this)">✓</button>'
-    + '<button class="btn btn-ghost btn-xs" style="color:var(--red);margin-left:4px" onclick="this.closest(\'tr\').remove()">✕</button></td>';
+    + '<td style="white-space:nowrap"><button class="btn btn-ghost btn-xs" onclick="sauverNouvelleLigne(this)">✓</button> '
+    + '<button class="btn btn-ghost btn-xs" style="color:var(--red)" onclick="this.closest(\'tr\').remove()">✕</button></td>';
   tbody.appendChild(tr);
+  tr.querySelector('input[type=text]').focus();
+}
+
+function sauverNouvelleLigne(btn) {
+  var row = btn.closest('tr');
+  var nomInput = row.querySelector('input[type=text]');
+  var produit = nomInput.value.trim();
+  if (!produit) { toast('Entrez le nom du produit'); nomInput.focus(); return; }
+  var prix = parseFloat(row.querySelector('input[type=number]').value) || 1;
+  var unite = row.querySelector('select').value || 'kg';
+  var today = new Date().toLocaleDateString('fr-FR');
+  prixGros[produit] = { prix: prix, unite: unite, maj: today };
+  sauverPrixGros();
+  updateSakYvo();
+  initTableauPrix(); // Reconstruire le tableau proprement
+  toast('"' + produit + '" ajouté : ' + prix + '€/' + unite);
 }
 
 
@@ -2703,34 +2769,95 @@ function aperçuOrders() {
     toast('Orders envoyés aux producteurs via lo tchat !');
   }
 }
+// ═══ ID article en cours d'édition ═══
+var editArticleId = null;
+
 function nouvelArticle() {
-  var titre = prompt('Titre de l\'article :');
-  if (!titre) return;
-  var contenu = prompt('Contenu (vous pourrez l\'éditer après) :');
-  var categorie = prompt('Catégorie (recette/jardin/astuce/actualite) :') || 'actualite';
-  if (!currentUser) return;
-  sb.from('articles').insert({
-    titre: titre, contenu: contenu || '', categorie: categorie,
-    auteur_id: currentUser.id, publie: true, tags: []
-  }).then(function(res) {
-    if (res.error) { toast('Erreur : ' + res.error.message); return; }
-    toast('Article publié !');
-    loadBlog();
-  });
+  editArticleId = null;
+  document.getElementById('edit-article-titre-modal').textContent = 'Nouvel article';
+  document.getElementById('edit-titre').value = '';
+  document.getElementById('edit-contenu').value = '';
+  document.getElementById('edit-tags').value = '';
+  document.getElementById('edit-categorie').value = 'recette';
+  document.getElementById('edit-preview').innerHTML = '<em style="color:var(--text3)">La prévisualisation apparaît ici…</em>';
+  openModal('m-edit-article');
 }
 
 function editerArticle(id) {
   var article = blogArticles.find(function(a) { return a.id === id; });
   if (!article) return;
-  var titre = prompt('Titre :', article.titre);
-  if (titre === null) return;
-  var contenu = prompt('Contenu :', article.contenu || '');
-  if (contenu === null) return;
-  sb.from('articles').update({ titre: titre, contenu: contenu }).eq('id', id).then(function(res) {
+  editArticleId = id;
+  document.getElementById('edit-article-titre-modal').textContent = 'Modifier l\'article';
+  document.getElementById('edit-titre').value = article.titre || '';
+  document.getElementById('edit-contenu').value = article.contenu || '';
+  document.getElementById('edit-tags').value = (article.tags || []).join(', ');
+  document.getElementById('edit-categorie').value = article.categorie || 'recette';
+  previewBlog();
+  openModal('m-edit-article');
+}
+
+function sauverArticle() {
+  var titre = document.getElementById('edit-titre').value.trim();
+  var contenu = document.getElementById('edit-contenu').value.trim();
+  var categorie = document.getElementById('edit-categorie').value;
+  var tagsRaw = document.getElementById('edit-tags').value;
+  var tags = tagsRaw.split(',').map(function(t) { return t.trim(); }).filter(Boolean);
+  if (!titre) { toast('Le titre est obligatoire'); return; }
+  var data = { titre: titre, contenu: contenu, categorie: categorie, tags: tags, publie: true };
+  var req;
+  if (editArticleId) {
+    req = sb.from('articles').update(data).eq('id', editArticleId);
+  } else {
+    req = sb.from('articles').insert(Object.assign({ auteur_id: currentUser.id }, data));
+  }
+  req.then(function(res) {
     if (res.error) { toast('Erreur : ' + res.error.message); return; }
-    toast('Article mis à jour !');
+    closeModal('m-edit-article');
+    toast(editArticleId ? 'Article mis à jour !' : 'Article publié !');
     loadBlog();
   });
+}
+
+function previewBlog() {
+  var contenu = document.getElementById('edit-contenu').value;
+  var preview = document.getElementById('edit-preview');
+  if (!preview) return;
+  // Convertir markdown basique en HTML
+  var html = contenu
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/^## (.+)$/gm, '<h3 style="font-size:1rem;font-weight:600;margin:12px 0 4px;color:var(--text)">$1</h3>')
+    .replace(/^### (.+)$/gm, '<h4 style="font-size:0.9rem;font-weight:600;margin:10px 0 3px;color:var(--text2)">$1</h4>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^• (.+)$/gm, '<div style="padding-left:14px">• $1</div>')
+    .replace(/^> (.+)$/gm, '<div style="border-left:3px solid var(--accent);padding:4px 10px;background:var(--accent-l);color:var(--accent2);margin:4px 0;font-size:0.82rem">$1</div>')
+    .replace(/^---$/gm, '<hr style="border:none;border-top:1px solid var(--border);margin:10px 0">')
+    .replace(/\n/g, '<br>');
+  preview.innerHTML = html || '<em style="color:var(--text3)">Rien à prévisualiser…</em>';
+}
+
+function formatBlog(cmd) {
+  var ta = document.getElementById('edit-contenu');
+  if (!ta) return;
+  var start = ta.selectionStart, end = ta.selectionEnd;
+  var sel = ta.value.substring(start, end);
+  var wrap = cmd === 'bold' ? '**' : '*';
+  var newText = sel ? wrap + sel + wrap : wrap + 'texte' + wrap;
+  ta.value = ta.value.substring(0, start) + newText + ta.value.substring(end);
+  ta.focus();
+  ta.setSelectionRange(start + wrap.length, start + newText.length - wrap.length);
+  previewBlog();
+}
+
+function insertBlogText(before, after, newline) {
+  var ta = document.getElementById('edit-contenu');
+  if (!ta) return;
+  var start = ta.selectionStart;
+  var prefix = newline && start > 0 && ta.value[start-1] !== '\n' ? '\n' : '';
+  ta.value = ta.value.substring(0, start) + prefix + before + after + ta.value.substring(start);
+  ta.focus();
+  ta.setSelectionRange(start + prefix.length + before.length, start + prefix.length + before.length);
+  previewBlog();
 }
 
 function supprimerArticle(id) {
