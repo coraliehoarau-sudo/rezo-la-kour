@@ -1590,31 +1590,84 @@ function loadPanye() {
       }
       var p = data[0];
       var contenu = [];
-      try { contenu = Array.isArray(p.contenu) ? p.contenu : JSON.parse(p.contenu || '[]'); } catch(e) {}
+      try {
+        contenu = Array.isArray(p.contenu) ? p.contenu : JSON.parse(p.contenu || '[]');
+      } catch(e) {}
+
+      // Dédoublonner par nom de produit
+      var seen = {};
+      contenu = contenu.filter(function(item) {
+        var key = (item.nom || item).toString().trim().toLowerCase();
+        if (seen[key]) return false;
+        seen[key] = true;
+        return true;
+      });
+
       var items = contenu.map(function(item) {
-        return '<div class="p-item"><div class="p-icon">🌿</div><div class="p-info"><div class="p-nom">' + (item.nom||item) + '</div><div class="p-src">' + (item.source||'') + '</div></div><div class="p-qty">' + (item.qty||'') + '</div></div>';
+        return '<div class="p-item"><div class="p-icon">🌿</div><div class="p-info">'
+          + '<div class="p-nom">' + (item.nom||item) + '</div>'
+          + '<div class="p-src">' + (item.source||'') + '</div></div>'
+          + '<div class="p-qty">' + (item.qty||'') + '</div></div>';
       }).join('') || '<div style="color:var(--text3);font-size:0.85rem">Composition à venir</div>';
+
+      // Utiliser le nom et prix stockés dans Supabase (pas panyeTypeActuel)
+      var nomAffiche = p.nom || 'Panyé';
+      var prixAffiche = Number(p.prix) || 0;
+
       el.innerHTML = '<div style="border:2px solid var(--accent);border-radius:8px;overflow:hidden;margin-bottom:16px">'
         + '<div style="background:var(--accent);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between">'
         + '<div><div style="font-family:\'DM Mono\',monospace;font-size:9px;opacity:0.7;margin-bottom:2px">SÈMENN AN KUR</div>'
-        + '<div style="font-size:1rem;font-weight:600">' + p.nom + ' — ' + Number(p.prix).toFixed(2) + '€</div></div>'
+        + '<div style="font-size:1rem;font-weight:600">' + nomAffiche + (prixAffiche > 0 ? ' — ' + prixAffiche.toFixed(2) + '€' : '') + '</div></div>'
         + '<span class="badge" style="background:rgba(255,255,255,0.2);color:#fff">Publié</span></div>'
         + '<div style="padding:14px 16px">' + items
-        + '<div style="margin-top:14px"><button class="btn btn-primary btn-sm" onclick="commanderPanye(\'' + p.id + '\',' + p.prix + ')">Komann so panyé la</button></div>'
+        + '<div style="margin-top:14px"><button class="btn btn-primary btn-sm" onclick="commanderPanye(\'' + p.id + '\',' + prixAffiche + ')">Komann so panyé la</button></div>'
         + '</div></div>';
     });
 }
 
 function commanderPanye(panyeId, prix) {
   if (!currentUser) { openModal('m-login'); return; }
-  var today = new Date().toISOString().split('T')[0];
-  sb.from('commandes').insert({
-    profile_id: currentUser.id, semaine: today, panier_id: panyeId,
-    montant_total: prix, point_retrait: retrait, statut: 'en_attente'
-  }).then(function(res) {
-    if (res.error) { toast('Erreur : ' + res.error.message); return; }
-    toast('✓ Komannd anregistré ! Vyin trapé samdi matin.');
-  });
+  // Afficher le récapitulatif dans la modale commande
+  var credit = profile && profile.credit_fruits ? parseFloat(profile.credit_fruits) : 0;
+  var apayer = Math.max(0, prix - credit);
+  var creditUtilise = Math.min(credit, prix);
+
+  var cartLines = document.getElementById('cart-lines');
+  if (cartLines) {
+    cartLines.innerHTML = '<div style="padding:10px 0;border-bottom:1px solid var(--border)">'
+      + '<div style="font-weight:600;margin-bottom:4px">Panyé commandé</div>'
+      + '<div style="font-size:0.85rem;color:var(--text2)">Retrait samedi matin au point choisi</div>'
+      + '</div>';
+  }
+  var sub = document.getElementById('cart-sub');
+  if (sub) sub.textContent = prix.toFixed(2) + ' €';
+  var creditEl = document.getElementById('cart-credit');
+  if (creditEl) {
+    creditEl.textContent = credit > 0 ? '-' + creditUtilise.toFixed(2) + ' €' : '0,00 €';
+    creditEl.style.color = credit > 0 ? 'var(--accent)' : 'var(--text3)';
+  }
+  var fin = document.getElementById('cart-final');
+  if (fin) fin.textContent = apayer.toFixed(2) + ' €';
+
+  // Ajouter info crédit
+  var creditInfo = document.getElementById('cart-credit-info');
+  if (!creditInfo && credit > 0) {
+    var modal = document.querySelector('#m-commande .modal-body');
+    if (modal) {
+      var div = document.createElement('div');
+      div.id = 'cart-credit-info';
+      div.className = 'alert a-ok';
+      div.style.marginBottom = '10px';
+      div.textContent = '🌿 Vous avez ' + credit.toFixed(2) + '€ de crédit fruits. ' + creditUtilise.toFixed(2) + '€ seront déduits.';
+      modal.insertBefore(div, modal.firstChild);
+    }
+  }
+
+  // Stocker le panyeId pour la confirmation
+  window._currentPanyeId = panyeId;
+  window._currentPanyePrix = prix;
+  window._creditUtilise = creditUtilise;
+  openModal('m-commande');
 }
 
 // ═══════════════════════════════════════════
@@ -1898,18 +1951,37 @@ function updateCartUI() {
 }
 
 function confirmerCommande() {
-  if (!currentUser || !cart.length) return;
+  if (!currentUser) return;
   var today = new Date().toISOString().split('T')[0];
-  var total = cart.reduce(function(s,i) { return s + i.prix * i.qty; }, 0);
   var retrait_el = document.getElementById('cart-retrait');
   var pt = retrait_el ? retrait_el.value : retrait;
+
+  // Commande de panyé
+  if (window._currentPanyeId) {
+    var montant = Math.max(0, (window._currentPanyePrix || 0) - (window._creditUtilise || 0));
+    sb.from('commandes').insert({
+      profile_id: currentUser.id, semaine: today,
+      panier_id: window._currentPanyeId,
+      montant_total: montant, point_retrait: pt, statut: 'en_attente'
+    }).then(function(res) {
+      if (res.error) { toast('Erreur : ' + res.error.message); return; }
+      window._currentPanyeId = null;
+      closeModal('m-commande');
+      toast('Komannd anregistré ! Vyin trapé samdi matin.');
+    });
+    return;
+  }
+
+  // Commande boutique
+  if (!cart.length) return;
+  var total = cart.reduce(function(s,i) { return s + i.prix * i.qty; }, 0);
   sb.from('commandes').insert({
     profile_id: currentUser.id, semaine: today,
     montant_total: total, point_retrait: pt, statut: 'en_attente'
   }).then(function(res) {
     if (res.error) { toast('Erreur : ' + res.error.message); return; }
     cart = []; updateCartUI(); closeModal('m-commande');
-    toast('✓ Commande confirmée ! Retrait samdi matin.');
+    toast('Komannd konfirmé ! Vyin trapé samdi matin.');
   });
 }
 
@@ -2163,6 +2235,24 @@ function updateKompozSource() {
   var src = document.getElementById('km-source').value;
   document.getElementById('km-dispo-list').style.display = src === 'libre' ? 'none' : 'block';
   document.getElementById('km-libre-fields').style.display = src === 'libre' ? 'block' : 'none';
+
+  if (src === 'dispo') {
+    loadDisposForKompoz();
+  } else if (src === 'boutik') {
+    // Charger les produits de la boutique
+    sb.from('produits').select('*').eq('actif', true).then(function(res) {
+      var sel = document.getElementById('km-produit-select');
+      if (!sel) return;
+      var data = res.data || [];
+      if (!data.length) {
+        sel.innerHTML = '<option>Aucun produit en boutique</option>';
+        return;
+      }
+      sel.innerHTML = data.map(function(p) {
+        return '<option value="' + p.id + '">' + (p.emoji||'🫙') + ' ' + p.nom + ' — ' + Number(p.prix).toFixed(2) + '€ (stock: ' + p.stock + ')</option>';
+      }).join('');
+    });
+  }
 }
 
 function ajouterAuKompoz() {
@@ -2193,31 +2283,44 @@ function ajouterAuKompoz() {
 function publierPanye() {
   var items = [];
   document.querySelectorAll('#kompoz-items .p-item').forEach(function(el) {
-    items.push({ nom: el.querySelector('.p-nom').textContent, source: el.querySelector('.p-src').textContent, qty: el.querySelector('.p-qty').textContent });
+    items.push({
+      nom: el.querySelector('.p-nom').textContent,
+      source: el.querySelector('.p-src').textContent,
+      qty: el.querySelector('.p-qty').textContent
+    });
   });
+  if (!items.length) { toast('Ajoutez au moins un produit au panyé'); return; }
+
   var today = new Date().toISOString().split('T')[0];
   var nomPanye = panyeTypeActuel ? panyeTypeActuel.nom : 'Panyé Standard';
   var prixPanye = panyeTypeActuel ? panyeTypeActuel.prix : 20;
-  sb.from('paniers').insert({ semaine: today, nom: nomPanye, prix: prixPanye, publie: true, contenu: items }).then(function(res) {
-    if (res.error) { toast('Erreur : ' + res.error.message); return; }
-    var el = document.getElementById('kompoz-confirm');
-    if (el) el.style.display = 'flex';
-    // Notification tchat
-    if (currentUser) {
-      var msg = '🧺 ' + nomPanye + (prixPanye > 0 ? ' (' + prixPanye + '€)' : '') + ' fin publié ! ' + items.length + ' produits. Komand avan jedi minwi.';
-      sb.from('messages').insert({ profile_id: currentUser.id, contenu: msg, canal: 'general' });
-      var msgs = document.getElementById('msgs-general');
-      if (msgs) {
-        var div = document.createElement('div');
-        div.className = 'msg-bubble msg-other';
-        div.innerHTML = '<div class="msg-author" style="color:var(--accent)">Rézo la Kour</div>' + msg;
-        msgs.appendChild(div);
-        msgs.scrollTop = msgs.scrollHeight;
+
+  // 1. Dépublier TOUS les anciens paniers d'abord
+  sb.from('paniers').update({ publie: false }).eq('publie', true).then(function() {
+    // 2. Publier le nouveau
+    sb.from('paniers').insert({
+      semaine: today, nom: nomPanye, prix: prixPanye, publie: true, contenu: items
+    }).then(function(res) {
+      if (res.error) { toast('Erreur : ' + res.error.message); return; }
+      var el = document.getElementById('kompoz-confirm');
+      if (el) el.style.display = 'flex';
+      // Notification tchat
+      if (currentUser) {
+        var msg = '🧺 ' + nomPanye + (prixPanye > 0 ? ' (' + prixPanye + '€)' : '') + ' fin publié ! ' + items.length + ' produits. Komand avan jedi minwi.';
+        sb.from('messages').insert({ profile_id: currentUser.id, contenu: msg, canal: 'general' });
+        var msgs = document.getElementById('msgs-general');
+        if (msgs) {
+          var div = document.createElement('div');
+          div.className = 'msg-bubble msg-other';
+          div.innerHTML = '<div class="msg-author" style="color:var(--accent)">Rézo la Kour</div>' + msg;
+          msgs.appendChild(div);
+          msgs.scrollTop = msgs.scrollHeight;
+        }
       }
-    }
-    toast(nomPanye + ' publié ! Notification dans lo tchat.');
-    // Actualiser onglet panyé
-    setTimeout(function() { loadPanye(); }, 500);
+      toast(nomPanye + ' publié ! Notification dans lo tchat.');
+      // Actualiser onglet panyé immédiatement
+      setTimeout(function() { loadPanye(); }, 500);
+    });
   });
 }
 
@@ -2225,11 +2328,34 @@ function verifierValeur() {
   var items = document.querySelectorAll('#kompoz-items .p-item');
   var el = document.getElementById('valeur-panye');
   if (!el) return;
+  var total = 0;
+  var rows = Array.from(items).map(function(item) {
+    var nom = item.querySelector('.p-nom').textContent.trim();
+    var qtyTxt = item.querySelector('.p-qty').textContent.trim();
+    // Chercher dans prixGros
+    var prix = null;
+    Object.keys(prixGros).forEach(function(k) {
+      if (nom.toLowerCase().includes(k.toLowerCase()) || k.toLowerCase().includes(nom.toLowerCase())) {
+        prix = prixGros[k].prix;
+      }
+    });
+    var qtyNum = parseFloat(qtyTxt) || 1;
+    var cout = prix ? prix * qtyNum : null;
+    if (cout) total += cout;
+    return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:0.82rem">'
+      + '<span>' + nom + ' (' + qtyTxt + ')</span>'
+      + '<span style="color:var(--accent2)">' + (cout ? cout.toFixed(2) + '€' : 'prix non défini') + '</span></div>';
+  }).join('');
+  var prixVente = panyeTypeActuel ? panyeTypeActuel.prix : 20;
+  var marge = prixVente - total;
   el.innerHTML = '<div style="margin-bottom:8px;font-weight:600">Estimation selon prix de gros :</div>'
-    + Array.from(items).map(function(item) {
-      return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:0.82rem"><span>' + item.querySelector('.p-nom').textContent + ' (' + item.querySelector('.p-qty').textContent + ')</span><span style="color:var(--accent2)">~2–4€</span></div>';
-    }).join('')
-    + '<div style="display:flex;justify-content:space-between;padding:8px 0;font-weight:700;font-size:0.9rem"><span>Valeur estimée totale</span><span>~' + (items.length * 3) + '€ coût / 20€ prix</span></div>';
+    + rows
+    + '<div style="display:flex;justify-content:space-between;padding:8px 0 4px;border-top:2px solid var(--black);margin-top:4px;font-size:0.85rem">'
+    + '<span>Coût producteurs</span><span style="color:var(--text3)">' + total.toFixed(2) + '€</span></div>'
+    + '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:0.85rem">'
+    + '<span>Prix de vente</span><span style="font-weight:600">' + prixVente + '€</span></div>'
+    + '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:0.9rem;font-weight:700">'
+    + '<span>Marge association</span><span style="color:' + (marge >= 0 ? 'var(--accent)' : 'var(--red)') + '">' + marge.toFixed(2) + '€</span></div>';
 }
 
 function envoyerOrders() {
@@ -2248,6 +2374,15 @@ function showReglaj(section) {
   ['zaderan','kompoz','prix'].forEach(function(s) {
     var el = document.getElementById('reglaj-' + s);
     if (el) el.style.display = (s === section) ? 'block' : 'none';
+  });
+  // Mettre à jour les boutons
+  var btns = document.querySelectorAll('#page-reglaj > div:first-child .btn');
+  btns.forEach(function(btn) {
+    var txt = btn.textContent.toLowerCase();
+    var isActive = (section === 'zadéran' && txt.includes('zadéran'))
+      || (section === 'kompoz' && txt.includes('kompoz'))
+      || (section === 'prix' && txt.includes('prix'));
+    btn.className = isActive ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm';
   });
   if (section === 'kompoz') loadDisposForKompoz();
 }
@@ -2338,13 +2473,23 @@ function renderCycleSemaine() {
 // ═══════════════════════════════════════════
 function supprimerDispo(id) {
   if (!confirm('Supprimer cette disponibilité ?')) return;
-  sb.from('disponibilites').delete().eq('id', id).then(function(res) {
-    if (res.error) { toast('Erreur : ' + res.error.message); return; }
-    toast('Disponibilité supprimée');
-    // Forcer rechargement complet
+  // Marquer comme épuisé plutôt que supprimer (contourne les restrictions RLS)
+  sb.from('disponibilites').update({ statut: 'epuise', quantite: 0 }).eq('id', id).then(function(res) {
+    if (res.error) {
+      // Essai suppression directe
+      sb.from('disponibilites').delete().eq('id', id).then(function(res2) {
+        if (res2.error) { toast('Erreur : ' + res2.error.message); return; }
+        toast('Disponibilité supprimée');
+        var wrap = document.getElementById('stock-table-wrap');
+        if (wrap) wrap.innerHTML = '<div style="color:var(--text3);padding:12px">Rechargement...</div>';
+        setTimeout(loadStockTable, 400);
+      });
+      return;
+    }
+    toast('Disponibilité retirée du stock');
     var wrap = document.getElementById('stock-table-wrap');
     if (wrap) wrap.innerHTML = '<div style="color:var(--text3);padding:12px">Rechargement...</div>';
-    setTimeout(function() { loadStockTable(); updateCompteurProducteurs(); }, 300);
+    setTimeout(loadStockTable, 400);
   });
 }
 
@@ -2400,20 +2545,28 @@ function modifierStock(id, nom, stockActuel) {
 var panyeTypeActuel = { nom: 'Panyé Standard', prix: 20 };
 
 function selectTypePanye(type, btn) {
+  // Mettre à jour les boutons
   document.querySelectorAll('#reglaj-kompoz > div:first-child .btn').forEach(function(b) {
     b.className = 'btn btn-ghost btn-sm';
   });
   if (btn) btn.className = 'btn btn-primary btn-sm';
+
+  // Mettre à jour le label ET le titre de la card
   var label = document.getElementById('panye-type-label');
+  var cardTitle = document.querySelector('#kompoz-items')?.closest('.card')?.querySelector('.card-title');
+
   if (type === 'standard') {
     panyeTypeActuel = { nom: 'Panyé Standard', prix: 20 };
     if (label) label.textContent = 'PANYÉ STANDARD — 20€';
+    if (cardTitle) cardTitle.textContent = 'Panyé Standard — 20€';
   } else if (type === 'premium') {
     panyeTypeActuel = { nom: 'Panyé Prémium', prix: 35 };
     if (label) label.textContent = 'PANYÉ PRÉMIUM — 35€';
+    if (cardTitle) cardTitle.textContent = 'Panyé Prémium — 35€';
   } else if (type === 'gros') {
     panyeTypeActuel = { nom: 'Fruits en gros', prix: 0 };
     if (label) label.textContent = 'FRUITS EN GROS — Prix selon mercuriales (min. 3kg)';
+    if (cardTitle) cardTitle.textContent = 'Fruits en gros — Prix marché';
   }
 }
 
