@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#1A3D2B">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -448,6 +448,62 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
 .rlk-art{display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
 .rlk-art img,.rlk-art .ph{width:64px;height:64px;object-fit:cover;border-radius:8px;background:var(--accent-l);display:flex;align-items:center;justify-content:center;font-size:1.6rem}
 .produit-img img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+
+/* v2.2 */
+@media(max-width:700px){#produits-grid{grid-template-columns:1fr}}
+.modal-hdr{position:sticky;top:0;background:#fff;z-index:3;border-radius:10px 10px 0 0}
+.rlk-xbtn{width:auto;height:auto;padding:8px 14px;font-size:13px;font-weight:600;color:var(--accent)}
+.rlk-modal-btns{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:18px;flex-wrap:wrap}
+.statut-check{cursor:pointer}
+.rlk-trok-line{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--border)}
+.rlk-trok-line select,.rlk-trok-line input{width:100%;min-width:0}
+.rlk-trok-line .tl-row{display:grid;grid-template-columns:1fr 110px 44px;gap:8px}
+.at-line .tl-row{grid-template-columns:1fr 24px 44px}
+.rlk-evimg{width:100%;max-height:220px;object-fit:cover;border-radius:8px;display:block;margin-bottom:10px}
+#akey-adh{margin:0 0 14px}
+.fr-row{display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;padding:12px 0;border-bottom:1px solid var(--border)}
+.fr-row .fr-top{grid-column:1/-1;display:flex;gap:8px;align-items:center}
+.fr-row .fr-top input{flex:1;min-width:0}
+.fr-row select,.fr-row input{width:100%;min-width:0}
+.fr-row label{font-size:10px;margin:0}
+
+/* ═══ v2.3 ═══ */
+.produit-img{height:auto!important;aspect-ratio:1/1;width:100%}
+.produit-prix{display:block;width:100%;flex:none;margin:8px 0 6px;font-size:1.15rem;white-space:normal}
+.produit-prix .rlk-eur{display:block;font-size:.8rem;font-weight:400;color:var(--text2)}
+.produit-footer{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center}
+body.bg-biyetri{background:#F4F1EA}
+.rlk-ev2{background:#fff;border-radius:12px;overflow:hidden;margin:0 0 34px;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.rlk-ev2-h{background:#1A3D2B;color:#fff;padding:16px 18px 18px;font-size:1.15rem;font-weight:600;line-height:1.3}
+.rlk-ev2 .rlk-evimg{display:block;width:100%;height:auto;max-height:320px;object-fit:cover}
+.rlk-ev2-b{padding:22px 18px 22px}
+.rlk-ev2-info{font-weight:300;font-size:.92rem;line-height:1.7;color:var(--text);font-family:inherit}
+.rlk-ev2-obj{margin:22px 0;font-weight:300;font-size:.92rem;line-height:1.6}
+.rlk-ev2-obj b{font-weight:300;text-decoration:underline}
+.rlk-ev2-desc{font-weight:300;font-size:.92rem;line-height:1.6;margin:0 0 6px}
+.rlk-chip{border:1px solid var(--border);background:#fff;border-radius:99px;padding:6px 14px;font-size:.82rem;cursor:pointer;margin:0 6px 6px 0}
+.rlk-chip.on{background:#1A3D2B;color:#fff;border-color:#1A3D2B}
+#blog-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:10px}
+@media(min-width:700px){#blog-grid{grid-template-columns:1fr 1fr 1fr}}
+.rlk-bcard{background:#fff;border-radius:12px;overflow:hidden;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.rlk-bcard img,.rlk-bph{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;background:#DCE8E0}
+.rlk-bbody{padding:14px 16px 18px}
+.rlk-bmeta{font-size:.74rem;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}
+.rlk-btitle{font-size:1.05rem;font-weight:600;margin:6px 0;line-height:1.3}
+.rlk-bchap{font-size:.86rem;color:var(--text2);line-height:1.5}
+.rlk-bcover{width:100%;max-height:340px;object-fit:cover;border-radius:12px;margin-top:12px}
+.rlk-bh1{font-size:1.7rem;line-height:1.2;margin:8px 0 10px;color:#1A3D2B}
+.rlk-bchapo{font-size:1.05rem;color:var(--text2);line-height:1.6}
+.rlk-bh2{font-size:1.3rem;color:#1A3D2B;margin:28px 0 8px}
+.rlk-bh3{font-size:1.1rem;color:#2D6A4F;margin:22px 0 6px}
+.rlk-bp{font-size:1rem;line-height:1.7;margin:0 0 14px}
+.rlk-bq{border-left:4px solid #2D6A4F;margin:18px 0;padding:4px 16px;font-style:italic;color:var(--text2)}
+.rlk-bfig{margin:18px 0}.rlk-bfig img{width:100%;border-radius:10px;display:block}.rlk-bfig figcaption{font-size:.8rem;color:var(--text2);margin-top:4px}
+.rlk-linkcard{display:block;border:1px solid #2D6A4F;border-radius:10px;padding:12px 14px;margin:16px 0;color:#1A3D2B;text-decoration:none}
+.rlk-bloc{border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px;background:#fff}
+.rlk-bloc-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:.82rem}
+.rlk-bloc textarea,.rlk-bloc input,.rlk-bloc select{width:100%;margin-bottom:4px}
+#m-post .modal{max-width:640px}
 </style>
 </head>
 <body>
@@ -491,10 +547,10 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
   </div>
   <nav class="nav-tabs" id="nav">
     <button class="nav-tab active" onclick="navTo('akey',this)">Akey</button>
-    <button class="nav-tab" data-access="member" onclick="navTo('don',this)">Don</button>
+    <button class="nav-tab" data-access="member" onclick="navTo('don',this)">Trok</button>
     <button class="nav-tab" data-access="member" onclick="navTo('boutik',this)">Boutik</button>
     <button class="nav-tab" data-access="member" onclick="navTo('lakour',this)">La Kour</button>
-    <button class="nav-tab" data-access="member" onclick="navTo('blog',this)">Resèt</button>
+    <button class="nav-tab" data-access="member" onclick="navTo('blog',this)">Ladilafé</button>
     <button class="nav-tab" onclick="navTo('biyetri',this)">Biyetri</button>
     <button class="nav-tab" data-access="member" onclick="navTo('tchat',this)">Tchat <span id="tchat-badge" class="rlk-badge-n" style="display:none"></span></button>
     <button class="nav-tab" data-access="admin" id="tab-reglaj" style="display:none" onclick="navTo('reglaj',this)">Réglaj <span id="reglaj-badge" class="rlk-badge-n" style="display:none"></span></button>
@@ -531,8 +587,11 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
         <div id="dash-role-badge"></div>
       </div>
       <div class="page-sub" id="dash-semaine" style="text-align:center;margin-bottom:4px">Semaine en cours</div>
+      <div class="rlk-row" style="margin-top:8px"><button class="btn btn-outline btn-sm" type="button" onclick="navTo('kont')">Mon kont</button></div>
     </div>
   </div>
+
+  <div id="akey-adh" class="rlk-warn" style="display:none"></div>
 
   <div class="rlk-count">
     <div class="stat"><div class="stat-val" id="c-recoltes">—</div><div class="stat-label">kg de fruits récoltés</div></div>
@@ -541,7 +600,7 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
     <div class="stat"><div class="stat-val" id="c-adh">—</div><div class="stat-label">adhérents</div></div>
   </div>
 
-  <details class="rlk-bar" id="bar-kour">
+  <details class="rlk-bar" id="bar-kour" open>
     <summary><span class="rlk-ttl" style="margin:0"><span class="rlk-dot"></span>La Kour domoun</span></summary>
     <div class="rlk-bar-body">
       <div style="font-size:12px;color:var(--text3);margin:0 0 10px">Nombre de jardins par commune, puis par quartier. Touchez une commune pour zoomer.</div>
@@ -570,7 +629,7 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
         </tbody></table>
       <p>C'est la magie de la transformation : elle multiplie par 4 la valeur d'un fruit. <b>Nous nous déplaçons pour un atelier à partir de <span id="seuil-fey">20</span> FEY.</b></p>
 
-      <p>Exemple avec un fruit courant (mangue, letchi) : chaque kilo de fruits frais donné produit en moyenne 4 unités de produits transformés, valorisées en FEY et redistribuées ainsi :</p>
+      <p>Exemple avec un fruit courant (mangue, letchi) : chaque kilo de fruits frais apporté au troc produit en moyenne 4 unités de produits transformés, valorisées en FEY et redistribuées ainsi :</p>
       <ul>
         <li><b>¼</b> des FEY pour l'hôte (donateur), en plus d'un petit nettoyage sous l'arbre.</li>
         <li><b>¼</b> des FEY à partager entre les cueilleurs et les cuisiniers.</li>
@@ -591,7 +650,7 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
       <p><b>Tout cela vaut 1 FEY, soit <span class="rlk-fey-eur">5</span> € au maximum.</b></p>
 
       <p class="rlk-h">Comment participer</p>
-      <p>1. Adhérez. 2. Déclarez vos fruits dans l'onglet DON. 3. Participez aux ateliers (BIYETRI). 4. Retrouvez vos FEY dans LA KOUR et choisissez vos pots à la BOUTIK.</p>
+      <p>1. Adhérez. 2. Déclarez vos fruits dans l'onglet TROK. 3. Participez aux ateliers (BIYETRI). 4. Retrouvez vos FEY dans LA KOUR et choisissez vos pots à la BOUTIK.</p>
     </div>
   </details>
 
@@ -611,12 +670,12 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
   </div>
 </div>
 
-<!-- ══ DON ══ -->
+<!-- ══ TROK ══ -->
 <div id="page-don" class="page">
   <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:4px">
     <div>
-      <div class="page-title">Don de fruits</div>
-      <div class="page-sub" style="margin-bottom:0">Déclarez ce que vous pouvez donner. Vous voyez tout de suite ce que vous recevrez.</div>
+      <div class="page-title">Troc de fruits</div>
+      <div class="page-sub" style="margin-bottom:0">Déclarez ce que vous apportez au troc. Vous voyez tout de suite ce que vous recevrez.</div>
     </div>
     <div style="background:var(--accent);color:#fff;border-radius:10px;padding:12px 18px;text-align:center;min-width:130px">
       <div style="font-size:1.6rem;font-weight:700" id="fey-solde-don">—</div>
@@ -747,24 +806,31 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
   <div id="don-identite"></div>
 
   <div class="card" style="margin:18px 0 14px">
-    <div class="card-title">Mes fruits disponibles</div>
+    <div class="card-title">Mes fruits à troquer</div>
     <div class="fr" id="dispo-prod-select" style="display:none">
-      <label>Donateur (administrateur : choisir un adhérent)</label>
-      <select id="dispo-prod"><option value="">— Sélectionner —</option></select>
+      <label>Adhérent (administrateur : choisir un adhérent)</label>
+      <select id="dispo-prod" onchange="rlkLoadMesTrocs()"><option value="">— Sélectionner —</option></select>
     </div>
     <div id="dispo-lignes"></div>
     <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
-      <button class="btn btn-ghost btn-sm" onclick="rlkAddLine()">+ Ajouter un produit</button>
+      <button class="btn btn-ghost btn-sm" type="button" onclick="rlkAddLine()">+ Ajouter un produit</button>
     </div>
+  </div>
+
+  <button class="btn btn-primary" type="button" style="width:100%" onclick="validerDispos()">Valider mon troc</button>
+  <div class="rlk-note" style="margin-bottom:18px">Pour valider, il vous sera demandé votre mot de passe.</div>
+
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">Mes déclarations de la semaine</div>
+    <div id="trok-mes" class="rlk-note">Chargement…</div>
   </div>
 
   <div class="card" style="margin-bottom:14px" id="don-preview-card">
     <div class="card-title">Ce que vous allez recevoir</div>
     <div id="don-preview" class="rlk-note">Ajoutez un produit et une quantité.</div>
+    <div class="rlk-note"><b>Quand arrivent vos FEY ?</b> Vos kilos sont comptés tout de suite dans l'accueil. Vos FEY sont crédités dans votre solde <b>après l'atelier</b> : l'équipe enregistre le lot transformé et la part de l'hôte est ajoutée à votre compte.</div>
     <div class="rlk-note">Règle des parts : ¼ des FEY produits pour vous, ¼ partagé entre cueilleurs et cuisiniers, ½ mis en vente pour financer l'association. Quota minimal pour que nous nous déplacions : <span id="quota-txt">5 kg de fruits mûrs, 10 kg de fruits verts, 1 kg de tisanes et aromates, 3 kg de café</span>.</div>
   </div>
-  <button class="btn btn-primary" onclick="validerDispos()">Valider mon don</button>
-  <div class="rlk-note">Pour valider, il vous sera demandé votre mot de passe.</div>
 </div>
 
 <!-- ══ PANYÉ ══ -->
@@ -806,9 +872,6 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
       <div class="page-title">Boutik</div>
       <div class="page-sub" style="margin-bottom:0">Produits transformés · 1 FEY = <span class="rlk-fey-eur">5</span> €</div>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-outline btn-sm" id="btn-add-produit" style="display:none" onclick="rlkGoReglaj('articles')">Gérer les articles</button>
-    </div>
   </div>
   <div id="bk-dbwarn"></div>
   <div class="rlk-ok" id="boutik-solde" style="display:none"></div>
@@ -836,7 +899,7 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
 
       <div class="rlk-banner" id="pan-ban">
         <b>Pas de légumes chez vous ?</b> Payez votre panyé avec les fruits que vous n'utilisez pas : donnez-les, ils sont convertis en FEY.
-        <div><button class="btn btn-sm" onclick="navTo('don')">Je donne mes fruits</button></div>
+        <div><button class="btn btn-sm" onclick="navTo('don')">Je troque mes fruits</button></div>
       </div>
     </div>
   </div>
@@ -878,7 +941,7 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
     </div>
     <div class="rlk-chk"><label><input type="checkbox" id="jd-accueil"> J'accepte d'accueillir des ateliers culinaires dans mon jardin et je dispose d'un espace d'au moins 12 m² de gazon plat, de terrasse ou de varangue pour l'installer</label></div>
     <div class="rlk-chk"><label><input type="checkbox" id="jd-visible"> J'accepte d'apparaître sur la carte publique (quartier et nombre de jardins seulement, jamais mon nom ni mon adresse)</label></div>
-    <button class="btn btn-primary btn-sm" onclick="rlkSaveJardin()">Enregistrer mon kour</button>
+    <button class="btn btn-primary btn-sm" onclick="rlkSaveJardin()">Enrejistr mon kour</button>
     <div id="jd-list" class="rlk-note"></div>
   </div>
 
@@ -916,7 +979,7 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
 
     <span class="rlk-qt">Autre chose à nous dire</span>
     <textarea id="q-libre" rows="3" style="margin-bottom:14px"></textarea>
-    <button class="btn btn-primary btn-sm" onclick="rlkSaveQuest()">Enregistrer mes réponses</button>
+    <button class="btn btn-primary btn-sm" onclick="rlkSaveQuest()">Enrejistr mé répons</button>
   </div>
 </div>
 
@@ -958,16 +1021,16 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
     <button class="btn btn-primary btn-sm" data-s="zaderan" onclick="showReglaj('zaderan')">Zadéran</button>
     <button class="btn btn-ghost btn-sm" data-s="dispo" onclick="showReglaj('dispo')">Dispo</button>
     <button class="btn btn-ghost btn-sm" data-s="kompoz" onclick="showReglaj('kompoz')">Panyé</button>
-    <button class="btn btn-ghost btn-sm" data-s="articles" onclick="showReglaj('articles')">Articles</button>
-    <button class="btn btn-ghost btn-sm" data-s="prix" onclick="showReglaj('prix')">Prix &amp; FEY</button>
-    <button class="btn btn-ghost btn-sm" data-s="atelier" onclick="showReglaj('atelier')">Atelier</button>
-    <button class="btn btn-ghost btn-sm" data-s="etiquette" onclick="showReglaj('etiquette')">Étiquettes</button>
-    <button class="btn btn-ghost btn-sm" data-s="equilibre" onclick="showReglaj('equilibre')">Équilibre</button>
-    <button class="btn btn-ghost btn-sm" data-s="commandes" onclick="showReglaj('commandes')">Commandes</button>
-    <button class="btn btn-ghost btn-sm" data-s="stock" onclick="showReglaj('stock')">Stock</button>
-    <button class="btn btn-ghost btn-sm" data-s="agenda" onclick="showReglaj('agenda')">Agenda</button>
-    <button class="btn btn-ghost btn-sm" data-s="messagerie" onclick="showReglaj('messagerie')">Messagerie <span id="msg-badge" class="rlk-badge-n" style="display:none">0</span></button>
-    <button class="btn btn-ghost btn-sm" data-s="stats" onclick="showReglaj('stats')">Statistiques</button>
+    <button class="btn btn-ghost btn-sm" data-s="articles" onclick="showReglaj('articles')">Artik</button>
+    <button class="btn btn-ghost btn-sm" data-s="prix" onclick="showReglaj('prix')">Pri &amp; FEY</button>
+    <button class="btn btn-ghost btn-sm" data-s="atelier" onclick="showReglaj('atelier')">Atélié</button>
+    <button class="btn btn-ghost btn-sm" data-s="etiquette" onclick="showReglaj('etiquette')">Étikèt</button>
+    <button class="btn btn-ghost btn-sm" data-s="equilibre" onclick="showReglaj('equilibre')">Lékilib</button>
+    <button class="btn btn-ghost btn-sm" data-s="commandes" onclick="showReglaj('commandes')">Komand <span id="cmd-badge" class="rlk-badge-n" style="display:none">0</span></button>
+    <button class="btn btn-ghost btn-sm" data-s="stock" onclick="showReglaj('stock')">Stok</button>
+    <button class="btn btn-ghost btn-sm" data-s="agenda" onclick="showReglaj('agenda')">Lazenda</button>
+    <button class="btn btn-ghost btn-sm" data-s="messagerie" onclick="showReglaj('messagerie')">Mesaj <span id="msg-badge" class="rlk-badge-n" style="display:none">0</span></button>
+    <button class="btn btn-ghost btn-sm" data-s="stats" onclick="showReglaj('stats')">Stat</button>
   </div>
 
   <!-- ZADÉRAN -->
@@ -981,8 +1044,9 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
       </div>
       <div class="card">
         <div class="card-title">Adhésions et paiements</div>
-        <div class="rlk-note" style="margin:0 0 10px">Les adhésions et paiements sont gérés sur Yapla, qui envoie les factures.</div>
-        <button class="btn btn-primary btn-sm" onclick="openYapla()">Ouvrir Yapla</button>
+        <div class="rlk-note" style="margin:0 0 10px">Les paiements sont faits sur Yapla, qui envoie les reçus. Confirmez ici chaque paiement reçu.</div>
+        <div id="adh-confirm-list" class="rlk-note">Chargement…</div>
+        <div style="margin-top:12px"><button class="btn btn-primary btn-sm" onclick="openYapla()">Ouvrir Yapla</button></div>
       </div>
     </div>
   </div>
@@ -1082,14 +1146,17 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
       <div class="card-title">La règle des parts (valeur des produits)</div>
       <table class="tbl"><thead><tr><th>Catégorie</th><th>FEY crédités par kg donné</th><th>FEY transformés par kg</th></tr></thead><tbody id="cl-tbody"></tbody></table>
       <div style="margin-top:12px"><button class="btn btn-primary btn-sm" onclick="rlkSaveClasses()">Enregistrer et publier</button></div>
-      <div class="rlk-note">Ce tableau pilote le crédit de FEY affiché sur la page DON et le texte « La règle des parts » de la page d'accueil.</div>
+      <div class="rlk-note">Ce tableau pilote le crédit de FEY affiché sur la page TROK et le texte « La règle des parts » de la page d'accueil.</div>
     </div>
     <div class="card">
-      <div class="card-title">Quantité de chaque produit pour 1 FEY</div>
-      <table class="tbl"><thead><tr><th>Produit</th><th>Quantité pour 1 FEY</th><th>Unité</th><th></th></tr></thead><tbody id="prix-tbody"></tbody></table>
+      <div class="card-title">Liste des fruits, légumes et aromates <span id="fr-count" style="float:right;font-weight:500;color:var(--text3)"></span></div>
+      <div class="rlk-note" style="margin:0 0 8px">Cette liste alimente la page TROK. <b>La catégorie fixée ici détermine la valeur en FEY</b> : les adhérents ne la choisissent pas. Toute modification (nouveau produit, nouveau nom, catégorie) s'actualise sur tous les téléphones après « Enregistrer et publier ». « Kg par unité » sert à convertir les mains, bottes, bouquets et unités en kilos.</div>
+      <div id="fr-note"></div>
+      <input type="search" id="fr-filtre" placeholder="Rechercher un produit…" oninput="rlkFruitFiltre()" style="margin-bottom:10px">
+      <div id="prix-tbody" style="max-height:560px;overflow-y:auto"></div>
       <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-        <button class="btn btn-outline btn-sm" onclick="rlkAddPrixRow()">+ Ajouter un produit</button>
-        <button class="btn btn-primary btn-sm" onclick="rlkSavePrix()">Enregistrer et publier</button>
+        <button class="btn btn-outline btn-sm" type="button" onclick="rlkAddPrixRow()">+ Ajouter un produit</button>
+        <button class="btn btn-primary btn-sm" type="button" onclick="rlkSavePrix()">Enregistrer et publier</button>
       </div>
     </div>
   </div>
@@ -1099,14 +1166,10 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
     <div class="rlk-grid">
       <div class="card">
         <div class="card-title">Combien de personnes à l'atelier ?</div>
-        <div class="fr2">
-          <div><label>Nombre de fruits</label><input type="number" id="at-nb" value="200" min="0" oninput="rlkCalcAtelier()"></div>
-          <div><label>Poids d'un fruit (g)</label><input type="number" id="at-poids" value="100" min="1" oninput="rlkCalcAtelier()"></div>
-        </div>
-        <div class="fr2">
-          <div><label>FEY par kg</label><input type="number" id="at-upk" value="4" step="0.5" min="1" oninput="rlkCalcAtelier()"></div>
-          <div><label>Participants prévus</label><input type="number" id="at-prevus" value="10" min="1" oninput="rlkCalcAtelier()"></div>
-        </div>
+        <div class="rlk-note" style="margin:0 0 10px">Le nombre dépend des kilos et des FEY qu'ils représentent : minimum <b>20 FEY</b> produits pour lancer l'atelier, et <b>1 participant par FEY</b> réservé aux préparants (¼ des FEY produits). Exemple : 20 FEY produits, 5 participants au maximum.</div>
+        <div id="at-lines"></div>
+        <button class="btn btn-ghost btn-sm" type="button" onclick="rlkAtAddLine()">+ Ajouter un produit</button>
+        <div class="fr" style="margin-top:10px"><label>Participants prévus</label><input type="number" id="at-prevus" value="5" min="1" oninput="rlkCalcAtelier()"></div>
         <div class="rlk-res"><div class="k">Maximum de personnes</div><div class="v" id="at-max">—</div><div class="s" id="at-detail"></div></div>
         <div id="at-verdict" class="rlk-note"></div>
       </div>
@@ -1143,8 +1206,9 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
         </div>
         <div class="fr2">
           <div><label>Nombre de pots produits</label><input type="number" id="lot-qte" min="0" oninput="rlkLotPreview()"></div>
-          <div><label>DDM / DLC</label><input type="date" id="lot-dlc"></div>
+          <div><label>Mention de date</label><select id="lot-dtype"><option value="DDM">DDM : à consommer de préférence avant</option><option value="DLC">DLC : à consommer jusqu'au</option></select></div>
         </div>
+        <div class="fr"><label>Date de DDM ou DLC * (figure sur l'étiquette)</label><input type="date" id="lot-dlc"></div>
         <div class="fr"><label>Ingrédients (allergènes à signaler)</label><input type="text" id="lot-ingr" placeholder="Pomelos, sucre de canne, citron"></div>
         <div class="fr"><label>Allergènes présents</label><input type="text" id="lot-allerg" placeholder="Aucun / gluten, lait..."></div>
         <div class="fr"><label>Équipe présente (cueilleurs et cuisiniers)</label><div class="rlk-chk" id="lot-equipe" style="max-height:130px;overflow:auto"></div></div>
@@ -1267,7 +1331,7 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
   <div id="reglaj-agenda" style="display:none">
     <div class="rlk-grid">
       <div class="card">
-        <div class="card-title">Nouvel atelier ou événement</div>
+        <div class="card-title" id="ev-form-title">Nouvel atelier ou événement</div>
         <div class="fr"><label>Titre</label><input type="text" id="ev-titre"></div>
         <div class="fr2">
           <div><label>Début</label><input type="datetime-local" id="ev-debut"></div>
@@ -1280,8 +1344,9 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
         </div>
         <div class="fr"><label>Objet du jour</label><input type="text" id="ev-objet" placeholder="Confiture de pomelos"></div>
         <div class="fr"><label>Description</label><textarea id="ev-desc" rows="4"></textarea></div>
+        <div class="fr"><label>Photo (facultatif)</label><input type="file" id="ev-photo" accept="image/*" onchange="rlkEvPhoto(this)"><div id="ev-photo-prev"></div></div>
         <div class="fr"><label>Fiches protocole et recettes (un lien par ligne : Titre | https://…)</label><textarea id="ev-fiches" rows="3" placeholder="Fiche confiture | https://drive.google.com/…"></textarea></div>
-        <button class="btn btn-primary btn-sm" onclick="rlkSaveEvent()">Publier l'événement</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" id="ev-save-btn" onclick="rlkSaveEvent()">Publier l'événement</button><button class="btn btn-ghost btn-sm" id="ev-cancel-btn" style="display:none" onclick="rlkEvReset()">Annuler la modification</button></div>
       </div>
       <div class="card"><div class="card-title">Événements publiés</div><div id="ev-admin-list" class="rlk-note">Chargement…</div></div>
     </div>
@@ -1295,10 +1360,18 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
         <div class="rlk-thread" id="msg-thread"></div>
         <div class="tchat-input"><input type="text" id="msg-reply-input" placeholder="Votre réponse…" onkeypress="if(event.key==='Enter')rlkReply()"><button class="btn btn-primary btn-sm" onclick="rlkReply()">Répondre</button></div></div>
     </div>
+    <div class="card"><div class="card-title">Canal général et canal administrateurs</div>
+      <div id="msg-canaux" class="rlk-note">Chargement…</div>
+      <div class="tchat-input"><select id="msg-canal-sel" style="width:auto"><option value="general">Général</option><option value="admin">Administrateurs</option></select><input type="text" id="msg-canal-input" placeholder="Votre message…" onkeypress="if(event.key==='Enter')rlkSendCanal()"><button class="btn btn-primary btn-sm" onclick="rlkSendCanal()">Envoyer</button></div>
+    </div>
   </div>
 
   <!-- STATISTIQUES -->
   <div id="reglaj-stats" style="display:none">
+    <div class="card" style="margin-bottom:14px"><div class="card-title">Rapport d'activité</div>
+      <div class="fr2"><div><label>Du</label><input type="date" id="rp-d1"></div><div><label>Au</label><input type="date" id="rp-d2"></div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" type="button" onclick="rlkRapport()">Générer</button><button class="btn btn-outline btn-sm" type="button" onclick="rlkRapportPrint()">Imprimer / PDF</button><button class="btn btn-ghost btn-sm" type="button" onclick="rlkRapportCsv()">Exporter CSV</button></div>
+      <div id="rp-out" class="rlk-note">Choisissez une période. Les trocs sont archivés chaque semaine (lundi au dimanche) sans jamais être effacés.</div></div>
     <div class="card"><div class="card-title">Statistiques du questionnaire <button class="btn btn-ghost btn-xs" style="float:right" onclick="rlkExportStats()">Exporter CSV</button></div>
       <div id="stats-body" class="rlk-note">Chargement…</div></div>
   </div>
@@ -1409,24 +1482,22 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
 </div>
 
 <!-- ══ BLOG ══ -->
+<!-- ══ LADILAFÉ (blog) ══ -->
 <div id="page-blog" class="page">
-  <div class="page-title">Resèt & Konsèy</div>
-  <div class="page-sub">Recettes créoles, astuces de jardin, actualités du réseau</div>
-
-  <div class="search-bar">
-    <input type="text" id="blog-search" placeholder="Chercher une recette, un conseil…" oninput="filterBlog()">
-    <select id="blog-cat" onchange="filterBlog()">
-      <option value="">Toutes catégories</option>
-      <option value="recette">Recettes</option>
-      <option value="jardin">Jardin</option>
-      <option value="astuce">Astuces</option>
-      <option value="actualite">Actualités</option>
-    </select>
+  <div id="blog-list">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <div><div class="page-title">Ladilafé</div><div class="page-sub" style="margin-bottom:0">Nout zévénman, nout roset, nout Zarboutan : les histoires du réseau.</div></div>
+      <div id="blog-admin-btns" style="display:none;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" type="button" onclick="rlkPostEdit(null)">+ Nouvel article</button>
+        <button class="btn btn-outline btn-sm" type="button" onclick="rlkBlogCatsToggle()">Catégories</button>
+      </div>
+    </div>
+    <div id="blog-cats-admin" class="card" style="display:none;margin:14px 0"></div>
+    <div class="search-bar" style="margin-top:16px"><input type="search" id="blog-search" placeholder="Chercher un article…" oninput="rlkBlogRender()"></div>
+    <div id="blog-chips" class="rlk-chips"></div>
+    <div id="blog-grid" class="rlk-blog-grid"><div class="loading"><div class="spinner"></div>Chargement…</div></div>
   </div>
-
-  <div id="blog-grid" class="g3">
-    <div class="loading"><div class="spinner"></div>Chargement…</div>
-  </div>
+  <div id="blog-read" style="display:none"></div>
 </div>
 
 <!-- ══ TCHAT ══ -->
@@ -1465,6 +1536,57 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
     </div>
     <div id="tchat-placeholder" style="display:none"></div>
   </div>
+</div>
+
+<!-- ══ MON KONT ══ -->
+<div id="page-kont" class="page">
+  <div class="page-title">Mon kont</div>
+  <div class="page-sub">Vos coordonnées, votre mot de passe, vos FEY, vos trocs et vos commandes.</div>
+  <div id="kont-adh"></div>
+
+  <div class="card">
+    <div class="card-title">Mes coordonnées</div>
+    <div class="fr2"><div><label>Nom</label><input type="text" id="k-nom"></div><div><label>Prénom</label><input type="text" id="k-prenom"></div></div>
+    <div class="fr"><label>Adresse</label><input type="text" id="k-adr"></div>
+    <div class="fr2"><div><label>Code postal</label><input type="text" id="k-cp"></div><div><label>Commune</label><input type="text" id="k-ville"></div></div>
+    <div class="fr"><label>Téléphone</label><input type="tel" id="k-tel"></div>
+    <div class="fr"><label>Adresse mail</label><input type="email" id="k-email"><div class="rlk-note">Si vous changez d'adresse mail, un message de confirmation vous est envoyé.</div></div>
+    <div class="fr"><label>Mon rôle dans le réseau</label>
+      <div class="rlk-chk" id="k-roles">
+        <label><input type="checkbox" value="Animateur"> Animateur</label>
+        <label><input type="checkbox" value="Cuisinier"> Cuisinier</label>
+        <label><input type="checkbox" value="Formateur"> Formateur</label>
+        <label><input type="checkbox" value="Producteur"> Producteur</label>
+        <label><input type="checkbox" value="Acheteur"> Acheteur</label>
+      </div></div>
+    <button class="btn btn-primary btn-sm" type="button" onclick="rlkKontSave()">Enregistrer mes coordonnées</button>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="card-title">Mon mot de passe</div>
+    <div class="fr"><label>Nouveau mot de passe (6 caractères minimum)</label><input type="password" id="k-pwd" autocomplete="new-password"></div>
+    <div class="fr"><label>Confirmer</label><input type="password" id="k-pwd2" autocomplete="new-password"></div>
+    <button class="btn btn-outline btn-sm" type="button" onclick="rlkKontPwd()">Changer mon mot de passe</button>
+    <div class="rlk-note">Votre mot de passe actuel vous sera demandé pour confirmer.</div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="card-title">Mes FEY <span id="k-solde" style="float:right;color:var(--accent)">—</span></div>
+    <div id="k-fey" class="rlk-note">Chargement…</div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="card-title">Mes trocs de fruits <span id="k-kgtot" style="float:right;font-weight:500;color:var(--text3)"></span></div>
+    <div id="k-trocs" class="rlk-note">Chargement…</div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="card-title">Mes commandes</div>
+    <div id="k-cmds" class="rlk-note">Chargement…</div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="card-title">Mes abonnements au panyé</div>
+    <div id="k-abos" class="rlk-note">Chargement…</div>
+  </div>
+  <div style="margin-top:16px"><button class="btn btn-ghost btn-sm" type="button" onclick="doLogout()">Dékonekte</button></div>
 </div>
 
 </main>
@@ -1547,21 +1669,18 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
 <!-- INSCRY -->
 <div class="modal-overlay" id="m-inscry">
   <div class="modal" style="max-width:700px">
-    <div class="modal-hdr"><div class="modal-title">Mi inskry a mwin — Adhésion en ligne</div><button class="modal-close" onclick="closeModal('m-inscry')">✕</button></div>
+    <div class="modal-hdr"><div class="modal-title">Mi inskri · Adhésion</div><button class="modal-close rlk-xbtn" onclick="rlkCloseInscry()" aria-label="Fermer">Fermer ✕</button></div>
     <div class="modal-body">
       <div class="steps-bar">
-        <button class="step-btn active" id="sb1" onclick="goStep(1)">1. Statuts</button>
-        <button class="step-btn" id="sb2" onclick="goStep(2)">2. Bulletin</button>
-        <button class="step-btn" id="sb3" onclick="goStep(3)">3. Paiement</button>
-        <button class="step-btn" id="sb4" onclick="goStep(4)">4. Reçu</button>
+        <button class="step-btn active" id="sb1" type="button">1. Statuts</button>
+        <button class="step-btn" id="sb2" type="button">2. Bulletin</button>
+        <button class="step-btn" id="sb3" type="button">3. Adhésion</button>
       </div>
 
-      <!-- STEP 1 STATUTS -->
       <div class="step-panel active" id="sp1">
-        <div style="background:var(--accent-l);border:1px solid rgba(26,61,43,0.2);border-radius:6px;padding:9px 13px;margin-bottom:14px;font-size:11px;color:var(--accent2);font-family:'DM Mono',monospace;letter-spacing:0.04em">
-          STATUTS ADOPTÉS EN ASSEMBLÉE GÉNÉRALE CONSTITUTIVE DU 27/04/2026 — TEXTE CERTIFIÉ CONFORME
-        </div>
-        <div id="statuts-src" style="max-height:340px;overflow-y:auto;padding-right:6px">
+        <div class="rlk-note" style="margin:0 0 10px">Statuts adoptés en assemblée générale constitutive du 27/04/2026.</div>
+        <div id="statuts-src" style="max-height:300px;overflow-y:auto;padding-right:6px;border:1px solid var(--border);border-radius:6px;padding:10px">
+
           <div class="statut-art"><h4>Article 1 — Dénomination</h4><p>Il est fondé entre les adhérents aux présents statuts une association régie par la loi du 1er juillet 1901 et le décret du 16 août 1901, ayant pour titre : <strong>RÉZO LA KOUR</strong>.</p></div>
           <div class="statut-art"><h4>Article 2 — Objet</h4>
             <p><strong>2.1 — Lutte contre le gaspillage alimentaire et les déchets d'emballage.</strong> L'association organise la collecte des fruits et légumes en surplus ou non récoltés dans les jardins privés, les parcelles de particuliers et les exploitations agricoles partenaires. Elle en assure la redistribution en circuits ultra-courts sous forme de paniers frais, et transforme en produits conservés (confitures, chutneys, jus, fruits séchés, poudres, huiles pressées à froid) les fruits ne pouvant être écoulés en l'état. Ce faisant, elle vise à atteindre le taux de valorisation le plus proche possible de zéro déchet alimentaire. L'association promeut l'utilisation de contenants réutilisables et consignés (bocaux, bouteilles retournables), et encourage ses membres à réduire les emballages à usage unique dans l'ensemble de la filière, contribuant ainsi à la diminution des déchets plastiques et d'emballage sur le territoire.</p>
@@ -1585,139 +1704,76 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
           <div class="statut-art"><h4>Article 14 — Règlement intérieur</h4><p>Un règlement intérieur, établi par le bureau et ratifié par l'assemblée générale, précise les modalités de fonctionnement de l'association non prévues par les présents statuts, notamment : les barèmes d'équivalences fruits/paniers et leur mécanisme d'actualisation selon les prix de gros locaux, les modalités de paiement en monnaie locale, les conditions de prêt et d'utilisation des équipements mutualisés, les règles d'hygiène et de sécurité alimentaire applicables aux activités de transformation, et les conditions d'accès au réseau des producteurs partenaires.</p></div>
           <div class="statut-art"><h4>Article 15 — Dissolution</h4><p>En cas de dissolution prononcée par l'assemblée générale extraordinaire, un ou plusieurs liquidateurs sont nommés par celle-ci. L'actif net est dévolu conformément à l'article 9 de la loi du 1er juillet 1901, à une ou plusieurs associations poursuivant des buts similaires, désignées par l'assemblée générale extraordinaire. Les équipements mutualisés acquis grâce à des subventions publiques feront l'objet d'une consultation préalable avec les organismes financeurs pour déterminer les modalités de leur dévolution ou de leur remboursement éventuel.</p></div>
           <div class="statut-art"><h4>Article 16 — Déclaration et formalités</h4><p>Le/La président(e) procède, dans les délais légaux, aux déclarations prévues à l'article 5 de la loi du 1er juillet 1901 et au décret du 16 août 1901, notamment en ce qui concerne les modifications apportées aux statuts et les changements survenus dans l'administration de l'association.</p></div>
+        
         </div>
-        <div class="statut-check" onclick="this.querySelector('input').checked=!this.querySelector('input').checked">
-          <input type="checkbox" id="statuts-ok">
-          <span>J'ai pris connaissance des statuts adoptés en AG du 27/04/2026 (facultatif : vous pouvez continuer sans cocher).</span>
-        </div>
-        <div style="margin-top:16px;display:flex;justify-content:flex-end">
-          <button class="btn btn-primary" onclick="nextStep(1)">Continuer →</button>
+        <label class="statut-check" for="statuts-ok" style="display:flex">
+          <input type="checkbox" id="statuts-ok" onchange="rlkStatutsOk()">
+          <span>J'ai pris connaissance des statuts.</span>
+        </label>
+        <div class="rlk-note" id="statuts-hint" style="margin:8px 0 0">Cochez la case pour passer à l'étape suivante.</div>
+        <div class="rlk-modal-btns">
+          <button class="btn btn-ghost" type="button" onclick="rlkCloseInscry()">Fermer</button>
+          <button class="btn btn-primary" type="button" id="btn-statuts-next" onclick="nextStep(1)" disabled>Continuer →</button>
         </div>
       </div>
 
-      <!-- STEP 2 BULLETIN -->
       <div class="step-panel" id="sp2">
         <div class="fr2">
-          <div><label>Nom *</label><input type="text" id="a-nom" placeholder="DUPONT"></div>
-          <div><label>Prénom *</label><input type="text" id="a-prenom" placeholder="Marie"></div>
+          <div><label>Nom *</label><input type="text" id="a-nom" placeholder="DUPONT" autocomplete="family-name"></div>
+          <div><label>Prénom *</label><input type="text" id="a-prenom" placeholder="Marie" autocomplete="given-name"></div>
         </div>
-        <div class="fr"><label>Adresse</label><input type="text" id="a-adr" placeholder="Adresse (optionnel)"></div>
+        <div class="fr"><label>Adresse</label><input type="text" id="a-adr" placeholder="Adresse" autocomplete="street-address"></div>
         <div class="fr2">
-          <div><label>Code postal</label><input type="text" id="a-cp" placeholder="97411"></div>
+          <div><label>Code postal</label><input type="text" id="a-cp" placeholder="97411" autocomplete="postal-code"></div>
           <div><label>Commune</label><input type="text" id="a-ville" placeholder="Saint-Paul"></div>
         </div>
         <div class="fr2">
-          <div><label>Téléphone</label><input type="tel" id="a-tel" placeholder="0692 XX XX XX"></div>
-          <div><label>Email *</label><input type="email" id="a-email" placeholder="prenom@email.re"></div>
+          <div><label>Téléphone *</label><input type="tel" id="a-tel" placeholder="0692 XX XX XX" autocomplete="tel"></div>
+          <div><label>Email *</label><input type="email" id="a-email" placeholder="prenom@email.re" autocomplete="email"></div>
         </div>
         <div class="fr2">
-          <div><label>Mot de passe * (min. 6 car.)</label><input type="password" id="a-pwd" placeholder="••••••••"></div>
-          <div><label>Confirmer *</label><input type="password" id="a-pwd2" placeholder="••••••••"></div>
+          <div><label>Mot de passe * (6 caractères minimum)</label><input type="password" id="a-pwd" placeholder="••••••••" autocomplete="new-password"></div>
+          <div><label>Confirmer *</label><input type="password" id="a-pwd2" placeholder="••••••••" autocomplete="new-password"></div>
         </div>
         <div class="fr">
-          <label>Rôle dans le réseau</label>
-          <select id="a-role">
-            <option value="jardinier">Jardinier consommateur — je donne des fruits et commande des paniers</option>
-            <option value="producteur">Agriculteur / Producteur — je vends au prix de gros</option>
-          </select>
-        </div>
-        <div class="fr">
-          <label>Type d'adhésion</label>
-          <select id="a-type">
-            <option value="actif">Membre actif — 15€</option>
-            <option value="producteur">Membre producteur partenaire — 15€</option>
-            <option value="bienfaiteur">Membre bienfaiteur — don libre (min. 30€)</option>
-          </select>
-        </div>
-        <div class="fr"><label>Don supplémentaire (optionnel)</label><input type="number" id="a-don" placeholder="0" min="0" step="1"></div>
-        <div class="fond-box">
-          <label class="fond-check">
-            <input type="checkbox" id="a-fondateur" onchange="toggleFondateur(this)">
-            <span>Je suis membre fondateur(trice) <span style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text3)">(adhésion déjà réglée)</span></span>
-          </label>
-          <div id="fond-code" style="display:none;margin-top:10px">
-            <label>Code fondateur *</label>
-            <input type="text" id="a-code" placeholder="Code transmis lors de l'AG constitutive">
+          <label>Mon rôle dans le réseau (un ou plusieurs choix)</label>
+          <div class="rlk-chk" id="a-roles">
+            <label><input type="checkbox" value="Animateur"> Animateur</label>
+            <label><input type="checkbox" value="Cuisinier"> Cuisinier</label>
+            <label><input type="checkbox" value="Formateur"> Formateur</label>
+            <label><input type="checkbox" value="Producteur"> Producteur</label>
+            <label><input type="checkbox" value="Acheteur"> Acheteur</label>
           </div>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-top:16px">
-          <button class="btn btn-ghost" onclick="goStep(1)">← Retour</button>
-          <button class="btn btn-primary" onclick="nextStep(2)">Continuer →</button>
+        <div class="rlk-modal-btns">
+          <button class="btn btn-ghost" type="button" onclick="goStep(1)">← Retour</button>
+          <button class="btn btn-ghost" type="button" onclick="rlkCloseInscry()">Fermer</button>
+          <button class="btn btn-primary" type="button" id="btn-bulletin-next" onclick="nextStep(2)">Créer mon compte →</button>
         </div>
       </div>
 
-      <!-- STEP 3 PAIEMENT -->
       <div class="step-panel" id="sp3">
-        <div class="card" style="margin-bottom:14px;border-color:var(--accent)">
-          <div class="card-title">Récapitulatif</div>
-          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.85rem"><span>Cotisation annuelle</span><span id="r-cotis">15,00 €</span></div>
-          <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:0.85rem" id="r-don-row" style="display:none"><span>Don à l'association</span><span id="r-don">0,00 €</span></div>
-          <div style="display:flex;justify-content:space-between;padding:10px 0 0;font-size:1rem;font-weight:700;border-top:2px solid var(--black)"><span>Total</span><span id="r-total">15,00 €</span></div>
+        <div class="rlk-ok" style="margin-bottom:12px"><b>Votre compte est créé.</b> Bienvenue dans le réseau Rézo la Kour.</div>
+        <div class="card" style="border-color:var(--accent)">
+          <div class="card-title">Régler mon adhésion sur Yapla</div>
+          <p style="font-size:.88rem;line-height:1.6;margin:0 0 10px">Le paiement se fait sur notre espace Yapla. <b>Yapla vous envoie directement votre reçu par mail.</b></p>
+          <ol style="font-size:.85rem;line-height:1.7;margin:0 0 12px;padding-left:20px">
+            <li>Touchez « Payer mon adhésion sur Yapla ».</li>
+            <li>Réglez votre cotisation.</li>
+            <li>Revenez dans l'application (vous y restez connecté) et touchez « J'ai payé ».</li>
+          </ol>
+          <button class="btn btn-primary" type="button" style="width:100%" onclick="rlkPayerYapla()">Payer mon adhésion sur Yapla</button>
         </div>
-
-        <div id="p-fondateur" style="display:none">
-          <div class="alert a-ok">✓ Membre fondateur : adhésion déjà réglée. Aucun paiement requis.</div>
+        <div class="rlk-modal-btns" style="flex-wrap:wrap">
+          <button class="btn btn-outline" type="button" onclick="rlkAiPaye()">J'ai payé, retour dans l'appli</button>
+          <button class="btn btn-ghost" type="button" onclick="rlkCloseInscry()">Je paierai plus tard</button>
         </div>
-        <div id="p-standard">
-          <div class="fr"><label>Mode de paiement</label>
-            <select id="a-paiement"><option value="cb">Carte bancaire (CB) — obligatoire pour les adhésions</option></select>
-          </div>
-          <div class="alert a-warn">Le paiement sécurisé CB sera intégré via Stripe lors de la mise en production. En mode démo, cliquez Valider pour simuler.</div>
-        </div>
-
-        <div class="fr2" style="margin-top:14px">
-          <div><label>Date</label><input type="date" id="a-date" value="2026-05-07"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;margin-top:14px">
-          <button class="btn btn-ghost" onclick="goStep(2)">← Retour</button>
-          <button class="btn btn-primary" id="btn-valider-adh" onclick="validerAdhesion()">Valider mon adhésion →</button>
-        </div>
-      </div>
-
-      <!-- STEP 4 REÇU -->
-      <div class="step-panel" id="sp4">
-        <div class="alert a-ok" style="margin-bottom:16px;font-weight:500">✓ Adhésion enregistrée ! Bienvenue dans le réseau Rézo la Kour.</div>
-
-        <div id="sp4-bienvenue" style="display:none">
-          <div class="card" style="text-align:center;padding:28px">
-            <div style="font-size:2.5rem;margin-bottom:12px">🌿</div>
-            <div style="font-size:1.1rem;font-weight:600;margin-bottom:8px">Membre fondateur enregistré</div>
-            <div style="font-size:0.85rem;color:var(--text2);margin-bottom:16px;line-height:1.65">Adhésion gratuite confirmée. Aucun reçu fiscal généré car aucun versement n'a été effectué.</div>
-            <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)" id="sp4-num">N° adhérent : —</div>
-          </div>
-          <div style="display:flex;justify-content:center;margin-top:14px">
-            <button class="btn btn-primary" onclick="closeModal('m-inscry')">Accéder à mon compte</button>
-          </div>
-        </div>
-
-        <div id="sp4-recu">
-          <div class="cerfa">
-            <div class="cerfa-title">REÇU DE DON — CERFA N° 11580*04<br>Articles 200 et 238 bis du Code Général des Impôts</div>
-            <div class="cerfa-row"><div class="cerfa-label">Association :</div><div class="cerfa-val">Rézo la Kour — Association loi 1901</div></div>
-            <div class="cerfa-row"><div class="cerfa-label">Siège social :</div><div class="cerfa-val">199 ch. des Combavas, 97411 Bois-de-Nèfles Saint-Paul</div></div>
-            <div class="cerfa-row"><div class="cerfa-label">Objet :</div><div class="cerfa-val">Réseau citoyen valorisation fruits — intérêt général</div></div>
-            <div style="border-top:1px solid #000;margin:10px 0"></div>
-            <div class="cerfa-row"><div class="cerfa-label">Donateur :</div><div class="cerfa-val" id="c-nom">—</div></div>
-            <div class="cerfa-row"><div class="cerfa-label">Adresse :</div><div class="cerfa-val" id="c-adr">—</div></div>
-            <div class="cerfa-row"><div class="cerfa-label">Date :</div><div class="cerfa-val" id="c-date">—</div></div>
-            <div class="cerfa-row"><div class="cerfa-label">Montant versé :</div><div class="cerfa-val" id="c-montant">—</div></div>
-            <div class="cerfa-row"><div class="cerfa-label">Nature :</div><div class="cerfa-val">Numéraire (cotisation annuelle + don éventuel)</div></div>
-            <div style="border-top:1px solid #000;margin:10px 0;font-size:9px;color:var(--text3)">Ce reçu est délivré conformément à l'article 200 du CGI. Il ouvre droit à une réduction d'impôt de 66 % dans la limite de 20 % du revenu imposable. À conserver et joindre à votre déclaration fiscale annuelle.</div>
-            <div style="display:flex;justify-content:space-between;font-size:10px;margin-top:10px">
-              <div><div style="color:var(--text3);margin-bottom:2px">N° adhérent</div><strong id="c-num">—</strong></div>
-              <div style="text-align:right"><div style="color:var(--text3);margin-bottom:2px">Signature de la présidente</div><img src="data:image/gif;base64,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" style="height:50px;max-width:160px;object-fit:contain;display:block;margin-top:2px;filter:contrast(1.2)"></div>
-            </div>
-          </div>
-          <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-            <button class="btn btn-primary" onclick="imprimerRecu()">Imprimer</button>
-
-            <button class="btn btn-ghost" onclick="closeModal('m-inscry')">Accéder à mon compte</button>
-          </div>
-        </div>
+        <div class="rlk-note">Une administratrice confirmera votre paiement dans Yapla. Vous pouvez utiliser l'application dès maintenant.</div>
       </div>
     </div>
   </div>
 </div>
+
 
 <!-- COMMANDE BOUTIQUE / PANYÉ -->
 <div class="modal-overlay" id="m-commande">
@@ -1786,8 +1842,42 @@ details.rlk-bar>summary::-webkit-details-marker{display:none}
       <div class="rlk-chk"><label><input type="checkbox" id="art-haccp"> Fabrication validée (fiche HACCP)</label></div>
     </div>
     <div class="modal-footer">
+      <button class="btn btn-ghost" id="art-del" style="display:none;color:#B3261E;margin-right:auto" onclick="rlkDelArticle()">Supprimer</button>
       <button class="btn btn-ghost" onclick="closeModal('m-article')">Annuler</button>
       <button class="btn btn-primary" onclick="rlkSaveArticle()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="m-post">
+  <div class="modal" style="max-width:760px">
+    <div class="modal-hdr"><div class="modal-title" id="post-ttl">Article</div><button class="modal-close rlk-xbtn" onclick="closeModal('m-post')">Fermer ✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="post-id">
+      <div class="fr"><label>Titre de l'article *</label><input type="text" id="post-titre"></div>
+      <div class="fr2">
+        <div><label>Catégorie</label><select id="post-cat"></select></div>
+        <div><label>Publication</label><select id="post-publie"><option value="0">Brouillon (invisible)</option><option value="1">Publié</option></select></div>
+      </div>
+      <div class="fr"><label>Résumé (sous le titre, dans la liste)</label><textarea id="post-chapeau" rows="2"></textarea></div>
+      <div class="fr"><label>Photo de couverture</label><input type="file" accept="image/*" onchange="rlkPostCover(this)"><div id="post-cover-prev"></div></div>
+      <div class="rlk-qt" style="margin-top:20px">Contenu</div>
+      <div id="post-blocs"></div>
+      <div class="rlk-addblocs">
+        <button class="btn btn-ghost btn-xs" type="button" onclick="rlkBlocAdd('h2')">+ Grand titre</button>
+        <button class="btn btn-ghost btn-xs" type="button" onclick="rlkBlocAdd('h3')">+ Sous-titre</button>
+        <button class="btn btn-ghost btn-xs" type="button" onclick="rlkBlocAdd('p')">+ Paragraphe</button>
+        <button class="btn btn-ghost btn-xs" type="button" onclick="rlkBlocAdd('img')">+ Photo</button>
+        <button class="btn btn-ghost btn-xs" type="button" onclick="rlkBlocAdd('liste')">+ Liste</button>
+        <button class="btn btn-ghost btn-xs" type="button" onclick="rlkBlocAdd('cit')">+ Citation</button>
+        <button class="btn btn-ghost btn-xs" type="button" onclick="rlkBlocAdd('lien')">+ Lien vers un article</button>
+      </div>
+      <div class="rlk-note">Dans un paragraphe : **texte** pour le gras, [texte](https://…) pour un lien, ou le menu « Lier un article » pour pointer vers un autre article de Ladilafé.</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="post-del" style="display:none;color:#B3261E;margin-right:auto" onclick="rlkPostDel()">Supprimer</button>
+      <button class="btn btn-ghost" onclick="closeModal('m-post')">Annuler</button>
+      <button class="btn btn-primary" onclick="rlkPostSave()">Enregistrer</button>
     </div>
   </div>
 </div>
@@ -2216,6 +2306,9 @@ function goStep(n) {
 }
 
 function nextStep(n) {
+  if (n === 1 && !document.getElementById('statuts-ok').checked) {
+    toast('Veuillez accepter les statuts pour continuer'); return;
+  }
   if (n === 2) {
     var nom = document.getElementById('a-nom').value;
     var email = document.getElementById('a-email').value;
@@ -2227,6 +2320,7 @@ function nextStep(n) {
     if (!pwd || pwd.length < 6) { toast('Mot de passe : 6 caractères minimum'); return; }
     if (pwd !== pwd2) { toast('Les mots de passe ne correspondent pas'); return; }
     if (fond) {
+      if (new Date() > new Date('2026-06-30')) { toast('Période fondateur expirée'); return; }
       var codeOk = ['FONDATEUR2026','RLK974','KOUR2026'].indexOf(code.trim().toUpperCase()) >= 0;
       if (!codeOk) { toast('Code fondateur invalide'); return; }
     }
@@ -3729,7 +3823,7 @@ function rlkDonPreview() {
   document.getElementById('don-preview').innerHTML = nb ? out.join('') + (totFey ? '<div style="margin-top:8px;font-size:1rem"><b>Total estimé : ' + totFey + ' FEY</b> (' + totFey + ' pot' + (totFey > 1 ? 's' : '') + ' à choisir au stock). ' + (totTr >= RLK.seuil ? 'Seuil de ' + RLK.seuil + ' FEY transformés atteint.' : 'Seuil de déplacement : ' + RLK.seuil + ' FEY transformés.') + '</div>' : '') : 'Ajoutez un produit et une quantité.';
 }
 function validerDispos() {
-  if (!currentUser) { toast('Inscrivez-vous ou connectez-vous pour déclarer un don'); openModal('m-login'); return; }
+  if (!currentUser) { toast('Inscrivez-vous ou connectez-vous pour déclarer un troc'); openModal('m-login'); return; }
   rlkEngage('Valider mon don de fruits', rlkDoDispos);
 }
 function rlkDoDispos() {
@@ -3752,13 +3846,13 @@ function rlkDoDispos() {
 function rlkDonIdentite() {
   var box = document.getElementById('don-identite'); if (!box) return;
   if (!currentUser) {
-    box.innerHTML = '<div class="rlk-id"><b>Pour déclarer un don, identifiez-vous.</b><br>Nous avons besoin de vos nom, prénom, téléphone et adresse pour organiser la cueillette.<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-primary btn-sm" onclick="openModal(\'m-inscry\')">Je m\'inscris</button><button class="btn btn-outline btn-sm" onclick="openModal(\'m-login\')">J\'ai déjà un compte</button></div></div>';
+    box.innerHTML = '<div class="rlk-id"><b>Pour déclarer un troc, identifiez-vous.</b><br>Nous avons besoin de vos nom, prénom, téléphone et adresse pour organiser la cueillette.<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn btn-primary btn-sm" onclick="openModal(\'m-inscry\')">Je m\'inscris</button><button class="btn btn-outline btn-sm" onclick="openModal(\'m-login\')">J\'ai déjà un compte</button></div></div>';
     return;
   }
   var p = profile || {};
   var nom = ((p.prenom || '') + ' ' + (p.nom || '')).trim();
   var manque = !p.telephone || !p.adresse;
-  box.innerHTML = '<div class="rlk-id"><b>Donateur : ' + rlkEsc(nom || currentUser.email) + '</b><br>' + rlkEsc(currentUser.email || '')
+  box.innerHTML = '<div class="rlk-id"><b>Adhérent : ' + rlkEsc(nom || currentUser.email) + '</b><br>' + rlkEsc(currentUser.email || '')
     + (p.telephone ? ' · ' + rlkEsc(p.telephone) : '') + (p.adresse ? '<br>' + rlkEsc(p.adresse) + (p.ville ? ', ' + rlkEsc((p.code_postal || '') + ' ' + p.ville) : '') : '')
     + (manque ? '<br><span style="color:#7A1020">Téléphone ou adresse manquant : écrivez-nous via TCHAT pour compléter votre fiche.</span>' : '') + '</div>';
 }
@@ -4231,6 +4325,7 @@ function rlkInitAtelier() {
 function rlkSaveLot() {
   var produit = rlkVal('lot-produit').trim(), q = rlkLotQte();
   if (!produit || q <= 0) { toast('Produit et quantité obligatoires'); return; }
+  if (!rlkVal('lot-dlc')) { toast('La date de DDM ou DLC est obligatoire (elle figure sur l\'étiquette)'); return; }
   var typ = rlkVal('lot-type').split('|'), p = rlkParts(q);
   var equipe = []; document.querySelectorAll('#lot-equipe input:checked').forEach(function(i) { equipe.push(i.value); });
   var share = equipe.length ? Math.floor(p.equipe / equipe.length) : 0, equipeFey = equipe.length ? share * equipe.length : p.equipe;
@@ -4241,11 +4336,11 @@ function rlkSaveLot() {
       ingredients: rlkVal('lot-ingr'), allergenes: rlkVal('lot-allerg'), dlc: rlkVal('lot-dlc') || null, qte_produite: q, fey_donateur: p.donateur, fey_equipe: equipeFey, fey_boutik: boutik,
       donateur_id: rlkVal('lot-donateur') || null, donateur_libre: rlkVal('lot-donlibre'), participants: equipe, qte_app: p.donateur + equipeFey, qte_yapla: boutik,
       ca_previsionnel: boutik * RLK.fey, created_by: currentUser.id,
-      releve: {reception: {etat: rlkVal('lot-etat'), decision: rlkVal('lot-decision')}, hygiene: hyg, observations: rlkVal('lot-obs')}};
+      releve: {dtype: rlkVal('lot-dtype') || 'DDM', reception: {etat: rlkVal('lot-etat'), decision: rlkVal('lot-decision')}, hygiene: hyg, observations: rlkVal('lot-obs')}};
     sb.from('rlk_lots').insert(row).select().then(function(res) {
       if (res.error) { toast(rlkErr(res.error)); return; }
       var lot = res.data && res.data[0], ledger = [];
-      if (lot && row.donateur_id && p.donateur) ledger.push({user_id: row.donateur_id, delta: p.donateur, motif: 'Don de ' + (row.fruit || 'fruits') + ' (' + num + ')', lot_id: lot.id});
+      if (lot && row.donateur_id && p.donateur) ledger.push({user_id: row.donateur_id, delta: p.donateur, motif: 'Troc de ' + (row.fruit || 'fruits') + ' (' + num + ')', lot_id: lot.id});
       if (lot && share) equipe.forEach(function(u) { ledger.push({user_id: u, delta: share, motif: 'Atelier ' + num, lot_id: lot.id}); });
       var done = function() { toast('✓ Lot ' + num + ' enregistré, FEY crédités'); rlkLoadLots(); rlkLotPreview(); };
       if (ledger.length) sb.from('rlk_fey').insert(ledger).then(done); else done();
@@ -4260,7 +4355,7 @@ function rlkLoadLots() {
     rows.forEach(function(l) { ca += Number(l.ca_previsionnel); });
     document.getElementById('lots-ca').textContent = 'CA prévisionnel total : ' + rlkFmt(ca, 2) + ' €';
     RLK.lots = rows;
-    el.innerHTML = rows.length ? '<table class="rlk-tbl"><tr><th>Lot</th><th>Produit</th><th>Pots</th><th>Don / Éq. / Boutik</th><th>CA prév.</th><th></th></tr>' + rows.map(function(l) {
+    el.innerHTML = rows.length ? '<table class="rlk-tbl"><tr><th>Lot</th><th>Produit</th><th>Pots</th><th>Hôte / Éq. / Boutik</th><th>CA prév.</th><th></th></tr>' + rows.map(function(l) {
       return '<tr><td>' + rlkEsc(l.numero_lot) + '<br><span style="color:var(--text3)">' + rlkDate(l.date_transfo) + '</span></td><td>' + rlkEsc(l.produit) + '</td><td>' + l.qte_produite + '</td><td>' + l.fey_donateur + ' / ' + l.fey_equipe + ' / ' + l.fey_boutik + '</td><td>' + rlkFmt(l.ca_previsionnel, 2) + ' €</td>'
         + '<td style="white-space:nowrap"><button class="btn btn-ghost btn-xs" onclick="rlkLabelFor(\'' + l.id + '\')">Étiquette</button> <button class="btn btn-ghost btn-xs" onclick="rlkPrintFiche(\'' + l.id + '\')">Fiche</button></td></tr>';
     }).join('') + '</table>' : 'Aucun lot enregistré.';
@@ -4274,7 +4369,7 @@ function rlkPrintFiche(id) {
     var eq = (l.participants || []).map(function(u) { return pm[u] || ''; }).filter(Boolean).join(', ');
     var html = '<div style="font-family:Arial,sans-serif;font-size:11pt;color:#000;padding:0"><h2 style="margin:0 0 6px">Rézo la Kour : fiche de traçabilité et d\'hygiène</h2><div>Lot <b>' + rlkEsc(l.numero_lot) + '</b> · transformé le ' + rlkDate(l.date_transfo) + '</div><hr>'
       + '<h3>Réception des produits de la cour</h3><div>Fruit : <b>' + rlkEsc(l.fruit || '') + '</b> · ' + rlkFmt(l.kg_fruits, 2) + ' kg · Donateur : ' + rlkEsc(pm[l.donateur_id] || l.donateur_libre || '') + '</div><div>État : ' + rlkEsc(rec.etat || '') + ' · Décision : ' + rlkEsc(rec.decision || '') + '</div>'
-      + '<h3>Produit fabriqué</h3><div><b>' + rlkEsc(l.produit) + '</b> · ' + l.qte_produite + ' × ' + rlkEsc(l.poids_net || '') + '</div><div>Ingrédients : ' + rlkEsc(l.ingredients || '') + '</div><div>Allergènes : ' + rlkEsc(l.allergenes || 'aucun déclaré') + '</div><div>' + (l.dlc_type || 'DDM') + ' : ' + rlkDate(l.dlc) + '</div>'
+      + '<h3>Produit fabriqué</h3><div><b>' + rlkEsc(l.produit) + '</b> · ' + l.qte_produite + ' × ' + rlkEsc(l.poids_net || '') + '</div><div>Ingrédients : ' + rlkEsc(l.ingredients || '') + '</div><div>Allergènes : ' + rlkEsc(l.allergenes || 'aucun déclaré') + '</div><div>' + ((l.releve && l.releve.dtype) || 'DDM') + ' : ' + rlkDate(l.dlc) + '</div>'
       + '<h3>Répartition en FEY</h3><div>Donateur ' + l.fey_donateur + ' · Équipe ' + l.fey_equipe + ' · Boutik ' + l.fey_boutik + ' · CA prévisionnel ' + rlkFmt(l.ca_previsionnel, 2) + ' €</div><div>Équipe présente : ' + rlkEsc(eq) + '</div>'
       + '<h3>Relevé d\'hygiène</h3>' + chk + '<div>Observations : ' + rlkEsc(r.observations || '') + '</div>'
       + '<h3>Températures relevées</h3><div>Réfrigération (0 à +4 °C) : ________ · Cuisson à cœur : ________ · Congélation (−18 °C) : ________</div><div style="margin-top:24px">Signature du responsable : ______________________</div></div>';
@@ -4324,7 +4419,7 @@ function rlkInitEtiquette() {
 function rlkLabelFromLot() {
   var l = (RLK.lots || []).filter(function(x) { return x.id === rlkVal('lb-lot'); })[0]; if (!l) return;
   document.getElementById('lb-prod').value = l.produit; document.getElementById('lb-poids').value = l.poids_net || ''; document.getElementById('lb-ingr').value = l.ingredients || '';
-  document.getElementById('lb-dlc').value = l.dlc || ''; document.getElementById('lb-lotnum').value = l.numero_lot; document.getElementById('lb-fab').value = l.date_transfo || ''; document.getElementById('lb-allerg').value = l.allergenes || '';
+  document.getElementById('lb-dlc').value = l.dlc || ''; document.getElementById('lb-dtype').value = (l.releve && l.releve.dtype) || 'DDM'; document.getElementById('lb-lotnum').value = l.numero_lot; document.getElementById('lb-fab').value = l.date_transfo || ''; document.getElementById('lb-allerg').value = l.allergenes || '';
   document.getElementById('lb-nb').value = l.qte_produite || 12; rlkLabelPrev();
 }
 function rlkLabelFor(id) { showReglaj('etiquette'); setTimeout(function() { document.getElementById('lb-lot').value = id; rlkLabelFromLot(); }, 600); }
@@ -4366,7 +4461,7 @@ var RLK_STAT_CMD = {en_attente: 'En attente', prete: 'Prête', payee: 'Payée su
 function rlkLoadCommandes() {
   Promise.all([sb.from('rlk_commandes').select('*').order('created_at', {ascending: false}).limit(60), rlkProfils()]).then(function(rs) {
     var el = document.getElementById('cmd-list'); if (!el) return;
-    if (rs[0].error) { el.textContent = "Les commandes seront disponibles après l'installation de la base (SQL v2)."; return; }
+    if (rs[0].error) { el.textContent = rlkErr(rs[0].error); return; }
     var rows = rs[0].data || []; RLK.cmds = rows;
     el.innerHTML = rows.length ? rows.map(function(c) {
       var lignes = (c.lignes || []).map(function(l) { return l.qty + ' × ' + rlkEsc(l.nom); }).join(', ');
@@ -4488,7 +4583,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (location.hash === '#install') navTo('install');
 });
 // ═══ MODULE 4 : accueil (défilé), mots de passe visibles, Boutik (articles, panyé, abonnements), Réglaj complémentaire ═══
-var RLK_VERSION = '2.1';
+var RLK_VERSION = '2.2';
 
 // ── Défilé de photos ──
 var rlkCarT = null, rlkCarI = 0;
@@ -4526,7 +4621,7 @@ function rlkEyes() {
 }
 
 // ── Diagnostic de la base ──
-var RLK_TABLES = ['rlk_params', 'rlk_config', 'rlk_prix', 'rlk_classes', 'rlk_jardins', 'rlk_questionnaire', 'rlk_lots', 'rlk_fey', 'rlk_stock', 'rlk_commandes', 'rlk_articles', 'rlk_abonnements', 'rlk_evenements', 'rlk_inscriptions', 'rlk_messages'];
+var RLK_TABLES = ['rlk_params', 'rlk_config', 'rlk_prix', 'rlk_classes', 'rlk_jardins', 'rlk_questionnaire', 'rlk_lots', 'rlk_fey', 'rlk_stock', 'rlk_commandes', 'rlk_articles', 'rlk_abonnements', 'rlk_evenements', 'rlk_inscriptions', 'rlk_messages', 'rlk_fruits', 'rlk_profil_ext'];
 function rlkDbCheck() {
   var box = document.getElementById('db-etat'); if (!box) return;
   box.innerHTML = '<div class="rlk-note">Vérification…</div>';
@@ -4535,7 +4630,7 @@ function rlkDbCheck() {
     .then(function(rs) {
       var ko = rs.filter(function(r) { return !r.ok; });
       box.innerHTML = (ko.length
-        ? '<div class="rlk-dbwarn"><b>Base de données à mettre à jour : ' + ko.length + ' élément(s) manquant(s).</b><br>Ouvrez Supabase, menu SQL Editor, collez le contenu du fichier <b>phase1_v2_additif.sql</b>, cliquez sur Run, puis rechargez cette page.<br><span style="font-size:12px">Manquants : ' + ko.map(function(r) { return rlkEsc(r.t); }).join(', ') + '</span></div>'
+        ? '<div class="rlk-dbwarn"><b>Base de données à mettre à jour : ' + ko.length + ' élément(s) manquant(s).</b><br>Ouvrez Supabase, menu SQL Editor, collez le contenu du fichier <b>phase1_v2_additif.sql (puis phase2_v22_additif.sql si besoin)</b>, cliquez sur Run, puis rechargez cette page.<br><span style="font-size:12px">Manquants : ' + ko.map(function(r) { return rlkEsc(r.t); }).join(', ') + '</span></div>'
         : '<div class="rlk-ok">Base à jour : les ' + rs.length + ' éléments sont présents.</div>')
         + '<div class="rlk-note">Version de l\'application : ' + RLK_VERSION + '</div>';
     });
@@ -4558,11 +4653,11 @@ function loadProduits() {
       var badge = stock > 5 ? 'b-ok' : stock > 0 ? 'b-wait' : 'b-err';
       var nomJs = String(p.nom).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
       var btn = stock > 0 ? '<button class="btn btn-primary btn-xs" onclick="addToCart(\'' + nomJs + '\',' + pf + ',\'' + (p.emoji || '🫙') + '\',\'' + p.id + '\')">+ Panier</button>' : '<span class="badge b-err">Épuisé</span>';
-      var adm = admin ? '<div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap"><button class="btn btn-ghost btn-xs" onclick="rlkEditArticle(\'' + p.id + '\')">Modifier</button></div>' : '';
+      var adm = '';
       var img = a.photo ? '<img src="' + a.photo + '" alt="' + rlkEsc(p.nom) + '">' : (p.emoji || '🫙');
       return '<div class="produit" data-id="' + p.id + '" data-nom="' + String(p.nom).replace(/"/g, '') + '" data-stock="' + stock + '"><div class="produit-img">' + img + '</div><div class="produit-body">'
-        + '<div class="produit-nom">' + rlkEsc(p.nom) + '</div><div class="produit-desc">' + rlkEsc(a.descriptif || p.description || '') + '</div><div class="produit-footer">'
-        + '<div class="produit-prix">' + rlkFmt(pf, 2) + ' FEY ou ' + rlkFmt(pf * RLK.fey, 2) + ' €</div><div style="display:flex;gap:6px;align-items:center"><span class="badge ' + badge + '">Stock : ' + stock + '</span>' + btn + '</div></div>' + adm + '</div></div>';
+        + '<div class="produit-nom">' + rlkEsc(p.nom) + '</div><div class="produit-desc">' + rlkEsc(a.descriptif || p.description || '') + '</div>'
+        + '<div class="produit-prix">' + rlkFmt(pf, 2) + ' FEY <span class="rlk-eur">ou ' + rlkFmt(pf * RLK.fey, 2) + ' €</span></div><div class="produit-footer"><div style="display:flex;gap:6px;align-items:center"><span class="badge ' + badge + '">Stock : ' + stock + '</span>' + btn + '</div></div>' + adm + '</div></div>';
     }).join('');
   });
   rlkLoadPanye();
@@ -4625,7 +4720,7 @@ function rlkLoadPanye() {
   set('abo-t-txt', pt.nb + ' panyés : ' + rlkFmt(tt, 2) + ' FEY (économie de ' + rlkFmt(pt.eco, 2) + ' FEY)');
   var usuel = rlkClasse('usuel'), kg = Math.ceil(pf / (usuel.credit_par_kg || 1));
   var ban = document.getElementById('pan-ban');
-  if (ban) ban.querySelector('b').nextSibling.textContent = ' Payez votre panyé avec les fruits que vous n\'utilisez pas : ' + kg + ' kg de fruits mûrs donnés rapportent ' + rlkFmt(kg * usuel.credit_par_kg, 0) + ' FEY, soit un panyé. ';
+  if (ban) ban.querySelector('b').nextSibling.textContent = ' Payez votre panyé avec les fruits que vous n\'utilisez pas : ' + kg + ' kg de fruits mûrs apportés au troc rapportent ' + rlkFmt(kg * usuel.credit_par_kg, 0) + ' FEY, soit un panyé. ';
   sb.from('paniers').select('*').eq('publie', true).order('created_at', {ascending: false}).limit(1).then(function(res) {
     var d = res.data && res.data[0];
     if (!d) { RLK.panye = null; c.innerHTML = 'Panyé pa ankor publié. La composition est publiée chaque mercredi soir.'; var b = document.getElementById('pan-btn'); if (b) b.disabled = true; return; }
@@ -4682,7 +4777,7 @@ function rlkLoadArticlesAdmin() {
       var a = ar[p.id] || {};
       return '<div class="rlk-art"><div>' + (a.photo ? '<img src="' + a.photo + '" alt="">' : '<div class="ph">' + (p.emoji || '🫙') + '</div>') + '</div>'
         + '<div><b>' + rlkEsc(p.nom) + '</b>' + (p.actif ? '' : ' <span class="badge b-err">masqué</span>') + '<div class="rlk-note" style="margin:2px 0 0">' + rlkFmt(rlkPrixFey(a), 2) + ' FEY (' + rlkFmt(rlkPrixFey(a) * RLK.fey, 2) + ' €) · stock app ' + (st[p.id + 'app'] != null ? st[p.id + 'app'] : p.stock) + ' · stock Yapla ' + (st[p.id + 'yapla'] || 0) + '</div></div>'
-        + '<button class="btn btn-outline btn-xs" onclick="rlkEditArticle(\'' + p.id + '\')">Modifier</button></div>';
+        + '<div style="display:flex;flex-direction:column;gap:6px"><button class="btn btn-outline btn-xs" onclick="rlkEditArticle(\'' + p.id + '\')">Modifier</button><button class="btn btn-ghost btn-xs" style="color:#B3261E" onclick="rlkDelArticle(\'' + p.id + '\')">Supprimer</button></div></div>';
     }).join('') : 'Aucun article. Ajoutez le premier.';
   });
 }
@@ -4702,6 +4797,7 @@ function rlkEditArticle(id) {
     document.getElementById('art-actif').checked = p ? !!p.actif : true;
     document.getElementById('art-haccp').checked = p ? !!p.haccp_valide : false;
     document.getElementById('art-file').value = '';
+    var dl = document.getElementById('art-del'); if (dl) dl.style.display = p ? 'inline-flex' : 'none';
     rlkArtPrev(); openModal('m-article');
   };
   if (!p) { go(null, null, 0, 0); return; }
@@ -4718,10 +4814,10 @@ function rlkArtPhoto(inp) {
   r.onload = function() {
     var im = new Image();
     im.onload = function() {
-      var s = Math.min(1, 640 / Math.max(im.width, im.height)), cv = document.createElement('canvas');
-      cv.width = Math.round(im.width * s); cv.height = Math.round(im.height * s);
-      cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
-      rlkArtPhotoData = cv.toDataURL('image/jpeg', 0.72); rlkArtPrev();
+      var side = Math.min(im.width, im.height), out = Math.min(640, side), cv = document.createElement('canvas');
+      cv.width = out; cv.height = out;
+      cv.getContext('2d').drawImage(im, (im.width - side) / 2, (im.height - side) / 2, side, side, 0, 0, out, out);
+      rlkArtPhotoData = cv.toDataURL('image/jpeg', 0.78); rlkArtPrev();
     };
     im.src = r.result;
   };
@@ -4766,6 +4862,852 @@ updateUI = function() {
   rlkEyes();
 };
 document.addEventListener('DOMContentLoaded', function() { rlkCarInit(); rlkEyes(); });
+// ═══════════════════════════════════════════════════════════════
+// MODULE 5 (v2.2) : adhésion Yapla, TROK, liste des fruits, atelier, événements, messagerie
+// ═══════════════════════════════════════════════════════════════
+RLK_VERSION = '2.2';
+
+// ── Fenêtre d'adhésion (Mi inskri) ──
+function rlkStatutsOk() {
+  var ok = document.getElementById('statuts-ok').checked;
+  document.getElementById('btn-statuts-next').disabled = !ok;
+  document.getElementById('statuts-hint').style.visibility = ok ? 'hidden' : 'visible';
+}
+function rlkCloseInscry() { closeModal('m-inscry'); }
+function prefillForm() {}
+function nextStep(n) {
+  if (n === 1) {
+    if (!document.getElementById('statuts-ok').checked) { toast("Cochez « J'ai pris connaissance des statuts » pour continuer"); return; }
+    goStep(2); return;
+  }
+  if (n === 2) rlkCreerCompte();
+}
+var rlkOpenModalOrig = openModal;
+openModal = function(id) {
+  rlkOpenModalOrig(id);
+  if (id === 'm-inscry') {
+    var c = document.getElementById('statuts-ok'); if (c) c.checked = false;
+    rlkStatutsOk(); goStep(1); rlkEyes();
+    var b = document.querySelector('#m-inscry .modal'); if (b) b.scrollTop = 0;
+    document.getElementById('m-inscry').scrollTop = 0;
+  }
+};
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Escape') return;
+  document.querySelectorAll('.modal-overlay.open').forEach(function(m) { closeModal(m.id); });
+});
+function rlkCreerCompte() {
+  if (!document.getElementById('statuts-ok').checked) { toast('Cochez la case des statuts'); goStep(1); return; }
+  var nom = rlkVal('a-nom').trim(), prenom = rlkVal('a-prenom').trim(), email = rlkVal('a-email').trim(), pwd = rlkVal('a-pwd'), pwd2 = rlkVal('a-pwd2'), tel = rlkVal('a-tel').trim();
+  var roles = []; document.querySelectorAll('#a-roles input:checked').forEach(function(i) { roles.push(i.value); });
+  if (!nom || !prenom || !email) { toast('Nom, prénom et email sont obligatoires'); return; }
+  if (!tel) { toast('Le téléphone est obligatoire pour organiser les cueillettes'); return; }
+  if (!pwd || pwd.length < 6) { toast('Mot de passe : 6 caractères minimum'); return; }
+  if (pwd !== pwd2) { toast('Les mots de passe ne correspondent pas'); return; }
+  if (!roles.length) { toast('Choisissez au moins un rôle'); return; }
+  var btn = document.getElementById('btn-bulletin-next'); btn.disabled = true; btn.textContent = 'Création du compte…';
+  var reset = function() { btn.disabled = false; btn.textContent = 'Créer mon compte →'; };
+  sb.auth.signUp({email: email, password: pwd, options: {data: {nom: nom, prenom: prenom}}}).then(function(res) {
+    if (res.error) { toast('Erreur : ' + res.error.message); reset(); return; }
+    var user = res.data && res.data.user;
+    if (!user) { toast('Création impossible, réessayez'); reset(); return; }
+    if (user.identities && user.identities.length === 0) { toast('Cette adresse est déjà inscrite : utilisez « Mwin néna déjà mon kont »'); reset(); return; }
+    var num = 'RLK-2026-' + String(Math.floor(Math.random() * 900) + 100);
+    var pdata = {nom: nom, prenom: prenom, email: email, adresse: rlkVal('a-adr'), code_postal: rlkVal('a-cp'), ville: rlkVal('a-ville'), telephone: tel,
+      role: roles.indexOf('Producteur') >= 0 ? 'producteur' : 'jardinier', type_membre: roles.indexOf('Producteur') >= 0 ? 'producteur' : 'actif',
+      est_fondateur: false, cotisation_payee: false, numero_adherent: num};
+    var fin = function() {
+      reset();
+      if (res.data.session) { currentUser = user; profile = Object.assign({id: user.id}, pdata); updateUI(); }
+      else { try { localStorage.setItem('rlk_pending_roles', JSON.stringify(roles)); } catch (e) {} toast('Confirmez votre adresse via le mail reçu, puis connectez-vous'); }
+      goStep(3);
+    };
+    if (!res.data.session) { fin(); return; }
+    var essai = function(k) {
+      sb.from('profiles').select('id').eq('id', user.id).maybeSingle().then(function(chk) {
+        if (!chk.data && k > 0) { setTimeout(function() { essai(k - 1); }, 500); return; }
+        sb.from('profiles').upsert(Object.assign({id: user.id}, pdata)).then(function() {
+          sb.from('rlk_profil_ext').upsert({user_id: user.id, roles: roles, statuts_lus: true}).then(function() { fin(); });
+        });
+      });
+    };
+    setTimeout(function() { essai(6); }, 400);
+  });
+}
+function rlkPayerYapla() { openYapla(); toast('Après le paiement, revenez ici et touchez « J\'ai payé »'); }
+function rlkSetDeclare() {
+  if (!currentUser) return Promise.resolve();
+  return sb.from('rlk_profil_ext').update({yapla_declare: true, yapla_declare_le: new Date().toISOString()}).eq('user_id', currentUser.id).then(function() { rlkAdhBanner(); });
+}
+function rlkAiPaye() {
+  rlkSetDeclare().then(function() {
+    closeModal('m-inscry');
+    toast('Merci ! L\'équipe confirme votre paiement. Yapla vous envoie votre reçu par mail.');
+  });
+}
+function rlkAdhBanner() {
+  var box = document.getElementById('akey-adh'); if (!box) return;
+  if (!currentUser) { box.style.display = 'none'; return; }
+  sb.from('rlk_profil_ext').select('*').eq('user_id', currentUser.id).maybeSingle().then(function(res) {
+    var e = res.data;
+    if (!e || e.paiement_confirme || (profile && profile.cotisation_payee)) { box.style.display = 'none'; return; }
+    box.style.display = 'block';
+    box.innerHTML = e.yapla_declare
+      ? '<b>Paiement signalé.</b> Une administratrice le confirme dans Yapla. Vous pouvez déjà utiliser l\'application.'
+      : '<b>Votre adhésion n\'est pas encore réglée.</b> Le paiement se fait sur Yapla, qui vous envoie le reçu.<div class="rlk-row" style="margin-top:10px;justify-content:flex-start"><button class="btn btn-primary btn-sm" onclick="rlkPayerYapla()">Payer sur Yapla</button><button class="btn btn-outline btn-sm" onclick="rlkAiPaye()">J\'ai payé</button></div>';
+  });
+}
+function rlkPending() {
+  if (!currentUser) return;
+  var r = null; try { r = JSON.parse(localStorage.getItem('rlk_pending_roles') || 'null'); } catch (e) {}
+  if (r && r.length) sb.from('rlk_profil_ext').upsert({user_id: currentUser.id, roles: r, statuts_lus: true}).then(function(x) { if (!x.error) { try { localStorage.removeItem('rlk_pending_roles'); } catch (e) {} } });
+}
+var rlkRetourDone = false;
+function rlkRetourYapla() {
+  if (rlkRetourDone) return; rlkRetourDone = true;
+  if (!/[?&]adhesion=ok/.test(location.search)) return;
+  try { history.replaceState(null, '', location.pathname); } catch (e) {}
+  toast('Merci pour votre adhésion ! Yapla vous envoie votre reçu par mail.');
+  rlkSetDeclare();
+}
+var rlkUpdateUIOrig3 = updateUI;
+updateUI = function() { rlkUpdateUIOrig3(); rlkAdhBanner(); rlkPending(); rlkRetourYapla(); };
+
+// Réglaj : adhésions à confirmer
+function rlkLoadAdhConfirm() {
+  var el = document.getElementById('adh-confirm-list'); if (!el) return;
+  Promise.all([sb.from('rlk_profil_ext').select('*').eq('paiement_confirme', false).order('created_at', {ascending: false}).limit(60), rlkProfils()]).then(function(rs) {
+    if (rs[0].error) { el.textContent = rlkErr(rs[0].error); return; }
+    var rows = rs[0].data || [];
+    el.innerHTML = rows.length ? rows.map(function(e) {
+      return '<div style="padding:8px 0;border-bottom:1px solid var(--border)"><b>' + rlkEsc(rs[1][e.user_id] || 'Adhérent') + '</b> · ' + (e.yapla_declare ? '<span class="badge b-wait">annonce avoir payé</span>' : '<span class="badge b-err">pas encore payé</span>')
+        + '<div class="rlk-note" style="margin:2px 0 6px">' + rlkEsc((e.roles || []).join(', ')) + ' · inscrit le ' + rlkDate(e.created_at) + '</div>'
+        + '<button class="btn btn-primary btn-xs" onclick="rlkConfirmAdh(\'' + e.user_id + '\')">Paiement reçu sur Yapla</button></div>';
+    }).join('') : 'Aucune adhésion en attente.';
+  });
+}
+function rlkConfirmAdh(uid) {
+  var exp = new Date(); exp.setFullYear(exp.getFullYear() + 1);
+  sb.from('rlk_profil_ext').update({paiement_confirme: true, paiement_confirme_le: new Date().toISOString()}).eq('user_id', uid).then(function(r1) {
+    if (r1.error) { toast(rlkErr(r1.error)); return; }
+    sb.from('profiles').update({cotisation_payee: true, cotisation_expiration: exp.toISOString().split('T')[0]}).eq('id', uid).then(function() { toast('✓ Adhésion confirmée'); rlkLoadAdhConfirm(); });
+  });
+}
+var RLK_FRUITS_NOMS = ["Aloe vera", "Aloes amer", "Ambaville", "Ambrevades", "Ananas Victoria", "Aubergines (Bringelles)", "Avocats (Zavoka)", "Avocats grand collet", "Ayapana", "Bananes", "Bananes figues", "Barbadine", "Basilic", "Basilic thaï", "Bâton de mouroungue", "Betteraves", "Bibasses (Néflier)", "Bilimbi", "Brèdes chouchou", "Brèdes mafane", "Brèdes morel", "Brèdes mouroungue", "Brocoli", "Café bourbon long", "Café bourbon pointu", "Calebasse", "Caramboles (Karambol)", "Carottes", "Cerise de Cayenne", "Cerise du Brésil", "Chou", "Chou fleur", "Chou palmiste", "Chouchou (Christophine)", "Citronelle", "Citrons 4 saisons", "Citrouille", "Clémentines", "Coeurs de boeuf", "Combavas", "Concombres", "Coriandre", "Corossols", "Courgettes", "Cresson", "Curcuma péi (Safran péi)", "Faham", "Fruits à pain (Fryapin)", "Fruits de la passion (Grenadine)", "Galanga", "Gingembre", "Gingembre mangue", "Girimbelles", "Goyaves de France", "Goyaves roses", "Goyavier blanc", "Goyavier rouge", "Grenadelle", "Haricots rouges", "Haricots verts", "Jacques mûr", "Jamalacs", "Jamblon", "Letchis", "Longanes", "Mandarines", "Mangoustans", "Mangues américaine", "Mangues Auguste", "Mangues carotte", "Mangues Josée", "Mangues Léonard", "Mangues sauvages", "Manioc", "Margoze", "Menthe", "Menthe poivrée", "Mûres", "Neem", "Noix de coco d'eau", "Noix de coco sèche", "Oignons", "Oignons verts", "Pamplemousses", "Patate douce blanche", "Patate douce carotte", "Patate douce mauve", "Patole", "Pêches", "Persil", "Piment cabri", "Piment oiseau", "Pipangailles", "Pois carré", "Pois du Cap", "Poivre vert", "Prune malgache", "Raisin bord de mer", "Salade", "Sapote noire", "Sapotilles", "Songe grise", "Songe violette", "Tamarin", "Tangors", "Thym", "Thym brésilien", "Ti-Jacques (vert)", "Tomate arbuste", "Tulsi", "Vavangues", "Verveine citronelle", "Zattes", "Zévi (Pomme de Cythère)"];
+
+// ── Liste des fruits (catégorie, unité, poids d'une unité) ──
+var RLK_UNITES = ['kg', 'U', 'main', 'botte', 'bouquet'];
+var RLK_KG_UNITE = {kg: 1, U: 0.5, main: 1.5, botte: 0.3, bouquet: 0.1};
+var RLK_KG_U = {ananas: 1.5, avocat: 0.4, 'chou': 1.2, calebasse: 1.5, citrouille: 3, brocoli: 0.5, 'fruits à pain': 1.2, corossol: 1.2, 'coeurs de boeuf': 0.6, salade: 0.3, 'noix de coco': 0.8, jacques: 3};
+function rlkGuessEtat(nom) {
+  var n = String(nom || '').toLowerCase();
+  if (/vanille/.test(n)) return 'exception';
+  if (/combava|citron galet/.test(n)) return 'cher';
+  if (/gingembre|safran|curcuma|champignon|galanga/.test(n)) return 'rare';
+  if (/thym|menthe|citronnelle|citronelle|verveine|tisane|aromate|basilic|persil|laurier|romarin|ciboulette|ravintsara|brède|bred|coriandre|ayapana|faham|ambaville|aloe|aloès|aloes|tulsi|neem|cresson/.test(n)) return 'tisane';
+  if (/^bananes figues/.test(n)) return 'mur';
+  if (/banane|papaye|manioc|patate|igname|chouchou|christophine|fruit à pain|fruits à pain|\(vert\)|aubergine|bringelle|betterave|brocoli|calebasse|carotte|chou|citrouille|concombre|courgette|haricot|ambrevade|margoze|oignon|salade|piment|pipangaille|patole|pois |poivre|tomate|bâton de mouroungue|vavangue|zattes|songe/.test(n)) return 'vert';
+  return 'mur';
+}
+function rlkGuessUnite(nom) {
+  var n = String(nom || '').toLowerCase();
+  if (/brède|bred|cresson|persil|oignons verts|salade/.test(n)) return 'botte';
+  if (/basilic|menthe|thym|coriandre|citronelle|citronnelle|verveine|ayapana|faham|ambaville|tulsi|neem|aloe|aloes/.test(n)) return 'bouquet';
+  if (/^bananes\b/.test(n)) return 'main';
+  if (/ananas|avocat|^chou\b|^chou |calebasse|citrouille|brocoli|fruits à pain|corossol|coeurs de boeuf|noix de coco|jacques/.test(n)) return 'U';
+  return 'kg';
+}
+function rlkKgParUnite(nom, unite) {
+  if (unite === 'kg') return 1;
+  var n = String(nom || '').toLowerCase();
+  if (unite === 'U') { for (var k in RLK_KG_U) if (n.indexOf(k) >= 0) return RLK_KG_U[k]; }
+  return RLK_KG_UNITE[unite] || 1;
+}
+function rlkFruitsDefaut() {
+  var prix = {}; (RLK.prix || []).forEach(function(p) { prix[p.produit] = p; });
+  return RLK_FRUITS_NOMS.map(function(n, i) {
+    var u = rlkGuessUnite(n), p = prix[n];
+    return {nom: n, etat: rlkGuessEtat(n), unite: p && p.unite ? p.unite : u, qte_pour_fey: p ? Number(p.qte_pour_fey) : null, kg_par_unite: rlkKgParUnite(n, p && p.unite ? p.unite : u), ordre: i};
+  });
+}
+function rlkLoadFruits() {
+  return sb.from('rlk_fruits').select('*').order('nom').then(function(res) {
+    RLK.fruitsDefaut = !(res && !res.error && res.data && res.data.length);
+    RLK.fruits = RLK.fruitsDefaut ? rlkFruitsDefaut() : res.data.map(function(f) { return {nom: f.nom, etat: f.etat, unite: f.unite, qte_pour_fey: f.qte_pour_fey == null ? null : Number(f.qte_pour_fey), kg_par_unite: Number(f.kg_par_unite) || 1, ordre: f.ordre}; });
+    RLK.fruits.sort(function(a, b) { return a.nom.localeCompare(b.nom, 'fr'); });
+    rlkSyncFruitViews();
+    return RLK.fruits;
+  });
+}
+function rlkFruit(nom) { return (RLK.fruits || []).filter(function(f) { return f.nom === nom; })[0] || null; }
+function rlkFruitOptions(cur) {
+  var h = '<option value="">Choisir un produit…</option>';
+  RLK_ETATS.forEach(function(e) {
+    var l = (RLK.fruits || []).filter(function(f) { return f.etat === e[0]; });
+    if (!l.length) return;
+    h += '<optgroup label="' + rlkEsc(e[1]) + '">' + l.map(function(f) { return '<option value="' + rlkEsc(f.nom) + '"' + (f.nom === cur ? ' selected' : '') + '>' + rlkEsc(f.nom) + '</option>'; }).join('') + '</optgroup>';
+  });
+  return h + '<option value="__autre"' + (cur === '__autre' ? ' selected' : '') + '>Autre produit (non listé)…</option>';
+}
+function rlkSyncFruitViews() {
+  var dl = document.getElementById('produits-list');
+  if (dl) dl.innerHTML = (RLK.fruits || []).map(function(f) { return '<option>' + rlkEsc(f.nom) + '</option>'; }).join('');
+  document.querySelectorAll('#dispo-lignes .dl-prod').forEach(function(s) { var v = s.value; s.innerHTML = rlkFruitOptions(v); s.value = v; });
+  document.querySelectorAll('#at-lines .at-prod').forEach(function(s) { var v = s.value; s.innerHTML = rlkFruitOptions(v); s.value = v; });
+  rlkDonPreview(); rlkCalcAtelier();
+}
+
+// ── TROK (ex-DON) ──
+function rlkAddLine() {
+  var d = document.createElement('div'); d.className = 'rlk-trok-line dispo-line';
+  d.innerHTML = '<select class="dl-prod" onchange="rlkDonSel(this)">' + rlkFruitOptions('') + '</select>'
+    + '<input type="text" class="dl-autre" placeholder="Nom du produit" style="display:none" oninput="rlkDonPreview()">'
+    + '<div class="tl-row"><input type="number" class="dl-q" min="0" step="0.5" inputmode="decimal" placeholder="Quantité" oninput="rlkDonPreview()">'
+    + '<select class="dl-u" onchange="rlkDonPreview()">' + RLK_UNITES.map(function(u) { return '<option>' + u + '</option>'; }).join('') + '</select>'
+    + '<button class="btn btn-ghost btn-sm" style="padding:8px" type="button" onclick="this.closest(\'.dispo-line\').remove();rlkDonPreview()" aria-label="Retirer">✕</button></div>';
+  document.getElementById('dispo-lignes').appendChild(d);
+}
+function rlkDonSel(sel) {
+  var l = sel.closest('.dispo-line'), a = l.querySelector('.dl-autre'), f = rlkFruit(sel.value);
+  a.style.display = sel.value === '__autre' ? 'block' : 'none';
+  if (f) l.querySelector('.dl-u').value = f.unite;
+  rlkDonPreview();
+}
+function rlkDonLignes() {
+  var out = [];
+  document.querySelectorAll('#dispo-lignes .dispo-line').forEach(function(l) {
+    var v = l.querySelector('.dl-prod').value, q = parseFloat(l.querySelector('.dl-q').value), u = l.querySelector('.dl-u').value;
+    var autre = v === '__autre', nom = autre ? l.querySelector('.dl-autre').value.trim() : v;
+    if (!nom || !(q > 0)) return;
+    var f = autre ? null : rlkFruit(nom), kg = f ? q * (u === f.unite ? f.kg_par_unite : rlkKgParUnite(nom, u)) : (u === 'kg' ? q : null);
+    out.push({nom: nom, q: q, u: u, autre: autre, f: f, etat: f ? f.etat : null, kg: kg});
+  });
+  return out;
+}
+function rlkDonPreview() {
+  var box = document.getElementById('don-preview'); if (!box) return;
+  var out = [], totFey = 0, totTr = 0, nb = 0;
+  rlkDonLignes().forEach(function(x) {
+    nb++;
+    if (!x.f) { out.push('<div class="rlk-warn"><b>' + rlkEsc(x.nom) + '</b> : ' + x.q + ' ' + x.u + '. Ce produit n\'est pas dans la liste : l\'équipe choisira sa catégorie et calculera vos FEY.</div>'); return; }
+    var cl = rlkClasse(rlkEtatClasse(x.etat)), quota = rlkQuotaKg(x.nom, x.etat), fey = Math.ceil(x.kg * cl.credit_par_kg - 1e-9), tr = x.kg * cl.transforme_par_kg;
+    totFey += fey; totTr += tr;
+    out.push('<div class="' + (x.kg >= quota ? 'rlk-ok' : 'rlk-warn') + '"><b>' + rlkEsc(x.nom) + '</b> : ' + x.q + ' ' + x.u + (x.u !== 'kg' ? ' (environ ' + rlkFmt(x.kg, 1) + ' kg)' : '') + ' → <b>' + fey + ' FEY</b> pour vous (environ ' + rlkFmt(tr, 1) + ' FEY de produits transformés). '
+      + (x.kg >= quota ? 'Quota atteint.' : 'Quota minimal ' + quota + ' kg : il manque ' + rlkFmt(quota - x.kg, 1) + ' kg pour que nous nous déplacions (ou regroupez avec des voisins).') + '</div>');
+  });
+  box.innerHTML = nb ? out.join('') + (totFey ? '<div style="margin-top:8px;font-size:1rem"><b>Total estimé : ' + totFey + ' FEY</b> (' + totFey + ' pot' + (totFey > 1 ? 's' : '') + ' à choisir au stock). ' + (totTr >= RLK.seuil ? 'Seuil de ' + RLK.seuil + ' FEY transformés atteint.' : 'Seuil de ' + RLK.seuil + ' FEY transformés non atteint : regroupez avec des voisins.') + '</div>' : '') : 'Ajoutez un produit et une quantité.';
+}
+function validerDispos() {
+  if (!currentUser) { toast('Inscrivez-vous ou connectez-vous pour déclarer votre troc'); openModal('m-login'); return; }
+  if (!rlkDonLignes().length) { toast('Choisissez un produit et une quantité'); return; }
+  rlkEngage('Valider mon troc de fruits', rlkDoDispos);
+}
+function rlkDoDispos() {
+  var prodId = (rlkIsAdmin() && rlkVal('dispo-prod')) ? rlkVal('dispo-prod') : currentUser.id;
+  var today = new Date().toISOString().split('T')[0], inserts = [];
+  rlkDonLignes().forEach(function(x) {
+    var suf = {vert: ' (vert)', rare: ' (rare)', cher: ' (cher)', exception: ' (exception)', tisane: ' (tisane/aromate)'}[x.etat] || '';
+    if (x.autre) inserts.push({profile_id: prodId, produit: x.nom + ' (à classer)', quantite: x.q, unite: x.u, semaine: today});
+    else if (x.kg != null) inserts.push({profile_id: prodId, produit: x.nom + suf + (x.u !== 'kg' ? ' (' + x.q + ' ' + x.u + ')' : ''), quantite: Math.round(x.kg * 100) / 100, unite: 'kg', semaine: today});
+  });
+  sb.from('disponibilites').insert(inserts).then(function(res) {
+    if (res.error) { toast(rlkErr(res.error)); return; }
+    toast('✓ Troc déclaré, merci ! Vos FEY seront crédités après l\'atelier.');
+    document.getElementById('dispo-lignes').innerHTML = ''; rlkAddLine(); rlkDonPreview();
+    setTimeout(function() { loadStockTable(); rlkLoadCompteurs(); }, 600);
+    setTimeout(rlkLoadCompteurs, 2500);
+  });
+}
+function rlkInitDon() {
+  rlkLoadSolde(); rlkDonIdentite();
+  var sel = document.getElementById('dispo-prod-select');
+  if (sel) sel.style.display = rlkIsAdmin() ? 'block' : 'none';
+  rlkLoadFruits().then(function() { if (!document.querySelector('#dispo-lignes .dispo-line')) rlkAddLine(); rlkDonPreview(); });
+  if (rlkIsAdmin()) {
+    sb.from('profiles').select('id,prenom,nom').order('prenom').then(function(res) {
+      var s = document.getElementById('dispo-prod'); if (!s) return;
+      var cur = s.value;
+      s.innerHTML = '<option value="">Moi-même (' + rlkEsc(((profile && profile.prenom) || '') + ' ' + ((profile && profile.nom) || '')) + ')</option>' + (res.data || []).map(function(p) { return '<option value="' + p.id + '">' + rlkEsc(((p.prenom || '') + ' ' + (p.nom || '')).trim() || 'Adhérent') + '</option>'; }).join('');
+      s.value = cur;
+    });
+  }
+}
+
+// ── Réglaj : liste des fruits ──
+function rlkFruitRow(f) {
+  var et = RLK_ETATS.map(function(e) { return '<option value="' + e[0] + '"' + (f.etat === e[0] ? ' selected' : '') + '>' + rlkEsc(e[1]) + '</option>'; }).join('');
+  var un = RLK_UNITES.map(function(u) { return '<option' + (f.unite === u ? ' selected' : '') + '>' + u + '</option>'; }).join('');
+  return '<div class="fr-row" data-orig="' + rlkEsc(f.nom || '') + '"><div class="fr-top"><input type="text" class="fr-nom" value="' + rlkEsc(f.nom || '') + '" placeholder="Nom du produit"><button class="btn btn-ghost btn-xs" type="button" onclick="this.closest(\'.fr-row\').remove();rlkFruitCount()" aria-label="Retirer">✕</button></div>'
+    + '<select class="fr-etat">' + et + '</select><select class="fr-unite">' + un + '</select>'
+    + '<label>Quantité pour 1 FEY<input type="number" class="fr-qfey" step="0.1" min="0" value="' + (f.qte_pour_fey || '') + '"></label>'
+    + '<label>Kg par unité<input type="number" class="fr-kgu" step="0.05" min="0.01" value="' + (f.kg_par_unite || 1) + '"></label></div>';
+}
+function rlkFruitCount() { var c = document.getElementById('fr-count'); if (c) c.textContent = document.querySelectorAll('#prix-tbody .fr-row').length + ' produits'; }
+function rlkLoadPrixAdmin() {
+  rlkLoadPrix().then(function() { return rlkLoadFruits(); }).then(function(rows) {
+    var body = document.getElementById('prix-tbody'); if (!body) return;
+    body.innerHTML = rows.map(rlkFruitRow).join('');
+    var n = document.getElementById('fr-note');
+    if (n) n.innerHTML = RLK.fruitsDefaut ? '<div class="rlk-warn">Liste de départ proposée automatiquement avec des catégories estimées. <b>Vérifiez les catégories, puis touchez « Enregistrer et publier »</b> : la liste devient alors celle de tous les adhérents.</div>' : '';
+    rlkFruitCount(); rlkFruitFiltre();
+  });
+}
+function rlkAddPrixRow() {
+  var body = document.getElementById('prix-tbody'); body.insertAdjacentHTML('afterbegin', rlkFruitRow({nom: '', etat: 'mur', unite: 'kg', kg_par_unite: 1}));
+  var i = body.querySelector('.fr-row .fr-nom'); if (i) i.focus(); rlkFruitCount();
+}
+function rlkFruitFiltre() {
+  var q = rlkVal('fr-filtre').trim().toLowerCase();
+  document.querySelectorAll('#prix-tbody .fr-row').forEach(function(tr) { tr.style.display = (!q || tr.querySelector('.fr-nom').value.toLowerCase().indexOf(q) >= 0) ? '' : 'none'; });
+}
+function rlkSavePrix() {
+  var rows = [], noms = {}, origs = [], dup = null;
+  document.querySelectorAll('#prix-tbody .fr-row').forEach(function(tr, i) {
+    var nom = tr.querySelector('.fr-nom').value.trim(); if (!nom) return;
+    if (noms[nom]) dup = nom; noms[nom] = 1; if (tr.dataset.orig) origs.push(tr.dataset.orig);
+    var q = parseFloat(tr.querySelector('.fr-qfey').value);
+    rows.push({nom: nom, etat: tr.querySelector('.fr-etat').value, unite: tr.querySelector('.fr-unite').value, qte_pour_fey: q > 0 ? q : null, kg_par_unite: parseFloat(tr.querySelector('.fr-kgu').value) || 1, ordre: i, maj: new Date().toISOString()});
+  });
+  if (dup) { toast('Le produit « ' + dup + ' » apparaît deux fois'); return; }
+  if (!rows.length) { toast('La liste est vide'); return; }
+  sb.from('rlk_fruits').select('nom').then(function(r) {
+    if (r.error) { toast(rlkErr(r.error)); return; }
+    var gone = (r.data || []).map(function(x) { return x.nom; }).filter(function(n) { return !noms[n]; });
+    var prev = gone.length ? sb.from('rlk_fruits').delete().in('nom', gone) : Promise.resolve({});
+    prev.then(function() {
+      sb.from('rlk_fruits').upsert(rows, {onConflict: 'nom'}).then(function(res) {
+        if (res.error) { toast(rlkErr(res.error)); return; }
+        var px = rows.filter(function(x) { return x.qte_pour_fey > 0; }).map(function(x) { return {produit: x.nom, qte_pour_fey: x.qte_pour_fey, unite: x.unite, maj: x.maj}; });
+        sb.from('rlk_prix').select('produit').then(function(r2) {
+          var goneP = (r2.data || []).map(function(x) { return x.produit; }).filter(function(n) { return !noms[n] || !px.some(function(p) { return p.produit === n; }); });
+          var d = goneP.length ? sb.from('rlk_prix').delete().in('produit', goneP) : Promise.resolve({});
+          d.then(function() {
+            var u = px.length ? sb.from('rlk_prix').upsert(px, {onConflict: 'produit'}) : Promise.resolve({});
+            u.then(function() { toast('✓ Liste publiée : mise à jour sur tous les téléphones'); rlkLoadPrixAdmin(); });
+          });
+        });
+      });
+    });
+  });
+}
+
+// ── Réglaj : atelier (kilos, FEY, participants) ──
+function rlkAtAddLine() {
+  var d = document.createElement('div'); d.className = 'rlk-trok-line at-line';
+  d.innerHTML = '<select class="at-prod" onchange="rlkCalcAtelier()">' + rlkFruitOptions('') + '</select><div class="tl-row"><input type="number" class="at-kg" min="0" step="0.5" inputmode="decimal" placeholder="Kilos" oninput="rlkCalcAtelier()"><span style="align-self:center;font-size:12px">kg</span><button class="btn btn-ghost btn-sm" style="padding:8px" type="button" onclick="this.closest(\'.at-line\').remove();rlkCalcAtelier()">✕</button></div>';
+  document.getElementById('at-lines').appendChild(d);
+}
+function rlkCalcAtelier() {
+  var box = document.getElementById('at-lines'); if (!box) return;
+  if (!box.children.length) { rlkAtAddLine(); }
+  var kg = 0, fey = 0, det = [];
+  box.querySelectorAll('.at-line').forEach(function(l) {
+    var f = rlkFruit(l.querySelector('.at-prod').value), q = parseFloat(l.querySelector('.at-kg').value);
+    if (!f || !(q > 0)) return;
+    var tr = rlkClasse(rlkEtatClasse(f.etat)).transforme_par_kg;
+    kg += q; fey += q * tr; det.push(rlkEsc(f.nom) + ' : ' + rlkFmt(q, 1) + ' kg × ' + tr + ' = ' + rlkFmt(q * tr, 1) + ' FEY');
+  });
+  fey = Math.floor(fey + 1e-9);
+  var seuil = RLK.seuil, ok = fey >= seuil, pool = ok ? Math.floor(fey / 4) : 0, prevus = Math.max(1, Math.floor(rlkNum('at-prevus', 1)));
+  document.getElementById('at-max').textContent = ok ? pool + ' pers.' : '—';
+  document.getElementById('at-detail').innerHTML = (det.length ? det.join('<br>') + '<br>' : '') + '<b>' + rlkFmt(kg, 1) + ' kg, ' + fey + ' FEY produits</b> (minimum ' + seuil + ' pour lancer l\'atelier)';
+  var v = document.getElementById('at-verdict');
+  if (!fey) { v.innerHTML = 'Choisissez un produit et des kilos.'; return; }
+  if (!ok) { v.innerHTML = '<b style="color:var(--red)">Atelier non lancé :</b> il manque ' + (seuil - fey) + ' FEY. Regroupez des donateurs.'; return; }
+  if (prevus <= pool) v.innerHTML = '<b style="color:var(--accent2)">' + prevus + ' participant' + (prevus > 1 ? 's' : '') + ' : OK.</b> Maximum ' + pool + ' (1 par FEY réservé aux préparants, soit ¼ de ' + fey + ' FEY). Chacun repart avec ' + Math.floor(pool / prevus) + ' FEY au moins.';
+  else v.innerHTML = '<b style="color:var(--red)">' + prevus + ' participants : trop nombreux.</b> Limitez à ' + pool + ' personnes (1 par FEY réservé aux préparants).';
+}
+function rlkLotQte() {
+  var q = rlkNum('lot-qte', 0); if (q > 0) return q;
+  var f = rlkFruit(rlkVal('lot-fruit').trim()), kg = rlkNum('lot-kg', 0);
+  return f ? Math.floor(kg * rlkClasse(rlkEtatClasse(f.etat)).transforme_par_kg + 1e-9) : Math.floor(kg * RLK.upk);
+}
+
+// ── Commandes : pastille et notification pour l'administratrice ──
+function rlkCmdBadge() {
+  if (!rlkIsAdmin()) return;
+  sb.from('rlk_commandes').select('id', {count: 'exact', head: true}).eq('statut', 'en_attente').then(function(r) {
+    var n = r.count || 0, b = document.getElementById('cmd-badge');
+    if (b) { b.textContent = n; b.style.display = n ? 'inline' : 'none'; }
+  });
+}
+var rlkRefreshBadgesOrig = rlkRefreshBadges;
+rlkRefreshBadges = function() { rlkRefreshBadgesOrig(); rlkCmdBadge(); };
+var rlkRealtimeOrig = rlkRealtime, rlkRt2 = false;
+rlkRealtime = function() {
+  rlkRealtimeOrig();
+  if (rlkRt2 || !currentUser || !rlkIsAdmin()) return; rlkRt2 = true;
+  sb.channel('rlk-cmds').on('postgres_changes', {event: 'INSERT', schema: 'public', table: 'rlk_commandes'}, function() { rlkNotify('Nouvelle commande', 'Voir Réglaj > Komand'); rlkCmdBadge(); }).subscribe();
+};
+
+// ── Messagerie : canaux général et administrateurs ──
+function rlkLoadCanaux() {
+  var box = document.getElementById('msg-canaux'); if (!box) return;
+  Promise.all(['general', 'admin'].map(function(c) { return sb.from('messages').select('*, profiles(prenom,nom)').eq('canal', c).order('created_at', {ascending: false}).limit(25); })).then(function(rs) {
+    var noms = {general: 'Canal général', admin: 'Canal administrateurs'};
+    box.innerHTML = rs.map(function(r, i) {
+      var c = ['general', 'admin'][i];
+      if (r.error) return '<div class="rlk-note"><b>' + noms[c] + '</b> : ' + rlkEsc(rlkErr(r.error)) + '</div>';
+      var rows = (r.data || []).slice().reverse();
+      return '<div style="margin-bottom:12px"><b>' + noms[c] + '</b><div class="rlk-thread" style="max-height:180px">' + (rows.length ? rows.map(function(m) { return rlkBubble({auteur: m.profiles ? ((m.profiles.prenom || '') + ' ' + (m.profiles.nom || '')).trim() : '', contenu: m.contenu}, currentUser && m.profile_id === currentUser.id); }).join('') : '<div class="rlk-note">Aucun message.</div>') + '</div></div>';
+    }).join('');
+    box.querySelectorAll('.rlk-thread').forEach(function(t) { t.scrollTop = t.scrollHeight; });
+  });
+}
+function rlkSendCanal() {
+  var t = rlkVal('msg-canal-input').trim(), c = rlkVal('msg-canal-sel'); if (!t || !currentUser) return;
+  sb.from('messages').insert({profile_id: currentUser.id, contenu: t, canal: c}).then(function(res) {
+    if (res.error) { toast(rlkErr(res.error)); return; }
+    document.getElementById('msg-canal-input').value = ''; rlkLoadCanaux();
+  });
+}
+
+// ── Événements : modification, photo ──
+var rlkEvEditId = null, rlkEvPhotoData = null;
+function rlkResizeImg(file, max, cb) {
+  var r = new FileReader();
+  r.onload = function() {
+    var im = new Image();
+    im.onload = function() {
+      var s = Math.min(1, max / Math.max(im.width, im.height)), cv = document.createElement('canvas');
+      cv.width = Math.round(im.width * s); cv.height = Math.round(im.height * s);
+      cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
+      cb(cv.toDataURL('image/jpeg', 0.75));
+    };
+    im.src = r.result;
+  };
+  r.readAsDataURL(file);
+}
+function rlkEvPrev() {
+  var p = document.getElementById('ev-photo-prev'); if (!p) return;
+  p.innerHTML = rlkEvPhotoData ? '<img src="' + rlkEvPhotoData + '" style="max-width:100%;max-height:160px;border-radius:8px;display:block;margin:6px 0"><button class="btn btn-ghost btn-xs" type="button" onclick="rlkEvPhotoDel()">Retirer la photo</button>' : '';
+}
+function rlkEvPhoto(inp) { var f = inp.files && inp.files[0]; if (!f) return; rlkResizeImg(f, 900, function(d) { rlkEvPhotoData = d; rlkEvPrev(); }); }
+function rlkEvPhotoDel() { rlkEvPhotoData = null; var i = document.getElementById('ev-photo'); if (i) i.value = ''; rlkEvPrev(); }
+function rlkLocalDT(s) { if (!s) return ''; var d = new Date(s), p = function(n) { return String(n).padStart(2, '0'); }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + 'T' + p(d.getHours()) + ':' + p(d.getMinutes()); }
+function rlkEvReset() {
+  rlkEvEditId = null; rlkEvPhotoData = null;
+  ['ev-titre', 'ev-debut', 'ev-fin', 'ev-adr', 'ev-quartier', 'ev-places', 'ev-objet', 'ev-desc', 'ev-fiches', 'ev-photo'].forEach(function(i) { var e = document.getElementById(i); if (e) e.value = ''; });
+  rlkEvPrev();
+  var t = document.getElementById('ev-form-title'); if (t) t.textContent = 'Nouvel atelier ou événement';
+  var b = document.getElementById('ev-save-btn'); if (b) b.textContent = 'Publier l\'événement';
+  var c = document.getElementById('ev-cancel-btn'); if (c) c.style.display = 'none';
+}
+function rlkEditEvent(id) {
+  sb.from('rlk_evenements').select('*').eq('id', id).maybeSingle().then(function(res) {
+    var e = res.data; if (!e) { toast(res.error ? rlkErr(res.error) : 'Événement introuvable'); return; }
+    rlkEvEditId = id; rlkEvPhotoData = e.photo || null;
+    var set = function(i, v) { var x = document.getElementById(i); if (x) x.value = v == null ? '' : v; };
+    set('ev-titre', e.titre); set('ev-debut', rlkLocalDT(e.date_debut)); set('ev-fin', rlkLocalDT(e.date_fin)); set('ev-adr', e.adresse); set('ev-quartier', e.quartier);
+    set('ev-places', e.places); set('ev-objet', e.objet); set('ev-desc', e.description);
+    set('ev-fiches', (e.fiches || []).map(function(f) { return f.titre + ' | ' + f.url; }).join('\n'));
+    rlkEvPrev();
+    document.getElementById('ev-form-title').textContent = 'Modifier l\'événement';
+    document.getElementById('ev-save-btn').textContent = 'Enregistrer les modifications';
+    document.getElementById('ev-cancel-btn').style.display = 'inline-flex';
+    document.getElementById('ev-titre').scrollIntoView({behavior: 'smooth', block: 'center'});
+  });
+}
+function rlkSaveEvent() {
+  var titre = rlkVal('ev-titre').trim(), debut = rlkVal('ev-debut');
+  if (!titre || !debut) { toast('Titre et date obligatoires'); return; }
+  var fiches = rlkVal('ev-fiches').split('\n').map(function(l) { var p = l.split('|'); return p.length > 1 ? {titre: p[0].trim(), url: p.slice(1).join('|').trim()} : (l.trim() ? {titre: 'Fiche', url: l.trim()} : null); }).filter(function(x) { return x && /^https?:\/\//.test(x.url); });
+  var row = {titre: titre, date_debut: new Date(debut).toISOString(), date_fin: rlkVal('ev-fin') ? new Date(rlkVal('ev-fin')).toISOString() : null, adresse: rlkVal('ev-adr'), quartier: rlkVal('ev-quartier'), objet: rlkVal('ev-objet'), description: rlkVal('ev-desc'), places: parseInt(rlkVal('ev-places')) || null, fiches: fiches, photo: rlkEvPhotoData};
+  var q = rlkEvEditId ? sb.from('rlk_evenements').update(row).eq('id', rlkEvEditId) : sb.from('rlk_evenements').insert(row);
+  q.then(function(res) {
+    if (res.error) { toast(/photo/.test(res.error.message || '') ? 'Pour les photos, lancez d\'abord le SQL v2.2 (phase2_v22_additif.sql)' : rlkErr(res.error)); return; }
+    toast(rlkEvEditId ? '✓ Événement modifié' : '✓ Événement publié'); rlkEvReset(); rlkLoadEventsAdmin(); rlkLoadEvents();
+  });
+}
+function rlkLoadEventsAdmin() {
+  sb.from('rlk_evenements').select('id,titre,date_debut').order('date_debut', {ascending: false}).limit(40).then(function(res) {
+    var el = document.getElementById('ev-admin-list'); if (!el) return;
+    if (res.error) { el.textContent = rlkErr(res.error); return; }
+    var rows = res.data || [];
+    el.innerHTML = rows.length ? rows.map(function(e) { return '<div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span style="flex:1;min-width:140px">' + rlkDate(e.date_debut) + ' · ' + rlkEsc(e.titre) + '</span><button class="btn btn-outline btn-xs" onclick="rlkEditEvent(\'' + e.id + '\')">Modifier</button><button class="btn btn-ghost btn-xs" onclick="rlkDelEvent(\'' + e.id + '\')">Supprimer</button></div>'; }).join('') : 'Aucun événement.';
+  });
+}
+// ── Branchements v2.2 ──
+var rlkShowReglajOrig2 = showReglaj;
+showReglaj = function(section) {
+  rlkShowReglajOrig2(section);
+  var s = String(section).replace('é', 'e');
+  if (s === 'zaderan') rlkLoadAdhConfirm();
+  if (s === 'atelier') rlkLoadFruits().then(rlkCalcAtelier);
+  if (s === 'messagerie') rlkLoadCanaux();
+  if (s === 'commandes') rlkCmdBadge();
+  if (s === 'agenda') rlkEvReset();
+};
+document.addEventListener('DOMContentLoaded', function() { rlkLoadFruits(); });
+// ═══════════════════════════════════════════════════════════════
+// MODULE 6 (v2.3) : Mon kont, journal des trocs, rapport, Ladilafé, événements, suppression d'article
+// ═══════════════════════════════════════════════════════════════
+RLK_VERSION = '2.3';
+function rlkLundi(d) { var x = d ? new Date(d) : new Date(); x = new Date(x.getFullYear(), x.getMonth(), x.getDate()); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; }
+function rlkISO(d) { var p = function(n) { return String(n).padStart(2, '0'); }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
+function rlkDateLong(s) { return new Date(s).toLocaleDateString('fr-FR', {day: 'numeric', month: 'long', year: 'numeric'}); }
+
+// ── Boutik : suppression d'un article ──
+function rlkDelArticle(id) {
+  id = id || rlkVal('art-id'); if (!id) return;
+  if (!confirm('Supprimer définitivement cet article de la boutique ?')) return;
+  Promise.all([sb.from('rlk_stock').delete().eq('produit_id', id), sb.from('rlk_articles').delete().eq('produit_id', id)]).then(function() {
+    return sb.from('produits').delete().eq('id', id);
+  }).then(function(res) {
+    if (res.error) {
+      sb.from('produits').update({actif: false}).eq('id', id).then(function() { toast('Suppression impossible (article lié à des données) : il est masqué de la boutique'); closeModal('m-article'); rlkLoadArticlesAdmin(); loadProduits(); });
+      return;
+    }
+    toast('✓ Article supprimé'); closeModal('m-article'); rlkLoadArticlesAdmin(); loadProduits();
+  });
+}
+
+// ── TROK : journal permanent et « Mes déclarations » ──
+function rlkDoDispos() {
+  var prodId = (rlkIsAdmin() && rlkVal('dispo-prod')) ? rlkVal('dispo-prod') : currentUser.id;
+  var today = new Date().toISOString().split('T')[0], lundi = rlkISO(rlkLundi()), inserts = [], journal = [];
+  rlkDonLignes().forEach(function(x) {
+    var suf = {vert: ' (vert)', rare: ' (rare)', cher: ' (cher)', exception: ' (exception)', tisane: ' (tisane/aromate)'}[x.etat] || '';
+    if (x.autre) inserts.push({profile_id: prodId, produit: x.nom + ' (à classer)', quantite: x.q, unite: x.u, semaine: today});
+    else if (x.kg != null) inserts.push({profile_id: prodId, produit: x.nom + suf + (x.u !== 'kg' ? ' (' + x.q + ' ' + x.u + ')' : ''), quantite: Math.round(x.kg * 100) / 100, unite: 'kg', semaine: today});
+    journal.push({user_id: prodId, declare_par: currentUser.id, produit: x.nom, etat: x.autre ? 'a_classer' : x.etat, quantite: x.q, unite: x.u, kg: x.kg != null ? Math.round(x.kg * 100) / 100 : null, semaine: lundi});
+  });
+  sb.from('disponibilites').insert(inserts).then(function(res) {
+    if (res.error) { toast(rlkErr(res.error)); return; }
+    sb.from('rlk_trok').insert(journal).then(function() { rlkLoadMesTrocs(); });
+    toast('✓ Troc déclaré, merci ! Vos FEY seront crédités après l\'atelier.');
+    document.getElementById('dispo-lignes').innerHTML = ''; rlkAddLine(); rlkDonPreview();
+    setTimeout(function() { loadStockTable(); rlkLoadCompteurs(); }, 600);
+    setTimeout(rlkLoadCompteurs, 2500);
+  });
+}
+function rlkTrocRows(uid, depuis) {
+  return sb.from('rlk_trok').select('*').eq('user_id', uid).gte('semaine', depuis).order('created_at', {ascending: false}).limit(500).then(function(r) {
+    if (!r.error && r.data && r.data.length) return r.data;
+    var d0 = new Date(depuis + 'T00:00:00');
+    return sb.from('disponibilites').select('*').eq('profile_id', uid).gte('created_at', d0.toISOString()).order('created_at', {ascending: false}).limit(500).then(function(r2) {
+      return (r2.data || []).map(function(x) { return {produit: x.produit, quantite: x.quantite, unite: x.unite, kg: x.unite === 'kg' ? Number(x.quantite) : null, semaine: rlkISO(rlkLundi(x.created_at)), created_at: x.created_at}; });
+    });
+  });
+}
+function rlkTrocLine(t) {
+  return '<div style="display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:.85rem"><span>' + rlkEsc(t.produit) + '</span><span style="white-space:nowrap">' + rlkFmt(t.quantite, 2) + ' ' + rlkEsc(t.unite) + (t.unite !== 'kg' && t.kg != null ? ' (≈ ' + rlkFmt(t.kg, 1) + ' kg)' : '') + '</span></div>';
+}
+function rlkLoadMesTrocs() {
+  var box = document.getElementById('trok-mes'); if (!box) return;
+  if (!currentUser) { box.innerHTML = '<div class="rlk-note">Connectez-vous pour voir vos déclarations.</div>'; return; }
+  var uid = (rlkIsAdmin() && rlkVal('dispo-prod')) ? rlkVal('dispo-prod') : currentUser.id, lundi = rlkLundi(), fin = new Date(lundi); fin.setDate(fin.getDate() + 6);
+  rlkTrocRows(uid, rlkISO(lundi)).then(function(rows) {
+    var kg = 0; rows.forEach(function(t) { kg += Number(t.kg) || 0; });
+    box.innerHTML = '<div class="rlk-note" style="margin:0 0 8px">Semaine du ' + lundi.toLocaleDateString('fr-FR', {day: 'numeric', month: 'long'}) + ' au ' + fin.toLocaleDateString('fr-FR', {day: 'numeric', month: 'long'}) + ' (lundi au dimanche). Le compteur repart à zéro chaque lundi, vos déclarations restent archivées.</div>'
+      + (rows.length ? rows.map(rlkTrocLine).join('') + '<div style="margin-top:8px"><b>Total de la semaine : ' + rlkFmt(kg, 1) + ' kg</b></div>' : '<div class="rlk-note">Aucune déclaration cette semaine.</div>')
+      + '<div style="margin-top:10px"><button class="btn btn-ghost btn-xs" type="button" onclick="navTo(\'kont\')">Voir tout mon historique</button></div>';
+  });
+}
+
+// ── Mon kont ──
+function rlkKontLoad() {
+  if (!currentUser) return;
+  sb.from('profiles').select('*').eq('id', currentUser.id).maybeSingle().then(function(r) {
+    var p = r.data || profile || {};
+    [['k-nom', 'nom'], ['k-prenom', 'prenom'], ['k-adr', 'adresse'], ['k-cp', 'code_postal'], ['k-ville', 'ville'], ['k-tel', 'telephone']].forEach(function(m) { var e = document.getElementById(m[0]); if (e) e.value = p[m[1]] || ''; });
+    var em = document.getElementById('k-email'); if (em) em.value = currentUser.email || p.email || '';
+  });
+  sb.from('rlk_profil_ext').select('*').eq('user_id', currentUser.id).maybeSingle().then(function(r) {
+    var e = r.data, roles = (e && e.roles) || [];
+    document.querySelectorAll('#k-roles input').forEach(function(i) { i.checked = roles.indexOf(i.value) >= 0; });
+    var box = document.getElementById('kont-adh'); if (!box) return;
+    if (!e) { box.innerHTML = ''; return; }
+    box.innerHTML = e.paiement_confirme ? '<div class="rlk-ok">Adhésion réglée et confirmée.</div>'
+      : (e.yapla_declare ? '<div class="rlk-warn">Paiement signalé : l\'équipe le confirme dans Yapla.</div>'
+        : '<div class="rlk-warn"><b>Adhésion à régler.</b> Le paiement se fait sur Yapla, qui vous envoie le reçu.<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" type="button" onclick="rlkPayerYapla()">Payer sur Yapla</button><button class="btn btn-outline btn-sm" type="button" onclick="rlkAiPaye();setTimeout(rlkKontLoad,800)">J\'ai payé</button></div></div>');
+  });
+  sb.rpc('rlk_mon_solde').then(function(r) { var e = document.getElementById('k-solde'); if (e) e.textContent = (r.data == null ? '—' : r.data) + ' FEY'; });
+  sb.from('rlk_fey').select('*').eq('user_id', currentUser.id).order('created_at', {ascending: false}).limit(100).then(function(r) {
+    var el = document.getElementById('k-fey'); if (!el) return;
+    if (r.error) { el.textContent = rlkErr(r.error); return; }
+    var rows = r.data || [];
+    el.innerHTML = rows.length ? rows.map(function(m) { return '<div style="display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:.85rem"><span>' + rlkDate(m.created_at) + ' · ' + rlkEsc(m.motif || '') + '</span><b style="color:' + (m.delta >= 0 ? 'var(--accent)' : '#B3261E') + '">' + (m.delta > 0 ? '+' : '') + m.delta + '</b></div>'; }).join('') : 'Aucun mouvement de FEY pour le moment.';
+  });
+  rlkTrocRows(currentUser.id, '2000-01-01').then(function(rows) {
+    var el = document.getElementById('k-trocs'); if (!el) return;
+    var by = {}, tot = 0; rows.forEach(function(t) { (by[t.semaine] = by[t.semaine] || []).push(t); tot += Number(t.kg) || 0; });
+    var ks = Object.keys(by).sort().reverse();
+    document.getElementById('k-kgtot').textContent = rlkFmt(tot, 1) + ' kg au total';
+    el.innerHTML = ks.length ? ks.map(function(k) {
+      var kg = 0; by[k].forEach(function(t) { kg += Number(t.kg) || 0; });
+      return '<details style="margin-bottom:6px"><summary style="cursor:pointer;font-size:.88rem"><b>Semaine du ' + rlkDateLong(k + 'T00:00:00') + '</b> · ' + rlkFmt(kg, 1) + ' kg</summary>' + by[k].map(rlkTrocLine).join('') + '</details>';
+    }).join('') : 'Aucun troc déclaré pour le moment.';
+  });
+  sb.from('rlk_commandes').select('*').eq('user_id', currentUser.id).order('created_at', {ascending: false}).limit(60).then(function(r) {
+    var el = document.getElementById('k-cmds'); if (!el) return;
+    if (r.error) { el.textContent = rlkErr(r.error); return; }
+    el.innerHTML = (r.data || []).length ? r.data.map(function(c) {
+      return '<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:.85rem"><div style="display:flex;justify-content:space-between;gap:8px"><b>' + rlkDate(c.created_at) + '</b><span class="badge ' + (c.statut === 'en_attente' ? 'b-wait' : 'b-ok') + '">' + (RLK_STAT_CMD[c.statut] || c.statut) + '</span></div>'
+        + '<div class="rlk-note" style="margin:2px 0">' + (c.lignes || []).map(function(l) { return l.qty + ' × ' + rlkEsc(l.nom); }).join(', ') + '</div>' + c.total_fey + ' FEY · ' + (c.mode_paiement === 'yapla' ? rlkFmt(c.total_eur, 2) + ' € via Yapla' : 'payé en FEY') + '</div>';
+    }).join('') : 'Aucune commande.';
+  });
+  sb.from('rlk_abonnements').select('*').eq('user_id', currentUser.id).order('created_at', {ascending: false}).then(function(r) {
+    var el = document.getElementById('k-abos'); if (!el) return;
+    el.innerHTML = (r.data || []).length ? r.data.map(function(a) { return '<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:.85rem">' + rlkDate(a.created_at) + ' · ' + a.formule + ' · ' + a.nb_panyes + ' panyés · ' + a.total_fey + ' FEY · ' + a.statut + '</div>'; }).join('') : 'Aucun abonnement.';
+  });
+}
+function rlkKontSave() {
+  var upd = {nom: rlkVal('k-nom').trim(), prenom: rlkVal('k-prenom').trim(), adresse: rlkVal('k-adr').trim(), code_postal: rlkVal('k-cp').trim(), ville: rlkVal('k-ville').trim(), telephone: rlkVal('k-tel').trim()};
+  if (!upd.nom || !upd.prenom) { toast('Nom et prénom obligatoires'); return; }
+  var roles = []; document.querySelectorAll('#k-roles input:checked').forEach(function(i) { roles.push(i.value); });
+  sb.from('profiles').update(upd).eq('id', currentUser.id).then(function(r) {
+    if (r.error) { toast(rlkErr(r.error)); return; }
+    profile = Object.assign(profile || {}, upd);
+    sb.rpc('rlk_mes_roles', {p_roles: roles}).then(function() {});
+    var mail = rlkVal('k-email').trim(), msg = '✓ Coordonnées enregistrées';
+    if (mail && mail !== currentUser.email) {
+      sb.auth.updateUser({email: mail}).then(function(x) { toast(x.error ? 'Mail non modifié : ' + x.error.message : 'Coordonnées enregistrées. Confirmez votre nouvelle adresse via le mail reçu.'); });
+    } else toast(msg);
+    rlkDonIdentite();
+  });
+}
+function rlkKontPwd() {
+  var a = rlkVal('k-pwd'), b = rlkVal('k-pwd2');
+  if (!a || a.length < 6) { toast('Mot de passe : 6 caractères minimum'); return; }
+  if (a !== b) { toast('Les deux mots de passe ne correspondent pas'); return; }
+  rlkEngage('Confirmez votre mot de passe actuel pour changer de mot de passe', function() {
+    sb.auth.updateUser({password: a}).then(function(r) {
+      if (r.error) { toast('Erreur : ' + r.error.message); return; }
+      document.getElementById('k-pwd').value = ''; document.getElementById('k-pwd2').value = ''; toast('✓ Mot de passe modifié');
+    });
+  });
+}
+
+// ── Rapport d'activité ──
+var rlkRapportData = null;
+function rlkRapport() {
+  var d1 = rlkVal('rp-d1') || (new Date().getFullYear() + '-01-01'), d2 = rlkVal('rp-d2') || rlkISO(new Date());
+  document.getElementById('rp-d1').value = d1; document.getElementById('rp-d2').value = d2;
+  var t1 = d1 + 'T00:00:00', t2 = d2 + 'T23:59:59', out = document.getElementById('rp-out'); out.textContent = 'Calcul en cours…';
+  Promise.all([
+    sb.from('rlk_trok').select('*').gte('semaine', rlkISO(rlkLundi(d1 + 'T00:00:00'))).lte('semaine', d2).limit(10000),
+    sb.from('rlk_lots').select('*').gte('date_transfo', d1).lte('date_transfo', d2).limit(2000),
+    sb.from('rlk_fey').select('delta,created_at').gt('delta', 0).gte('created_at', t1).lte('created_at', t2).limit(20000),
+    sb.from('rlk_commandes').select('*').gte('created_at', t1).lte('created_at', t2).limit(5000),
+    sb.from('rlk_evenements').select('id,titre,date_debut').gte('date_debut', t1).lte('date_debut', t2).limit(500),
+    sb.from('profiles').select('id', {count: 'exact', head: true}).gte('created_at', t1).lte('created_at', t2),
+    sb.from('disponibilites').select('*').gte('created_at', t1).lte('created_at', t2).limit(10000)
+  ]).then(function(rs) {
+    var trok = (rs[0].data || []).filter(function(t) { return t.created_at >= t1 && t.created_at <= t2 + 'Z' || true; }), src = 'journal des trocs';
+    if (!trok.length) { src = 'déclarations de disponibilités'; trok = (rs[6].data || []).map(function(x) { return {user_id: x.profile_id, produit: x.produit, kg: x.unite === 'kg' ? Number(x.quantite) : null, semaine: rlkISO(rlkLundi(x.created_at))}; }); }
+    var weeks = {}, prods = {}, users = {}, kg = 0;
+    trok.forEach(function(t) { var k = Number(t.kg) || 0; kg += k; users[t.user_id] = 1; var w = weeks[t.semaine] = weeks[t.semaine] || {kg: 0, n: 0, u: {}}; w.kg += k; w.n++; w.u[t.user_id] = 1; var pn = String(t.produit).replace(/ \((vert|rare|cher|exception|tisane\/aromate|à classer)\)/, '').replace(/ \(\d.*\)$/, ''); prods[pn] = (prods[pn] || 0) + k; });
+    var lots = rs[1].data || [], lotKg = 0, pots = 0; lots.forEach(function(l) { lotKg += Number(l.kg_fruits) || 0; pots += Number(l.qte_produite) || 0; });
+    var fey = 0; (rs[2].data || []).forEach(function(f) { fey += f.delta; });
+    var cmds = (rs[3].data || []).filter(function(c) { return c.statut !== 'annulee'; }), cFey = 0, cEur = 0; cmds.forEach(function(c) { cFey += c.total_fey; if (c.mode_paiement === 'yapla') cEur += Number(c.total_eur); });
+    var evs = rs[4].data || [];
+    var ws = Object.keys(weeks).sort(), ps = Object.keys(prods).sort(function(a, b) { return prods[b] - prods[a]; }).slice(0, 20);
+    var h = '<h3 style="margin:0 0 4px">Rézo la Kour : rapport d\'activité</h3><div>Du ' + rlkDateLong(d1 + 'T00:00:00') + ' au ' + rlkDateLong(d2 + 'T00:00:00') + '</div>'
+      + '<h4>Chiffres clés</h4><table class="rlk-tbl" style="width:100%"><tbody>'
+      + '<tr><td>Fruits et légumes troqués</td><td><b>' + rlkFmt(kg, 1) + ' kg</b> (' + trok.length + ' déclarations, ' + Object.keys(users).length + ' adhérents)</td></tr>'
+      + '<tr><td>Fruits reçus et transformés en atelier</td><td><b>' + rlkFmt(lotKg, 1) + ' kg</b> (' + lots.length + ' lots)</td></tr>'
+      + '<tr><td>Produits transformés fabriqués</td><td><b>' + rlkFmt(pots, 0) + '</b> unités</td></tr>'
+      + '<tr><td>FEY créditées aux adhérents</td><td><b>' + rlkFmt(fey, 0) + '</b></td></tr>'
+      + '<tr><td>Commandes Boutik</td><td><b>' + cmds.length + '</b> (' + rlkFmt(cFey, 0) + ' FEY, ' + rlkFmt(cEur, 2) + ' € via Yapla)</td></tr>'
+      + '<tr><td>Ateliers et événements</td><td><b>' + evs.length + '</b></td></tr>'
+      + '<tr><td>Nouveaux adhérents</td><td><b>' + (rs[5].count || 0) + '</b></td></tr></tbody></table>'
+      + '<h4>Récoltes par semaine (lundi au dimanche)</h4><table class="rlk-tbl" style="width:100%"><tr><th>Semaine du</th><th>kg</th><th>Adhérents</th><th>Déclarations</th></tr>'
+      + (ws.map(function(w) { return '<tr><td>' + rlkDate(w + 'T00:00:00') + '</td><td>' + rlkFmt(weeks[w].kg, 1) + '</td><td>' + Object.keys(weeks[w].u).length + '</td><td>' + weeks[w].n + '</td></tr>'; }).join('') || '<tr><td colspan="4">Aucune donnée sur la période.</td></tr>') + '</table>'
+      + '<h4>Produits les plus troqués</h4><table class="rlk-tbl" style="width:100%"><tr><th>Produit</th><th>kg</th></tr>' + ps.map(function(p) { return '<tr><td>' + rlkEsc(p) + '</td><td>' + rlkFmt(prods[p], 1) + '</td></tr>'; }).join('') + '</table>'
+      + '<div class="rlk-note">Source des récoltes : ' + src + '. Les déclarations antérieures à la v2.3 sont lues dans les disponibilités.</div>';
+    var csv = ['Semaine du;kg;adhérents;déclarations'].concat(ws.map(function(w) { return [w, String(weeks[w].kg).replace('.', ','), Object.keys(weeks[w].u).length, weeks[w].n].join(';'); })).concat(['', 'Produit;kg']).concat(ps.map(function(p) { return p + ';' + String(prods[p]).replace('.', ','); }));
+    rlkRapportData = {html: h, csv: csv.join('\n'), d1: d1, d2: d2};
+    out.innerHTML = h;
+  });
+}
+function rlkRapportPrint() { if (!rlkRapportData) { toast('Générez d\'abord le rapport'); return; } rlkPrintHtml('<div style="font-family:Arial,sans-serif;font-size:11pt;color:#000"><img src="logo-96.png" style="width:22mm;float:right">' + rlkRapportData.html + '</div>', 'A4', true); }
+function rlkRapportCsv() {
+  if (!rlkRapportData) { toast('Générez d\'abord le rapport'); return; }
+  var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + rlkRapportData.csv], {type: 'text/csv'})); a.download = 'rapport-activite-' + rlkRapportData.d1 + '-' + rlkRapportData.d2 + '.csv'; a.click();
+}
+
+// ── Événements (Biyetri) ──
+function rlkLoadEvents() {
+  var box = document.getElementById('biy-list'); if (!box) return;
+  sb.rpc('rlk_evenements_liste').then(function(res) {
+    if (res.error) { box.innerHTML = '<div class="rlk-note">L\'agenda sera disponible après l\'installation de la base (SQL v2).</div>'; return; }
+    var rows = res.data || [];
+    if (!rows.length) { box.innerHTML = '<div class="rlk-ev2"><div class="rlk-ev2-b rlk-note">Aucun atelier programmé pour le moment.</div></div>'; return; }
+    box.innerHTML = rows.map(function(e) {
+      var d = new Date(e.date_debut), reste = e.places ? e.places - Number(e.inscrits) : null;
+      var fiches = (e.fiches || []).map(function(f) { return '<a href="' + rlkEsc(f.url) + '" target="_blank" rel="noopener" class="btn btn-ghost btn-xs">' + rlkEsc(f.titre) + '</a>'; }).join(' ');
+      var act = e.moi_inscrit
+        ? '<span class="badge b-ok">Vous êtes inscrit</span> <button class="btn btn-ghost btn-xs" onclick="rlkCancelRes(\'' + e.id + '\')">Annuler</button>'
+        : (reste !== null && reste <= 0 ? '<span class="badge b-err">Complet</span>' : '<select id="nb-' + e.id + '" style="width:auto"><option>1</option><option>2</option><option>3</option><option>4</option></select> personne(s) <button class="btn btn-primary btn-sm" onclick="rlkReserve(\'' + e.id + '\')">Réserver</button>');
+      return '<div class="rlk-ev2"><div class="rlk-ev2-h">' + rlkEsc(e.titre) + '</div>'
+        + (e.photo ? '<img class="rlk-evimg" src="' + e.photo + '" alt="">' : '')
+        + '<div class="rlk-ev2-b"><div class="rlk-ev2-info">' + d.toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric', month: 'long'}) + ' à ' + d.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})
+        + (e.quartier ? '<br>Lieu : ' + rlkEsc(e.quartier) : '') + (e.adresse ? '<br>Adresse : ' + rlkEsc(e.adresse) : '') + (reste !== null ? '<br>' + Math.max(0, reste) + ' place' + (reste > 1 ? 's' : '') + ' restante' + (reste > 1 ? 's' : '') + ' sur ' + e.places : '') + '</div>'
+        + (e.objet ? '<div class="rlk-ev2-obj"><b>Objet du jour :</b> ' + rlkEsc(e.objet) + '</div>' : '') + (e.description ? '<p class="rlk-ev2-desc">' + rlkEsc(e.description) + '</p>' : '')
+        + (fiches ? '<div style="margin:14px 0;display:flex;gap:6px;flex-wrap:wrap">' + fiches + '</div>' : '') + '<div style="margin-top:18px">' + act + '</div></div></div>';
+    }).join('');
+  });
+}
+
+// ── Ladilafé : blog ──
+RLK.blog = {cats: [], posts: [], cat: '', erreur: null};
+function loadBlog() { rlkBlogLoad(); }
+function filterBlog() { rlkBlogRender(); }
+function rlkBlogLoad() {
+  var adm = document.getElementById('blog-admin-btns'); if (adm) adm.style.display = rlkIsAdmin() ? 'flex' : 'none';
+  var rd = document.getElementById('blog-read'), ls = document.getElementById('blog-list'); if (rd) rd.style.display = 'none'; if (ls) ls.style.display = 'block';
+  return Promise.all([
+    sb.from('rlk_blog_cats').select('*').order('ordre'),
+    sb.from('rlk_blog_posts').select('id,cat_id,titre,chapeau,couverture,publie,created_at').order('created_at', {ascending: false}).limit(300),
+    sb.from('articles').select('*').eq('publie', true).order('created_at', {ascending: false}).limit(100)
+  ]).then(function(rs) {
+    RLK.blog.erreur = rs[0].error || rs[1].error;
+    RLK.blog.cats = rs[0].data || [];
+    var posts = rs[1].data || [], old = (rs[2].data || []).map(function(a) { return {id: 'old:' + a.id, cat_id: '__old', titre: a.titre, chapeau: String(a.contenu || '').replace(/\s+/g, ' ').slice(0, 140), couverture: a.image || a.photo || null, publie: true, created_at: a.created_at, legacy: a}; });
+    RLK.blog.posts = posts.concat(old);
+    if (old.length) RLK.blog.cats = RLK.blog.cats.concat([{id: '__old', nom: 'Resèt'}]);
+    rlkBlogRender();
+  });
+}
+function rlkBlogCat(id) { RLK.blog.cat = RLK.blog.cat === id ? '' : id; rlkBlogRender(); }
+function rlkBlogRender() {
+  var chips = document.getElementById('blog-chips'), grid = document.getElementById('blog-grid'); if (!grid) return;
+  var B = RLK.blog;
+  if (B.erreur) { grid.innerHTML = '<div class="rlk-dbwarn">' + rlkEsc(rlkErr(B.erreur)) + ' (fichier phase2_v22_additif.sql)</div>'; return; }
+  chips.innerHTML = '<button type="button" class="rlk-chip' + (!B.cat ? ' on' : '') + '" onclick="rlkBlogCat(\'\')">Tout</button>' + B.cats.map(function(c) { return '<button type="button" class="rlk-chip' + (B.cat === c.id ? ' on' : '') + '" onclick="rlkBlogCat(\'' + c.id + '\')">' + rlkEsc(c.nom) + '</button>'; }).join('');
+  var q = rlkVal('blog-search').trim().toLowerCase(), nom = {}; B.cats.forEach(function(c) { nom[c.id] = c.nom; });
+  var l = B.posts.filter(function(p) { return (!B.cat || p.cat_id === B.cat) && (!q || (p.titre + ' ' + (p.chapeau || '')).toLowerCase().indexOf(q) >= 0); });
+  grid.innerHTML = l.length ? l.map(function(p) {
+    return '<div class="rlk-bcard" onclick="rlkPostOpen(\'' + p.id + '\')">' + (p.couverture ? '<img src="' + p.couverture + '" alt="">' : '<div class="rlk-bph"></div>')
+      + '<div class="rlk-bbody"><div class="rlk-bmeta">' + rlkEsc(nom[p.cat_id] || 'Sans catégorie') + ' · ' + rlkDate(p.created_at) + (p.publie ? '' : ' · <b style="color:#B3261E">Brouillon</b>') + '</div><div class="rlk-btitle">' + rlkEsc(p.titre) + '</div>' + (p.chapeau ? '<div class="rlk-bchap">' + rlkEsc(p.chapeau) + '</div>' : '') + '</div></div>';
+  }).join('') : '<div class="rlk-note">Aucun article pour le moment.</div>';
+}
+function rlkInline(t) {
+  var h = rlkEsc(t);
+  h = h.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  h = h.replace(/\[([^\]]+)\]\(post:([0-9a-fA-F-]+)\)/g, '<a href="#" onclick="rlkPostOpen(\'$2\');return false">$1</a>');
+  h = h.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  return h.replace(/\n/g, '<br>');
+}
+function rlkBlocHtml(b) {
+  var T = {}; RLK.blog.posts.forEach(function(p) { T[p.id] = p.titre; });
+  if (b.t === 'h2') return '<h2 class="rlk-bh2">' + rlkEsc(b.v) + '</h2>';
+  if (b.t === 'h3') return '<h3 class="rlk-bh3">' + rlkEsc(b.v) + '</h3>';
+  if (b.t === 'p') return '<p class="rlk-bp">' + rlkInline(b.v) + '</p>';
+  if (b.t === 'cit') return '<blockquote class="rlk-bq">' + rlkInline(b.v) + '</blockquote>';
+  if (b.t === 'liste') return '<ul class="rlk-bp">' + String(b.v || '').split('\n').filter(function(x) { return x.trim(); }).map(function(x) { return '<li>' + rlkInline(x) + '</li>'; }).join('') + '</ul>';
+  if (b.t === 'img') return b.src ? '<figure class="rlk-bfig"><img src="' + b.src + '" alt="' + rlkEsc(b.leg || '') + '">' + (b.leg ? '<figcaption>' + rlkEsc(b.leg) + '</figcaption>' : '') + '</figure>' : '';
+  if (b.t === 'lien') return T[b.post] ? '<a class="rlk-linkcard" href="#" onclick="rlkPostOpen(\'' + b.post + '\');return false">Lire aussi : <b>' + rlkEsc(T[b.post]) + '</b> →</a>' : '';
+  return '';
+}
+function rlkPostOpen(id) {
+  var rd = document.getElementById('blog-read'), ls = document.getElementById('blog-list'); if (!rd) return;
+  var meta = RLK.blog.posts.filter(function(p) { return p.id === id; })[0];
+  var show = function(p, blocs, cover) {
+    var cat = RLK.blog.cats.filter(function(c) { return c.id === p.cat_id; })[0];
+    ls.style.display = 'none'; rd.style.display = 'block';
+    rd.innerHTML = '<button class="btn btn-ghost btn-sm" type="button" onclick="rlkBlogLoad()">← Tous les articles</button>'
+      + (cover ? '<img class="rlk-bcover" src="' + cover + '" alt="">' : '')
+      + '<div class="rlk-bmeta" style="margin-top:14px">' + rlkEsc(cat ? cat.nom : 'Sans catégorie') + ' · ' + rlkDate(p.created_at) + (p.publie ? '' : ' · <b style="color:#B3261E">Brouillon</b>') + '</div>'
+      + '<h1 class="rlk-bh1">' + rlkEsc(p.titre) + '</h1>' + (p.chapeau ? '<p class="rlk-bchapo">' + rlkEsc(p.chapeau) + '</p>' : '')
+      + '<div>' + blocs.map(rlkBlocHtml).join('') + '</div>'
+      + (rlkIsAdmin() && !String(id).startsWith('old:') ? '<div style="margin-top:22px"><button class="btn btn-outline btn-sm" type="button" onclick="rlkPostEdit(\'' + id + '\')">Modifier cet article</button></div>' : '');
+    window.scrollTo(0, 0);
+  };
+  if (String(id).startsWith('old:') && meta && meta.legacy) { show(meta, String(meta.legacy.contenu || '').split(/\n{1,}/).filter(Boolean).map(function(x) { return {t: 'p', v: x}; }), meta.couverture); return; }
+  sb.from('rlk_blog_posts').select('*').eq('id', id).maybeSingle().then(function(r) {
+    if (!r.data) { toast('Article introuvable'); return; }
+    show(r.data, r.data.blocs || [], r.data.couverture);
+  });
+}
+// Éditeur
+var rlkEd = {id: null, blocs: [], cover: null};
+var RLK_BLOC_NOM = {h2: 'Grand titre', h3: 'Sous-titre', p: 'Paragraphe', img: 'Photo', liste: 'Liste', cit: 'Citation', lien: 'Lien vers un article'};
+function rlkPostEdit(id) {
+  var go = function(p) {
+    rlkEd = {id: p ? p.id : null, blocs: p && p.blocs ? JSON.parse(JSON.stringify(p.blocs)) : [], cover: p ? p.couverture : null};
+    document.getElementById('post-ttl').textContent = p ? 'Modifier l\'article' : 'Nouvel article';
+    document.getElementById('post-id').value = p ? p.id : '';
+    document.getElementById('post-titre').value = p ? p.titre : '';
+    document.getElementById('post-chapeau').value = p ? p.chapeau || '' : '';
+    document.getElementById('post-publie').value = p && p.publie ? '1' : '0';
+    document.getElementById('post-cat').innerHTML = '<option value="">Sans catégorie</option>' + RLK.blog.cats.filter(function(c) { return c.id !== '__old'; }).map(function(c) { return '<option value="' + c.id + '"' + (p && p.cat_id === c.id ? ' selected' : '') + '>' + rlkEsc(c.nom) + '</option>'; }).join('');
+    document.getElementById('post-del').style.display = p ? 'inline-flex' : 'none';
+    if (!p) rlkEd.blocs = [{t: 'p', v: ''}];
+    rlkCoverPrev(); rlkBlocsRender(); openModal('m-post');
+  };
+  if (!id) { go(null); return; }
+  sb.from('rlk_blog_posts').select('*').eq('id', id).maybeSingle().then(function(r) { if (r.data) go(r.data); else toast('Article introuvable'); });
+}
+function rlkCoverPrev() { var e = document.getElementById('post-cover-prev'); if (e) e.innerHTML = rlkEd.cover ? '<img src="' + rlkEd.cover + '" style="max-width:100%;max-height:150px;border-radius:8px;display:block;margin:6px 0"><button class="btn btn-ghost btn-xs" type="button" onclick="rlkEd.cover=null;rlkCoverPrev()">Retirer</button>' : ''; }
+function rlkPostCover(inp) { var f = inp.files && inp.files[0]; if (f) rlkResizeImg(f, 1000, function(d) { rlkEd.cover = d; rlkCoverPrev(); }); }
+function rlkBlocAdd(t) { rlkEd.blocs.push(t === 'img' ? {t: t, src: null, leg: ''} : (t === 'lien' ? {t: t, post: ''} : {t: t, v: ''})); rlkBlocsRender(); var c = document.getElementById('post-blocs'); if (c.lastElementChild) c.lastElementChild.scrollIntoView({block: 'center'}); }
+function rlkBlocSet(i, k, v) { rlkEd.blocs[i][k] = v; }
+function rlkBlocMove(i, d) { var j = i + d; if (j < 0 || j >= rlkEd.blocs.length) return; var x = rlkEd.blocs.splice(i, 1)[0]; rlkEd.blocs.splice(j, 0, x); rlkBlocsRender(); }
+function rlkBlocDel(i) { rlkEd.blocs.splice(i, 1); rlkBlocsRender(); }
+function rlkBlocImg(i, inp) { var f = inp.files && inp.files[0]; if (f) rlkResizeImg(f, 1000, function(d) { rlkEd.blocs[i].src = d; rlkBlocsRender(); }); }
+function rlkBlocLierArt(i, sel) {
+  if (!sel.value) return; var t = RLK.blog.posts.filter(function(p) { return p.id === sel.value; })[0];
+  rlkEd.blocs[i].v = (rlkEd.blocs[i].v || '') + ' [' + (t ? t.titre : 'article') + '](post:' + sel.value + ')'; rlkBlocsRender();
+}
+function rlkBlocsRender() {
+  var box = document.getElementById('post-blocs'); if (!box) return;
+  var arts = RLK.blog.posts.filter(function(p) { return p.id !== rlkEd.id && !String(p.id).startsWith('old:'); });
+  var opts = '<option value="">Choisir un article…</option>' + arts.map(function(p) { return '<option value="' + p.id + '">' + rlkEsc(p.titre) + '</option>'; }).join('');
+  box.innerHTML = rlkEd.blocs.map(function(b, i) {
+    var body = '';
+    if (b.t === 'h2' || b.t === 'h3') body = '<input type="text" value="' + rlkEsc(b.v) + '" oninput="rlkBlocSet(' + i + ',\'v\',this.value)" placeholder="Votre titre">';
+    else if (b.t === 'p') body = '<textarea rows="6" oninput="rlkBlocSet(' + i + ',\'v\',this.value)" placeholder="Votre texte…">' + rlkEsc(b.v) + '</textarea><select onchange="rlkBlocLierArt(' + i + ',this)">' + opts.replace('Choisir un article…', 'Lier un article dans ce paragraphe…') + '</select>';
+    else if (b.t === 'liste') body = '<textarea rows="4" oninput="rlkBlocSet(' + i + ',\'v\',this.value)" placeholder="Une ligne par puce">' + rlkEsc(b.v) + '</textarea>';
+    else if (b.t === 'cit') body = '<textarea rows="3" oninput="rlkBlocSet(' + i + ',\'v\',this.value)" placeholder="Citation">' + rlkEsc(b.v) + '</textarea>';
+    else if (b.t === 'img') body = (b.src ? '<img src="' + b.src + '" style="max-width:100%;max-height:150px;border-radius:8px;display:block;margin-bottom:6px">' : '') + '<input type="file" accept="image/*" onchange="rlkBlocImg(' + i + ',this)"><input type="text" value="' + rlkEsc(b.leg || '') + '" oninput="rlkBlocSet(' + i + ',\'leg\',this.value)" placeholder="Légende (facultatif)" style="margin-top:6px">';
+    else if (b.t === 'lien') body = '<select onchange="rlkBlocSet(' + i + ',\'post\',this.value)">' + opts.replace('value="' + b.post + '"', 'value="' + b.post + '" selected') + '</select>';
+    return '<div class="rlk-bloc"><div class="rlk-bloc-h"><b>' + RLK_BLOC_NOM[b.t] + '</b><span><button class="btn btn-ghost btn-xs" type="button" onclick="rlkBlocMove(' + i + ',-1)" aria-label="Monter">↑</button><button class="btn btn-ghost btn-xs" type="button" onclick="rlkBlocMove(' + i + ',1)" aria-label="Descendre">↓</button><button class="btn btn-ghost btn-xs" type="button" onclick="rlkBlocDel(' + i + ')" aria-label="Supprimer">✕</button></span></div>' + body + '</div>';
+  }).join('');
+}
+function rlkPostSave() {
+  var titre = rlkVal('post-titre').trim(); if (!titre) { toast('Le titre est obligatoire'); return; }
+  var blocs = rlkEd.blocs.filter(function(b) { return b.t === 'img' ? b.src : (b.t === 'lien' ? b.post : String(b.v || '').trim()); });
+  var row = {titre: titre, cat_id: rlkVal('post-cat') || null, chapeau: rlkVal('post-chapeau').trim(), couverture: rlkEd.cover, blocs: blocs, publie: rlkVal('post-publie') === '1', updated_at: new Date().toISOString()};
+  var q = rlkEd.id ? sb.from('rlk_blog_posts').update(row).eq('id', rlkEd.id) : sb.from('rlk_blog_posts').insert(Object.assign({auteur: currentUser.id}, row));
+  q.then(function(r) {
+    if (r.error) { toast(rlkErr(r.error)); return; }
+    toast(row.publie ? '✓ Article publié' : '✓ Brouillon enregistré'); closeModal('m-post'); rlkBlogLoad();
+  });
+}
+function rlkPostDel() {
+  if (!rlkEd.id || !confirm('Supprimer définitivement cet article ?')) return;
+  sb.from('rlk_blog_posts').delete().eq('id', rlkEd.id).then(function(r) { if (r.error) { toast(rlkErr(r.error)); return; } toast('Article supprimé'); closeModal('m-post'); rlkBlogLoad(); });
+}
+function rlkBlogCatsToggle() {
+  var b = document.getElementById('blog-cats-admin'); b.style.display = b.style.display === 'none' ? 'block' : 'none'; if (b.style.display === 'block') rlkBlogCatsRender();
+}
+function rlkBlogCatsRender() {
+  var b = document.getElementById('blog-cats-admin');
+  b.innerHTML = '<div class="card-title">Catégories</div>' + RLK.blog.cats.filter(function(c) { return c.id !== '__old'; }).map(function(c) {
+    return '<div style="display:flex;gap:6px;margin-bottom:8px"><input type="text" value="' + rlkEsc(c.nom) + '" id="bc-' + c.id + '"><button class="btn btn-outline btn-xs" type="button" onclick="rlkCatSave(\'' + c.id + '\')">Enregistrer</button><button class="btn btn-ghost btn-xs" type="button" style="color:#B3261E" onclick="rlkCatDel(\'' + c.id + '\')">✕</button></div>';
+  }).join('') + '<div style="display:flex;gap:6px"><input type="text" id="bc-new" placeholder="Nouvelle catégorie"><button class="btn btn-primary btn-xs" type="button" onclick="rlkCatSave(null)">Ajouter</button></div>';
+}
+function rlkCatSave(id) {
+  var nom = rlkVal(id ? 'bc-' + id : 'bc-new').trim(); if (!nom) return;
+  var q = id ? sb.from('rlk_blog_cats').update({nom: nom}).eq('id', id) : sb.from('rlk_blog_cats').insert({nom: nom, ordre: RLK.blog.cats.length + 1});
+  q.then(function(r) { if (r.error) { toast(rlkErr(r.error)); return; } rlkBlogLoad().then(rlkBlogCatsRender); });
+}
+function rlkCatDel(id) {
+  if (!confirm('Supprimer cette catégorie ? Les articles restent, sans catégorie.')) return;
+  sb.from('rlk_blog_cats').delete().eq('id', id).then(function(r) { if (r.error) { toast(rlkErr(r.error)); return; } rlkBlogLoad().then(rlkBlogCatsRender); });
+}
+
+// ── Branchements v2.3 ──
+var rlkNavOrig4 = navTo;
+navTo = function(pageId, el) {
+  if (pageId === 'kont' && !currentUser) { toast('Connectez-vous pour accéder à votre compte'); openModal('m-login'); return; }
+  rlkNavOrig4(pageId, el);
+  document.body.classList.toggle('bg-biyetri', pageId === 'biyetri');
+  if (pageId === 'kont') rlkKontLoad();
+  if (pageId === 'don') rlkLoadMesTrocs();
+};
 </script>
 
 
