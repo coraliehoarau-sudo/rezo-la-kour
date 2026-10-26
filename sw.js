@@ -1,6 +1,6 @@
 // Service worker minimal : page toujours chargée depuis le réseau d'abord (jamais de version périmée),
 // copie en cache seulement si le téléphone est hors ligne.
-const CACHE = 'rlk-v1';
+const CACHE = 'rlk-v23';
 self.addEventListener('install', e => { self.skipWaiting(); });
 self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
 self.addEventListener('fetch', e => {
