@@ -504,6 +504,38 @@ body.bg-biyetri{background:#F4F1EA}
 .rlk-bloc-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:.82rem}
 .rlk-bloc textarea,.rlk-bloc input,.rlk-bloc select{width:100%;margin-bottom:4px}
 #m-post .modal{max-width:640px}
+
+/* ═══ v2.4 : fiches recettes, matériel, protocole ═══ */
+.rlk-rec{margin:6px 0 10px}
+.rlk-rec-warn{background:#FEF3C7;border:1px solid #E5C77A;border-radius:8px;padding:10px 12px;font-size:.85rem;line-height:1.55;margin-bottom:12px}
+.rlk-rec-top{background:var(--accent-l);border:1px solid #CFE0D4;border-radius:10px;padding:14px;margin-bottom:12px}
+.rlk-rec-lbl{font-size:.9rem;margin-bottom:8px}.rlk-rec-lbl span{color:var(--text2);font-size:.8rem}
+.rlk-rec-w{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.rlk-rec-w input{width:96px;font-size:1.15rem;font-weight:700;text-align:center;padding:8px}
+.rlk-rec-f{font-size:.78rem;color:var(--text2);margin-top:8px}
+.rlk-rec-meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.82rem;color:var(--text2);margin:6px 0 10px}
+.rlk-rec-l{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid var(--border);cursor:pointer;margin:0;text-transform:none;letter-spacing:0;font-size:.92rem}
+.rlk-rec-l input,.rlk-rec-s input,.rlk-pr-i input,.rlk-mat-l input{width:20px;height:20px;flex:none;accent-color:var(--accent2)}
+.rlk-rec-l .nm{flex:1}.rlk-rec-l small{color:var(--text3);font-size:.75rem}
+.rlk-rec-l .rq{font-weight:700;color:var(--accent);white-space:nowrap}.rlk-rec-l .rq.fixe{font-weight:500;color:var(--text2)}
+.rlk-rec-l.main .nm{font-weight:700}
+.rlk-rec-l input:checked~.nm{text-decoration:line-through;opacity:.55}
+.rlk-rec-ph{font-weight:700;color:var(--accent);margin:16px 0 4px;font-size:.88rem}
+.rlk-rec-s{display:flex;gap:10px;align-items:flex-start;padding:7px 0;margin:0;cursor:pointer;text-transform:none;letter-spacing:0;font-size:.9rem;line-height:1.55}
+.rlk-rec-s .no{flex:none;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-size:.72rem;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.rlk-rec-s input:checked~.tx{text-decoration:line-through;opacity:.5}
+.rlk-mat{background:var(--gold-l,#FBF1D9);border:1px solid #E5D3A0;border-radius:10px;padding:12px 14px;margin-top:14px}
+.rlk-mat-t{font-weight:700;font-size:.85rem}.rlk-mat-l{display:flex;gap:8px;align-items:center;padding:5px 0;margin:0;text-transform:none;letter-spacing:0;font-size:.9rem}
+.rlk-pr-g{background:var(--surface);border:1px solid #E6DFC9;border-radius:10px;margin-bottom:12px;padding:4px 14px 8px}
+.rlk-pr-g summary{cursor:pointer;font-weight:700;color:var(--accent);padding:10px 0;font-size:.95rem}
+.rlk-pr-n{float:right;font-family:'DM Mono',monospace;font-size:.78rem;color:var(--text2);font-weight:500}
+.rlk-pr-i{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--border);margin:0;cursor:pointer;text-transform:none;letter-spacing:0;font-size:.88rem;line-height:1.5}
+.rlk-pr-i.ok span{color:var(--text2)}
+.rlk-pr-crit{font-size:.66rem;background:#FDECEA;color:#B3261E;border-radius:4px;padding:1px 6px;margin-left:4px;white-space:nowrap}
+.rlk-pr-barw{height:10px;background:#E4E4E0;border-radius:6px;overflow:hidden;margin:8px 0 4px}#pr-bar{height:100%;width:0;background:var(--accent2);transition:width .25s}
+.rlk-pr-v{border-radius:8px;padding:10px 12px;font-size:.88rem;line-height:1.5;margin:10px 0}.rlk-pr-v.ok{background:#E8F5EC;border:1px solid #9AC9A7;color:#1A3D2B}.rlk-pr-v.ko{background:#FEF3C7;border:1px solid #E5C77A}
+label.rlk-rec-l,label.rlk-rec-s,label.rlk-pr-i,label.rlk-mat-l{font-family:'DM Sans',sans-serif;color:var(--text)}
+@media print{.rlk-pr-g{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -880,6 +912,7 @@ body.bg-biyetri{background:#F4F1EA}
   </div>
   <div class="rlk-note">Payer en FEY : votre solde est débité. Payer en euros : vous êtes dirigé vers notre boutique Yapla au moment de régler.</div>
 
+  <div class="rlk-note" id="pan-ferme-note" style="display:none;margin:0 0 16px"><b>Panyé de la semaine :</b> pas encore ouvert. Il sera mis en ligne dès que la composition est prête et que les fruits et légumes sont disponibles.</div>
   <div class="rlk-pan" id="panye-bloc">
     <div class="rlk-pan-h">
       <div><div style="font-size:.7rem;letter-spacing:.14em;opacity:.8;text-transform:uppercase">Sèmenn an kour</div><div style="font-size:1.05rem;font-weight:700">Panyé de la semaine</div></div>
@@ -1024,12 +1057,14 @@ body.bg-biyetri{background:#F4F1EA}
     <button class="btn btn-ghost btn-sm" data-s="articles" onclick="showReglaj('articles')">Artik</button>
     <button class="btn btn-ghost btn-sm" data-s="prix" onclick="showReglaj('prix')">Pri &amp; FEY</button>
     <button class="btn btn-ghost btn-sm" data-s="atelier" onclick="showReglaj('atelier')">Atélié</button>
+    <button class="btn btn-ghost btn-sm" data-s="protocole" onclick="showReglaj('protocole')">Protokol</button>
     <button class="btn btn-ghost btn-sm" data-s="etiquette" onclick="showReglaj('etiquette')">Étikèt</button>
     <button class="btn btn-ghost btn-sm" data-s="equilibre" onclick="showReglaj('equilibre')">Lékilib</button>
     <button class="btn btn-ghost btn-sm" data-s="commandes" onclick="showReglaj('commandes')">Komand <span id="cmd-badge" class="rlk-badge-n" style="display:none">0</span></button>
     <button class="btn btn-ghost btn-sm" data-s="stock" onclick="showReglaj('stock')">Stok</button>
     <button class="btn btn-ghost btn-sm" data-s="agenda" onclick="showReglaj('agenda')">Lazenda</button>
     <button class="btn btn-ghost btn-sm" data-s="messagerie" onclick="showReglaj('messagerie')">Mesaj <span id="msg-badge" class="rlk-badge-n" style="display:none">0</span></button>
+    <button class="btn btn-ghost btn-sm" data-s="ladilafe" onclick="showReglaj('ladilafe')">Ladilafé</button>
     <button class="btn btn-ghost btn-sm" data-s="stats" onclick="showReglaj('stats')">Stat</button>
   </div>
 
@@ -1060,6 +1095,15 @@ body.bg-biyetri{background:#F4F1EA}
 
   <!-- PANYÉ : composition, tarif, abonnements -->
   <div id="reglaj-kompoz" style="display:none">
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Mise en ligne des paniers</div>
+      <label style="display:flex;gap:10px;align-items:center;font-size:.95rem;cursor:pointer;text-transform:none;letter-spacing:0">
+        <input type="checkbox" id="pan-ouvert" onchange="rlkPanyeToggle()" style="width:22px;height:22px;flex:none">
+        <b id="pan-ouvert-txt">Paniers fermés</b>
+      </label>
+      <div id="pan-ouvert-info" class="rlk-note" style="margin-top:10px">Chargement…</div>
+      <div class="rlk-note">Activez seulement quand il y a assez de fruits et légumes et que la composition est publiée. Fermé, le panyé et les abonnements disparaissent de la Boutik. Les paniers déjà commandés ne sont pas touchés.</div>
+    </div>
     <div class="rlk-grid" style="margin-bottom:16px">
       <div class="card">
         <div class="card-title">Tarif du panyé et abonnements</div>
@@ -1212,6 +1256,7 @@ body.bg-biyetri{background:#F4F1EA}
         <div class="fr"><label>Ingrédients (allergènes à signaler)</label><input type="text" id="lot-ingr" placeholder="Pomelos, sucre de canne, citron"></div>
         <div class="fr"><label>Allergènes présents</label><input type="text" id="lot-allerg" placeholder="Aucun / gluten, lait..."></div>
         <div class="fr"><label>Équipe présente (cueilleurs et cuisiniers)</label><div class="rlk-chk" id="lot-equipe" style="max-height:130px;overflow:auto"></div></div>
+        <div class="rlk-note" id="lot-proto" style="margin:0 0 10px"></div>
         <div class="fr"><label>Relevé d'hygiène (cocher ce qui a été fait)</label>
           <div class="rlk-chk" id="lot-hygiene">
             <label><input type="checkbox" value="Eau potable disponible"> Eau potable</label>
@@ -1230,6 +1275,34 @@ body.bg-biyetri{background:#F4F1EA}
     <div class="card">
       <div class="card-title">Lots enregistrés <span id="lots-ca" style="float:right;font-weight:500;color:var(--gold)"></span></div>
       <div id="lots-list" class="rlk-note">Chargement…</div>
+    </div>
+  </div>
+
+  <!-- PROTOCOLE DE PRÉPARATION -->
+  <div id="reglaj-protocole" style="display:none">
+    <div class="card">
+      <div class="card-title">Protocole de préparation de l'atelier</div>
+      <div class="rlk-note" style="margin:0 0 12px">Check-lists du livret sanitaire (installation, hygiène des personnes, réception des fruits, préparation, fin d'atelier). Cochez chaque vérification avant de démarrer : tout est conservé sur ce téléphone, joint au lot dans <b>Atélié</b>, et imprimable pour le dossier.</div>
+      <div class="fr2">
+        <div><label>Atelier</label><select id="pr-event" onchange="rlkProtoMeta()"></select></div>
+        <div><label>Date</label><input type="date" id="pr-date" onchange="rlkProtoMeta()"></div>
+      </div>
+      <div class="fr2">
+        <div><label>Responsable de l'atelier</label><input type="text" id="pr-resp" oninput="rlkProtoMeta()"></div>
+        <div><label>Lieu</label><input type="text" id="pr-lieu" oninput="rlkProtoMeta()" placeholder="Chez… (quartier)"></div>
+      </div>
+      <div class="rlk-pr-barw"><div id="pr-bar"></div></div>
+      <div class="rlk-note" id="pr-count" style="margin:0"></div>
+      <div id="pr-verdict" class="rlk-pr-v ko"></div>
+    </div>
+    <div id="pr-groups"></div>
+    <div class="card">
+      <div class="fr"><label>Écarts constatés et actions correctives (si une vérification n'a pas pu être faite)</label><textarea id="pr-nc" rows="3" oninput="rlkProtoMeta()"></textarea></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" type="button" onclick="rlkProtoPrint()">Imprimer ou enregistrer en PDF</button>
+        <button class="btn btn-ghost btn-sm" type="button" onclick="rlkProtoReset()">Nouvel atelier (tout décocher)</button>
+      </div>
+      <div class="rlk-note">Source : check-lists du livret sanitaire de l'association, à faire valider par la DAAF.</div>
     </div>
   </div>
 
@@ -1346,6 +1419,7 @@ body.bg-biyetri{background:#F4F1EA}
         <div class="fr"><label>Description</label><textarea id="ev-desc" rows="4"></textarea></div>
         <div class="fr"><label>Photo (facultatif)</label><input type="file" id="ev-photo" accept="image/*" onchange="rlkEvPhoto(this)"><div id="ev-photo-prev"></div></div>
         <div class="fr"><label>Fiches protocole et recettes (un lien par ligne : Titre | https://…)</label><textarea id="ev-fiches" rows="3" placeholder="Fiche confiture | https://drive.google.com/…"></textarea></div>
+        <div class="fr"><label>Matériel recherché pour l'atelier (un objet par ligne : Objet | quantité)</label><textarea id="ev-materiel" rows="4" placeholder="Planche à découper | 4&#10;Couteau d'office | 6&#10;Grande marmite | 1"></textarea><div class="rlk-note">Les inscrits cochent ce qu'ils apportent et peuvent ajouter autre chose. Nécessite phase3_v24_additif.sql.</div></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" id="ev-save-btn" onclick="rlkSaveEvent()">Publier l'événement</button><button class="btn btn-ghost btn-sm" id="ev-cancel-btn" style="display:none" onclick="rlkEvReset()">Annuler la modification</button></div>
       </div>
       <div class="card"><div class="card-title">Événements publiés</div><div id="ev-admin-list" class="rlk-note">Chargement…</div></div>
@@ -1363,6 +1437,19 @@ body.bg-biyetri{background:#F4F1EA}
     <div class="card"><div class="card-title">Canal général et canal administrateurs</div>
       <div id="msg-canaux" class="rlk-note">Chargement…</div>
       <div class="tchat-input"><select id="msg-canal-sel" style="width:auto"><option value="general">Général</option><option value="admin">Administrateurs</option></select><input type="text" id="msg-canal-input" placeholder="Votre message…" onkeypress="if(event.key==='Enter')rlkSendCanal()"><button class="btn btn-primary btn-sm" onclick="rlkSendCanal()">Envoyer</button></div>
+    </div>
+  </div>
+
+  <!-- LADILAFÉ -->
+  <div id="reglaj-ladilafe" style="display:none">
+    <div class="card">
+      <div class="card-title">Catégories de Ladilafé</div>
+      <div id="rg-blog-cats" class="rlk-note">Chargement…</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Articles <span style="float:right;display:flex;gap:6px"><button class="btn btn-primary btn-xs" type="button" onclick="rlkRecNew()">+ Fiche recette</button><button class="btn btn-outline btn-xs" type="button" onclick="rlkPostEdit(null)">+ Article</button></span></div>
+      <div id="rg-blog-posts" class="rlk-note">Chargement…</div>
+      <div class="rlk-note">Un article en brouillon n'est visible que par les administrateurs.</div>
     </div>
   </div>
 
@@ -1488,7 +1575,8 @@ body.bg-biyetri{background:#F4F1EA}
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap">
       <div><div class="page-title">Ladilafé</div><div class="page-sub" style="margin-bottom:0">Nout zévénman, nout roset, nout Zarboutan : les histoires du réseau.</div></div>
       <div id="blog-admin-btns" style="display:none;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-primary btn-sm" type="button" onclick="rlkPostEdit(null)">+ Nouvel article</button>
+        <button class="btn btn-primary btn-sm" type="button" onclick="rlkRecNew()">+ Fiche recette</button>
+        <button class="btn btn-outline btn-sm" type="button" onclick="rlkPostEdit(null)">+ Article</button>
         <button class="btn btn-outline btn-sm" type="button" onclick="rlkBlogCatsToggle()">Catégories</button>
       </div>
     </div>
@@ -1845,6 +1933,52 @@ body.bg-biyetri{background:#F4F1EA}
       <button class="btn btn-ghost" id="art-del" style="display:none;color:#B3261E;margin-right:auto" onclick="rlkDelArticle()">Supprimer</button>
       <button class="btn btn-ghost" onclick="closeModal('m-article')">Annuler</button>
       <button class="btn btn-primary" onclick="rlkSaveArticle()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="m-recette">
+  <div class="modal" style="max-width:760px">
+    <div class="modal-hdr"><div class="modal-title" id="rec-ttl">Fiche recette</div><button class="modal-close rlk-xbtn" onclick="closeModal('m-recette')">Fermer ✕</button></div>
+    <div class="modal-body">
+      <div class="rlk-note" style="margin:0 0 12px">Remplissez le modèle : une fois enregistrée, la fiche apparaît dans <b>Ladilafé</b> et chaque adhérent peut adapter toutes les quantités au poids de fruit disponible.
+        <button class="btn btn-outline btn-xs" type="button" onclick="rlkRecModele()" style="margin-left:6px">Charger le modèle achards de mangue verte</button></div>
+      <div class="fr"><label>Titre de la recette *</label><input type="text" id="rec-titre" placeholder="Achards de mangue verte"></div>
+      <div class="fr2">
+        <div><label>Catégorie</label><select id="rec-cat"></select></div>
+        <div><label>Publication</label><select id="rec-publie"><option value="0">Brouillon (invisible)</option><option value="1">Publié</option></select></div>
+      </div>
+      <div class="fr"><label>Résumé (dans la liste)</label><textarea id="rec-chapeau" rows="2"></textarea></div>
+      <div class="fr"><label>Photo</label><input type="file" accept="image/*" onchange="rlkRecCover(this)"><div id="rec-cover-prev"></div></div>
+      <div class="rlk-qt" style="margin-top:18px">Fruit principal (celui qu'on pèse)</div>
+      <div class="fr2">
+        <div><label>Fruit ou légume *</label><input type="text" id="rec-fruit" placeholder="Mangue verte"></div>
+        <div><label>Poids de référence de la recette (kg) *</label><input type="number" step="any" min="0" id="rec-ref" placeholder="5"></div>
+      </div>
+      <div class="fr"><label>Précision sur la pesée</label><input type="text" id="rec-prec" placeholder="épluchée et dénoyautée, poids net"></div>
+      <div class="fr2">
+        <div><label>Rendement pour ce poids (nombre de pots)</label><input type="number" step="any" min="0" id="rec-rend" placeholder="40"></div>
+        <div><label>Format du rendement</label><input type="text" id="rec-rendfmt" placeholder="pots de 250 g"></div>
+      </div>
+      <div class="rlk-qt" style="margin-top:18px">Autres ingrédients (pour le poids de référence)</div>
+      <div id="rec-ingr"></div>
+      <button class="btn btn-ghost btn-xs" type="button" onclick="rlkRecIngrAdd()">+ Ajouter un ingrédient</button>
+      <div class="rlk-note">« Suit le poids du fruit » : la quantité est recalculée. « Quantité fixe » : elle ne change pas (ex. vinaigre ajouté selon le pH).</div>
+      <div class="rlk-qt" style="margin-top:18px">Matériel, déroulé, contrôles</div>
+      <div class="fr"><label>Matériel nécessaire (un par ligne)</label><textarea id="rec-materiel" rows="4"></textarea></div>
+      <div class="fr"><label>Déroulé (une étape par ligne ; une ligne commençant par ## est un titre de phase ; **gras** possible)</label><textarea id="rec-etapes" rows="10" placeholder="## Phase 1. Tri et lavage&#10;Trier les fruits…&#10;Laver à l'eau potable…"></textarea></div>
+      <div class="fr"><label>Points de contrôle (un par ligne)</label><textarea id="rec-controles" rows="3" placeholder="pH avant mise en bocal : 3,5 maximum"></textarea></div>
+      <div class="fr2">
+        <div><label>Durée</label><input type="text" id="rec-duree" placeholder="Une demi-journée"></div>
+        <div><label>Allergènes</label><input type="text" id="rec-allerg"></div>
+      </div>
+      <div class="fr"><label>Conservation</label><input type="text" id="rec-conserv" placeholder="Au froid (0 à 4 °C), date courte"></div>
+      <div class="fr"><label>Avertissement affiché en haut de la fiche (facultatif)</label><textarea id="rec-avert" rows="2" placeholder="Recette à valider avec la DAAF avant toute vente."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="rec-del" style="display:none;color:#B3261E;margin-right:auto" onclick="rlkRecDel()">Supprimer</button>
+      <button class="btn btn-ghost" onclick="closeModal('m-recette')">Annuler</button>
+      <button class="btn btn-primary" onclick="rlkRecSave()">Enregistrer</button>
     </div>
   </div>
 </div>
@@ -4336,7 +4470,7 @@ function rlkSaveLot() {
       ingredients: rlkVal('lot-ingr'), allergenes: rlkVal('lot-allerg'), dlc: rlkVal('lot-dlc') || null, qte_produite: q, fey_donateur: p.donateur, fey_equipe: equipeFey, fey_boutik: boutik,
       donateur_id: rlkVal('lot-donateur') || null, donateur_libre: rlkVal('lot-donlibre'), participants: equipe, qte_app: p.donateur + equipeFey, qte_yapla: boutik,
       ca_previsionnel: boutik * RLK.fey, created_by: currentUser.id,
-      releve: {dtype: rlkVal('lot-dtype') || 'DDM', reception: {etat: rlkVal('lot-etat'), decision: rlkVal('lot-decision')}, hygiene: hyg, observations: rlkVal('lot-obs')}};
+      releve: {dtype: rlkVal('lot-dtype') || 'DDM', reception: {etat: rlkVal('lot-etat'), decision: rlkVal('lot-decision')}, hygiene: hyg, observations: rlkVal('lot-obs'), protocole: rlkProtoSummary()}};
     sb.from('rlk_lots').insert(row).select().then(function(res) {
       if (res.error) { toast(rlkErr(res.error)); return; }
       var lot = res.data && res.data[0], ledger = [];
@@ -5287,8 +5421,8 @@ function rlkEvPhotoDel() { rlkEvPhotoData = null; var i = document.getElementByI
 function rlkLocalDT(s) { if (!s) return ''; var d = new Date(s), p = function(n) { return String(n).padStart(2, '0'); }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + 'T' + p(d.getHours()) + ':' + p(d.getMinutes()); }
 function rlkEvReset() {
   rlkEvEditId = null; rlkEvPhotoData = null;
-  ['ev-titre', 'ev-debut', 'ev-fin', 'ev-adr', 'ev-quartier', 'ev-places', 'ev-objet', 'ev-desc', 'ev-fiches', 'ev-photo'].forEach(function(i) { var e = document.getElementById(i); if (e) e.value = ''; });
-  rlkEvPrev();
+  ['ev-titre', 'ev-debut', 'ev-fin', 'ev-adr', 'ev-quartier', 'ev-places', 'ev-objet', 'ev-desc', 'ev-fiches', 'ev-materiel', 'ev-photo'].forEach(function(i) { var e = document.getElementById(i); if (e) e.value = ''; });
+  rlkEvMatHad = false; rlkEvPrev();
   var t = document.getElementById('ev-form-title'); if (t) t.textContent = 'Nouvel atelier ou événement';
   var b = document.getElementById('ev-save-btn'); if (b) b.textContent = 'Publier l\'événement';
   var c = document.getElementById('ev-cancel-btn'); if (c) c.style.display = 'none';
@@ -5299,7 +5433,7 @@ function rlkEditEvent(id) {
     rlkEvEditId = id; rlkEvPhotoData = e.photo || null;
     var set = function(i, v) { var x = document.getElementById(i); if (x) x.value = v == null ? '' : v; };
     set('ev-titre', e.titre); set('ev-debut', rlkLocalDT(e.date_debut)); set('ev-fin', rlkLocalDT(e.date_fin)); set('ev-adr', e.adresse); set('ev-quartier', e.quartier);
-    set('ev-places', e.places); set('ev-objet', e.objet); set('ev-desc', e.description);
+    set('ev-places', e.places); set('ev-objet', e.objet); set('ev-desc', e.description); set('ev-materiel', e.materiel_besoin); rlkEvMatHad = !!e.materiel_besoin;
     set('ev-fiches', (e.fiches || []).map(function(f) { return f.titre + ' | ' + f.url; }).join('\n'));
     rlkEvPrev();
     document.getElementById('ev-form-title').textContent = 'Modifier l\'événement';
@@ -5313,9 +5447,10 @@ function rlkSaveEvent() {
   if (!titre || !debut) { toast('Titre et date obligatoires'); return; }
   var fiches = rlkVal('ev-fiches').split('\n').map(function(l) { var p = l.split('|'); return p.length > 1 ? {titre: p[0].trim(), url: p.slice(1).join('|').trim()} : (l.trim() ? {titre: 'Fiche', url: l.trim()} : null); }).filter(function(x) { return x && /^https?:\/\//.test(x.url); });
   var row = {titre: titre, date_debut: new Date(debut).toISOString(), date_fin: rlkVal('ev-fin') ? new Date(rlkVal('ev-fin')).toISOString() : null, adresse: rlkVal('ev-adr'), quartier: rlkVal('ev-quartier'), objet: rlkVal('ev-objet'), description: rlkVal('ev-desc'), places: parseInt(rlkVal('ev-places')) || null, fiches: fiches, photo: rlkEvPhotoData};
+  if (rlkVal('ev-materiel').trim() || rlkEvMatHad) row.materiel_besoin = rlkVal('ev-materiel').trim();
   var q = rlkEvEditId ? sb.from('rlk_evenements').update(row).eq('id', rlkEvEditId) : sb.from('rlk_evenements').insert(row);
   q.then(function(res) {
-    if (res.error) { toast(/photo/.test(res.error.message || '') ? 'Pour les photos, lancez d\'abord le SQL v2.2 (phase2_v22_additif.sql)' : rlkErr(res.error)); return; }
+    if (res.error) { toast(/materiel/.test(res.error.message || '') ? 'Pour le matériel, lancez d\'abord phase3_v24_additif.sql dans Supabase' : (/photo/.test(res.error.message || '') ? 'Pour les photos, lancez d\'abord le SQL v2.2 (phase2_v22_additif.sql)' : rlkErr(res.error))); return; }
     toast(rlkEvEditId ? '✓ Événement modifié' : '✓ Événement publié'); rlkEvReset(); rlkLoadEventsAdmin(); rlkLoadEvents();
   });
 }
@@ -5545,8 +5680,9 @@ function rlkLoadEvents() {
         + '<div class="rlk-ev2-b"><div class="rlk-ev2-info">' + d.toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric', month: 'long'}) + ' à ' + d.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})
         + (e.quartier ? '<br>Lieu : ' + rlkEsc(e.quartier) : '') + (e.adresse ? '<br>Adresse : ' + rlkEsc(e.adresse) : '') + (reste !== null ? '<br>' + Math.max(0, reste) + ' place' + (reste > 1 ? 's' : '') + ' restante' + (reste > 1 ? 's' : '') + ' sur ' + e.places : '') + '</div>'
         + (e.objet ? '<div class="rlk-ev2-obj"><b>Objet du jour :</b> ' + rlkEsc(e.objet) + '</div>' : '') + (e.description ? '<p class="rlk-ev2-desc">' + rlkEsc(e.description) + '</p>' : '')
-        + (fiches ? '<div style="margin:14px 0;display:flex;gap:6px;flex-wrap:wrap">' + fiches + '</div>' : '') + '<div style="margin-top:18px">' + act + '</div></div></div>';
+        + (fiches ? '<div style="margin:14px 0;display:flex;gap:6px;flex-wrap:wrap">' + fiches + '</div>' : '') + '<div style="margin-top:18px">' + act + '</div><div id="evmat-' + e.id + '"></div></div></div>';
     }).join('');
+    rlkMatLoad().then(rlkMatRender);
   });
 }
 
@@ -5708,6 +5844,577 @@ navTo = function(pageId, el) {
   if (pageId === 'kont') rlkKontLoad();
   if (pageId === 'don') rlkLoadMesTrocs();
 };
+
+// ── Réglaj > Ladilafé ──
+function rlkRgBlog() {
+  return rlkBlogLoad().then(rlkRgBlogRender);
+}
+function rlkRgBlogRender() {
+  var B = RLK.blog, cats = B.cats.filter(function(c) { return c.id !== '__old'; }), box = document.getElementById('rg-blog-cats'), pb = document.getElementById('rg-blog-posts');
+  if (!box || !pb) return;
+  if (B.erreur) { box.innerHTML = '<div class="rlk-dbwarn">' + rlkEsc(rlkErr(B.erreur)) + ' (fichier phase2_v22_additif.sql)</div>'; pb.innerHTML = ''; return; }
+  box.innerHTML = cats.map(function(c, i) {
+    var n = B.posts.filter(function(p) { return p.cat_id === c.id; }).length;
+    return '<div style="display:flex;gap:6px;margin-bottom:8px;align-items:center"><input type="text" value="' + rlkEsc(c.nom) + '" id="rc-' + c.id + '" style="flex:1;min-width:0">'
+      + '<button class="btn btn-ghost btn-xs" type="button" aria-label="Monter" onclick="rlkRgCatMove(' + i + ',-1)">↑</button><button class="btn btn-ghost btn-xs" type="button" aria-label="Descendre" onclick="rlkRgCatMove(' + i + ',1)">↓</button>'
+      + '<button class="btn btn-outline btn-xs" type="button" onclick="rlkRgCatSave(\'' + c.id + '\')">OK</button><button class="btn btn-ghost btn-xs" type="button" style="color:#B3261E" onclick="rlkRgCatDel(\'' + c.id + '\',' + n + ')">✕</button></div>'
+      + '<div class="rlk-note" style="margin:-4px 0 10px">' + n + ' article' + (n > 1 ? 's' : '') + '</div>';
+  }).join('') + '<div style="display:flex;gap:6px"><input type="text" id="rc-new" placeholder="Nouvelle catégorie" style="flex:1;min-width:0"><button class="btn btn-primary btn-xs" type="button" onclick="rlkRgCatSave(null)">Ajouter</button></div>';
+  var nom = {}; B.cats.forEach(function(c) { nom[c.id] = c.nom; });
+  var posts = B.posts.filter(function(p) { return !String(p.id).startsWith('old:'); });
+  pb.innerHTML = posts.length ? cats.concat([{id: null, nom: 'Sans catégorie'}]).map(function(c) {
+    var l = posts.filter(function(p) { return (p.cat_id || null) === c.id; });
+    if (!l.length) return '';
+    return '<div style="margin:12px 0 4px;font-weight:600;color:#1A3D2B">' + rlkEsc(c.nom) + '</div>' + l.map(function(p) {
+      return '<div style="padding:8px 0;border-bottom:1px solid var(--border)"><div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><div><b>' + rlkEsc(p.titre) + '</b><div class="rlk-note" style="margin:2px 0">' + rlkDate(p.created_at) + '</div></div><span class="badge ' + (p.publie ? 'b-ok' : 'b-wait') + '">' + (p.publie ? 'Publié' : 'Brouillon') + '</span></div>'
+        + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="btn btn-outline btn-xs" type="button" onclick="rlkPostEdit(\'' + p.id + '\')">Modifier</button><button class="btn btn-ghost btn-xs" type="button" onclick="rlkRgPublie(\'' + p.id + '\',' + (p.publie ? 'false' : 'true') + ')">' + (p.publie ? 'Dépublier' : 'Publier') + '</button><button class="btn btn-ghost btn-xs" type="button" style="color:#B3261E" onclick="rlkRgPostDel(\'' + p.id + '\')">Supprimer</button></div></div>';
+    }).join('');
+  }).join('') : 'Aucun article pour le moment.';
+}
+function rlkRgCatSave(id) {
+  var nom = rlkVal(id ? 'rc-' + id : 'rc-new').trim(); if (!nom) return;
+  var q = id ? sb.from('rlk_blog_cats').update({nom: nom}).eq('id', id) : sb.from('rlk_blog_cats').insert({nom: nom, ordre: RLK.blog.cats.length + 1});
+  q.then(function(r) { if (r.error) { toast(rlkErr(r.error)); return; } toast('✓ Catégorie enregistrée'); rlkRgBlog(); });
+}
+function rlkRgCatMove(i, d) {
+  var cats = RLK.blog.cats.filter(function(c) { return c.id !== '__old'; }), j = i + d; if (j < 0 || j >= cats.length) return;
+  var a = cats[i], b = cats[j];
+  Promise.all([sb.from('rlk_blog_cats').update({ordre: j + 1}).eq('id', a.id), sb.from('rlk_blog_cats').update({ordre: i + 1}).eq('id', b.id)]).then(rlkRgBlog);
+}
+function rlkRgCatDel(id, n) {
+  if (!confirm(n ? 'Cette catégorie contient ' + n + ' article(s). Ils resteront, sans catégorie. Supprimer la catégorie ?' : 'Supprimer cette catégorie ?')) return;
+  sb.from('rlk_blog_cats').delete().eq('id', id).then(function(r) { if (r.error) { toast(rlkErr(r.error)); return; } rlkRgBlog(); });
+}
+function rlkRgPublie(id, v) {
+  sb.from('rlk_blog_posts').update({publie: v, updated_at: new Date().toISOString()}).eq('id', id).then(function(r) { if (r.error) { toast(rlkErr(r.error)); return; } toast(v ? '✓ Article publié' : 'Article repassé en brouillon'); rlkRgBlog(); });
+}
+function rlkRgPostDel(id) {
+  if (!confirm('Supprimer définitivement cet article ?')) return;
+  sb.from('rlk_blog_posts').delete().eq('id', id).then(function(r) { if (r.error) { toast(rlkErr(r.error)); return; } toast('Article supprimé'); rlkRgBlog(); });
+}
+// l'éditeur ouvert depuis Réglaj rafraîchit aussi la liste de Réglaj
+var rlkBlogLoadOrig = rlkBlogLoad;
+rlkBlogLoad = function() { return rlkBlogLoadOrig().then(function(x) { rlkRgBlogRender(); return x; }); };
+var rlkShowReglajOrig3 = showReglaj;
+showReglaj = function(section) { rlkShowReglajOrig3(section); if (section === 'ladilafe') rlkRgBlog(); };
+
+// ── Mise en ligne des paniers ──
+RLK.panyeOuvert = false;
+function rlkPanyeOuvertLoad() {
+  return sb.from('rlk_config').select('valeur').eq('cle', 'panye_ouvert').maybeSingle().then(function(r) {
+    RLK.panyeOuvert = !!(r.data && r.data.valeur === '1');
+    rlkPanyeOuvertApply(); return RLK.panyeOuvert;
+  });
+}
+function rlkPanyeOuvertApply() {
+  var b = document.getElementById('panye-bloc'), n = document.getElementById('pan-ferme-note');
+  if (b) b.style.display = RLK.panyeOuvert ? '' : 'none';
+  if (n) n.style.display = RLK.panyeOuvert ? 'none' : 'block';
+  var c = document.getElementById('pan-ouvert'), t = document.getElementById('pan-ouvert-txt');
+  if (c) c.checked = RLK.panyeOuvert;
+  if (t) t.textContent = RLK.panyeOuvert ? 'Paniers en ligne (visibles dans la Boutik)' : 'Paniers fermés (non visibles dans la Boutik)';
+}
+function rlkPanyeAdminInfo() {
+  var el = document.getElementById('pan-ouvert-info'); if (!el) return;
+  sb.from('paniers').select('*').eq('publie', true).order('created_at', {ascending: false}).limit(1).then(function(res) {
+    var d = res.data && res.data[0], items = [];
+    if (d) { try { items = Array.isArray(d.contenu) ? d.contenu : JSON.parse(d.contenu || '[]'); } catch (e) {} }
+    RLK.panyeCompose = items.length;
+    el.innerHTML = d ? 'Composition publiée : <b>' + items.length + ' produit' + (items.length > 1 ? 's' : '') + '</b> (' + rlkEsc(d.nom || 'Panyé') + ', ' + rlkDate(d.created_at) + ').' : '<b style="color:#B3261E">Aucune composition publiée.</b> Composez le panyé ci-dessous puis cliquez sur « Publier ce panyé ».';
+  });
+}
+function rlkPanyeToggle() {
+  var c = document.getElementById('pan-ouvert'), v = c.checked;
+  var go = function() {
+    sb.from('rlk_config').upsert([{cle: 'panye_ouvert', valeur: v ? '1' : '0'}], {onConflict: 'cle'}).then(function(r) {
+      if (r.error) { c.checked = !v; toast(rlkErr(r.error)); return; }
+      RLK.panyeOuvert = v; rlkPanyeOuvertApply(); toast(v ? '✓ Paniers mis en ligne' : '✓ Paniers retirés de la Boutik');
+    });
+  };
+  if (!v) { go(); return; }
+  sb.from('paniers').select('contenu').eq('publie', true).order('created_at', {ascending: false}).limit(1).then(function(res) {
+    var d = res.data && res.data[0], items = [];
+    if (d) { try { items = Array.isArray(d.contenu) ? d.contenu : JSON.parse(d.contenu || '[]'); } catch (e) {} }
+    if (!items.length) { c.checked = false; toast('Publiez d\'abord un panyé composé (au moins 1 produit)'); return; }
+    go();
+  });
+}
+var rlkAddPanyeOrig = rlkAddPanye;
+rlkAddPanye = function() { if (!RLK.panyeOuvert) { toast('Le panyé n\'est pas encore ouvert'); return; } rlkAddPanyeOrig(); };
+var rlkAddAboOrig = rlkAddAbo;
+rlkAddAbo = function(f) { if (!RLK.panyeOuvert) { toast('Les abonnements ne sont pas encore ouverts'); return; } rlkAddAboOrig(f); };
+var rlkLoadPanyeOrig = rlkLoadPanye;
+rlkLoadPanye = function() { rlkLoadPanyeOrig(); rlkPanyeOuvertLoad(); };
+var rlkShowReglajOrig4 = showReglaj;
+showReglaj = function(section) { rlkShowReglajOrig4(section); if (section === 'kompoz') { rlkPanyeOuvertLoad(); rlkPanyeAdminInfo(); } };
+var rlkPublierPanyeOrig = publierPanye;
+publierPanye = function() { rlkPublierPanyeOrig(); setTimeout(rlkPanyeAdminInfo, 1500); };
+
+// ═══════════════════════════════════════════════════════════════
+// MODULE 7 (v2.4) : fiches recettes, quantités proportionnelles, matériel apporté, protocole de préparation
+// ═══════════════════════════════════════════════════════════════
+
+// ── Mise en forme des quantités ──
+function rlkSpoon(q) {
+  var qq = Math.round(q * 4) / 4; if (q > 0 && qq === 0) qq = 0.25;
+  var w = Math.floor(qq), f = qq - w, s = f === 0.25 ? '¼' : (f === 0.5 ? '½' : (f === 0.75 ? '¾' : ''));
+  return ((w ? w : '') + (w && s ? ' ' : '') + s) || '0';
+}
+function rlkRecQ(q, u) {
+  q = Number(q);
+  if (!(q > 0)) return '';
+  if (u === 'g') return q >= 1000 ? rlkFmt(Math.round(q / 10) / 100, 2) + ' kg' : rlkFmt(q >= 50 ? Math.round(q / 5) * 5 : Math.round(q * 10) / 10, 1) + ' g';
+  if (u === 'kg') return q < 1 ? rlkFmt(Math.round(q * 200) * 5, 0) + ' g' : rlkFmt(Math.round(q * 100) / 100, 2) + ' kg';
+  if (u === 'ml') return q >= 1000 ? rlkFmt(Math.round(q / 10) / 100, 2) + ' L' : rlkFmt(q >= 50 ? Math.round(q / 5) * 5 : Math.round(q), 0) + ' ml';
+  if (u === 'cl') return q >= 100 ? rlkFmt(Math.round(q) / 100, 2) + ' L' : rlkFmt(Math.round(q * 10) / 10, 1) + ' cl';
+  if (u === 'L') return q < 1 ? rlkFmt(Math.round(q * 100), 0) + ' cl' : rlkFmt(Math.round(q * 100) / 100, 2) + ' L';
+  if (u === 'c. à soupe' || u === 'c. à café') return rlkSpoon(q) + ' ' + u;
+  if (u === 'pincée') { var n = Math.max(1, Math.round(q)); return n + ' pincée' + (n > 1 ? 's' : ''); }
+  return String(Math.max(1, Math.round(q)));
+}
+var RLK_UNITES = ['g', 'kg', 'ml', 'cl', 'L', 'c. à soupe', 'c. à café', 'pincée', ''];
+function rlkUniteNom(u) { return u === '' ? 'nombre' : u; }
+
+// ── Lecture d'une fiche recette (Ladilafé) ──
+var rlkRecN = 0, rlkRecStore = {};
+function rlkRecSteps(txt) {
+  var n = 0;
+  return String(txt || '').split('\n').map(function(l) { return l.trim(); }).filter(Boolean).map(function(l) {
+    if (l.indexOf('## ') === 0) return {phase: l.slice(3)};
+    return {n: ++n, t: l};
+  });
+}
+function rlkRecScaled(d, w) {
+  var ref = Number(d.ref_kg) || 1, f = w / ref;
+  return {
+    f: f,
+    main: rlkRecQ(w, 'kg'),
+    ingr: (d.ingr || []).map(function(i) {
+      if (i.q === '' || i.q == null || !(Number(i.q) > 0)) return 'selon besoin';
+      return rlkRecQ(i.m === 'fixe' ? Number(i.q) : Number(i.q) * f, i.u || '');
+    }),
+    rend: d.rend_n ? Math.max(1, Math.round(Number(d.rend_n) * f)) : null
+  };
+}
+function rlkRecHtml(d) {
+  var n = ++rlkRecN; rlkRecStore[n] = d;
+  var ref = Number(d.ref_kg) || 1, sc = rlkRecScaled(d, ref), steps = rlkRecSteps(d.etapes);
+  var h = '<div class="rlk-rec" id="rec-' + n + '">';
+  if (d.avertissement) h += '<div class="rlk-rec-warn">' + rlkInline(d.avertissement) + '</div>';
+  h += '<div class="rlk-rec-top"><div class="rlk-rec-lbl">Poids de <b>' + rlkEsc(d.fruit || 'fruit principal') + '</b> disponible sur le site' + (d.precision ? ' <span>(' + rlkEsc(d.precision) + ')</span>' : '') + '</div>'
+    + '<div class="rlk-rec-w"><button type="button" class="btn btn-outline btn-sm" onclick="rlkRecStep(' + n + ',-1)" aria-label="Moins">−</button>'
+    + '<input type="number" inputmode="decimal" id="rw-' + n + '" min="0.1" step="0.1" value="' + ref + '" oninput="rlkRecScale(' + n + ')" aria-label="Poids en kg"><span>kg</span>'
+    + '<button type="button" class="btn btn-outline btn-sm" onclick="rlkRecStep(' + n + ',1)" aria-label="Plus">+</button>'
+    + '<button type="button" class="btn btn-ghost btn-sm" onclick="rlkRecReset(' + n + ')">Poids de la recette (' + rlkFmt(ref, 1) + ' kg)</button></div>'
+    + '<div class="rlk-rec-f" id="rf-' + n + '"></div></div>';
+  var meta = [];
+  if (d.rend_n) meta.push('<span><b>Rendement</b> <span id="rr-' + n + '"></span> ' + rlkEsc(d.rend_fmt || 'pots') + '</span>');
+  if (d.duree) meta.push('<span><b>Durée</b> ' + rlkEsc(d.duree) + '</span>');
+  if (d.allergenes) meta.push('<span><b>Allergènes</b> ' + rlkEsc(d.allergenes) + '</span>');
+  if (d.conservation) meta.push('<span><b>Conservation</b> ' + rlkEsc(d.conservation) + '</span>');
+  if (meta.length) h += '<div class="rlk-rec-meta">' + meta.join('') + '</div>';
+  h += '<h3 class="rlk-bh3">Ingrédients</h3><div class="rlk-rec-ing">'
+    + '<label class="rlk-rec-l main"><input type="checkbox"><span class="nm">' + rlkEsc(d.fruit || 'Fruit principal') + '</span><span class="rq" id="rq-' + n + '-main">' + sc.main + '</span></label>'
+    + (d.ingr || []).map(function(i, k) {
+      return '<label class="rlk-rec-l"><input type="checkbox"><span class="nm">' + rlkEsc(i.n) + (i.note ? ' <small>' + rlkEsc(i.note) + '</small>' : '') + '</span>'
+        + '<span class="rq' + (i.m === 'fixe' ? ' fixe' : '') + '" id="rq-' + n + '-' + k + '">' + sc.ingr[k] + '</span></label>';
+    }).join('') + '</div><div class="rlk-note">Les quantités suivent le poids saisi ci-dessus. Les lignes « quantité fixe » ne changent pas. Pesez au gramme près et notez.</div>';
+  var mat = String(d.materiel || '').split('\n').map(function(x) { return x.trim(); }).filter(Boolean);
+  if (mat.length) h += '<h3 class="rlk-bh3">Matériel</h3><ul class="rlk-bp">' + mat.map(function(x) { return '<li>' + rlkInline(x) + '</li>'; }).join('') + '</ul>';
+  if (steps.length) h += '<h3 class="rlk-bh3">Déroulé</h3><div class="rlk-rec-steps">' + steps.map(function(s) {
+    return s.phase ? '<div class="rlk-rec-ph">' + rlkEsc(s.phase) + '</div>' : '<label class="rlk-rec-s"><input type="checkbox"><span class="no">' + s.n + '</span><span class="tx">' + rlkInline(s.t) + '</span></label>';
+  }).join('') + '</div>';
+  var ctl = String(d.controles || '').split('\n').map(function(x) { return x.trim(); }).filter(Boolean);
+  if (ctl.length) h += '<h3 class="rlk-bh3">Points de contrôle</h3><div class="rlk-rec-ctl">' + ctl.map(function(x) { return '<label class="rlk-rec-s"><input type="checkbox"><span class="tx">' + rlkInline(x) + '</span></label>'; }).join('') + '</div>';
+  h += '<div style="margin-top:18px"><button type="button" class="btn btn-outline btn-sm" onclick="rlkRecPrint(' + n + ')">Imprimer ou enregistrer en PDF</button></div></div>';
+  setTimeout(function() { rlkRecScale(n); }, 0);
+  return h;
+}
+function rlkRecScale(n) {
+  var d = rlkRecStore[n]; if (!d) return;
+  var ref = Number(d.ref_kg) || 1, w = parseFloat(String((document.getElementById('rw-' + n) || {}).value).replace(',', '.'));
+  if (!(w > 0)) w = ref;
+  var sc = rlkRecScaled(d, w), e;
+  if ((e = document.getElementById('rq-' + n + '-main'))) e.textContent = sc.main;
+  sc.ingr.forEach(function(t, k) { var x = document.getElementById('rq-' + n + '-' + k); if (x) x.textContent = t; });
+  if ((e = document.getElementById('rr-' + n))) e.textContent = sc.rend == null ? '' : '≈ ' + rlkFmt(sc.rend, 0);
+  if ((e = document.getElementById('rf-' + n))) e.innerHTML = Math.abs(sc.f - 1) < 0.005 ? 'Quantités de la recette d\'origine.' : 'Toutes les quantités sont multipliées par <b>' + rlkFmt(sc.f, 2) + '</b> par rapport à la recette d\'origine (' + rlkFmt(ref, 1) + ' kg).';
+}
+function rlkRecStep(n, dir) {
+  var inp = document.getElementById('rw-' + n); if (!inp) return;
+  var w = parseFloat(String(inp.value).replace(',', '.')) || 0, st = (rlkRecStore[n] && Number(rlkRecStore[n].ref_kg) >= 3) ? 1 : 0.5;
+  inp.value = Math.max(0.1, Math.round((w + dir * st) * 10) / 10); rlkRecScale(n);
+}
+function rlkRecReset(n) { var d = rlkRecStore[n], inp = document.getElementById('rw-' + n); if (d && inp) { inp.value = Number(d.ref_kg) || 1; rlkRecScale(n); } }
+function rlkRecPrint(n) {
+  var d = rlkRecStore[n]; if (!d) return;
+  var ref = Number(d.ref_kg) || 1, w = parseFloat(String((document.getElementById('rw-' + n) || {}).value).replace(',', '.')); if (!(w > 0)) w = ref;
+  var sc = rlkRecScaled(d, w), steps = rlkRecSteps(d.etapes), logo = new URL('logo-96.png', location.href).href, E = rlkEsc;
+  var titre = (document.querySelector('#blog-read .rlk-bh1') || {}).textContent || d.fruit || 'Fiche recette';
+  var html = '<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>' + E(titre) + '</title><style>'
+    + 'body{font-family:Arial,sans-serif;font-size:12px;color:#111;margin:16mm}h1{font-size:20px;margin:6px 0}h2{font-size:13px;border-bottom:1px solid #111;padding-bottom:2px;margin:16px 0 6px}'
+    + '.hd{display:flex;align-items:center;gap:10px;border-bottom:2px solid #111;padding-bottom:8px}.hd img{width:44px;height:44px}table{border-collapse:collapse;width:100%}td{border-bottom:1px solid #ccc;padding:4px 6px}td:last-child{text-align:right;font-weight:bold;white-space:nowrap}'
+    + '.w{border:1px solid #111;padding:6px 8px;margin:8px 0}.p{font-weight:bold;margin:10px 0 4px}.s{display:flex;gap:8px;margin:3px 0}.s b{min-width:18px}.c{display:inline-block;width:11px;height:11px;border:1px solid #111;margin-right:6px;vertical-align:-1px}@page{margin:12mm}</style></head><body>'
+    + '<div class="hd"><img src="' + logo + '" alt=""><div><b>Rézo la Kour</b><br>Fiche recette</div></div><h1>' + E(titre) + '</h1>'
+    + (d.avertissement ? '<div class="w">' + E(d.avertissement) + '</div>' : '')
+    + '<div>Poids de ' + E(d.fruit || 'fruit principal') + ' pour cet atelier : <b>' + rlkFmt(w, 1) + ' kg</b>' + (d.precision ? ' (' + E(d.precision) + ')' : '') + (Math.abs(sc.f - 1) >= 0.005 ? ' · quantités × ' + rlkFmt(sc.f, 2) : '') + '</div>'
+    + (sc.rend ? '<div>Rendement : ≈ ' + rlkFmt(sc.rend, 0) + ' ' + E(d.rend_fmt || 'pots') + '</div>' : '') + (d.allergenes ? '<div>Allergènes : ' + E(d.allergenes) + '</div>' : '') + (d.conservation ? '<div>Conservation : ' + E(d.conservation) + '</div>' : '')
+    + '<h2>Ingrédients</h2><table><tr><td><span class="c"></span>' + E(d.fruit || 'Fruit principal') + '</td><td>' + sc.main + '</td></tr>'
+    + (d.ingr || []).map(function(i, k) { return '<tr><td><span class="c"></span>' + E(i.n) + (i.note ? ' <i>(' + E(i.note) + ')</i>' : '') + (i.m === 'fixe' ? ' <i>(quantité fixe)</i>' : '') + '</td><td>' + E(sc.ingr[k]) + '</td></tr>'; }).join('') + '</table>'
+    + (d.materiel ? '<h2>Matériel</h2><div>' + E(String(d.materiel).split('\n').filter(function(x) { return x.trim(); }).join(' · ')) + '</div>' : '')
+    + '<h2>Déroulé</h2>' + steps.map(function(s) { return s.phase ? '<div class="p">' + E(s.phase) + '</div>' : '<div class="s"><b>' + s.n + '.</b><span><span class="c"></span>' + E(s.t.replace(/\*\*/g, '')) + '</span></div>'; }).join('')
+    + (d.controles ? '<h2>Points de contrôle</h2>' + String(d.controles).split('\n').filter(function(x) { return x.trim(); }).map(function(x) { return '<div class="s"><span><span class="c"></span>' + E(x.replace(/\*\*/g, '')) + '</span></div>'; }).join('') : '')
+    + '<p style="margin-top:20px">Rempli par : ____________________ Date : ___________ Visa : ___________</p></body></html>';
+  var wn = window.open('', '_blank'); if (!wn) { toast('Autorisez les fenêtres pour imprimer'); return; }
+  wn.document.open(); wn.document.write(html); wn.document.close(); setTimeout(function() { wn.focus(); wn.print(); }, 400);
+}
+
+// Branchement dans le lecteur d'articles
+var rlkBlocHtmlOrig7 = rlkBlocHtml;
+rlkBlocHtml = function(b) { return b && b.t === 'recette' ? rlkRecHtml(b.d || {}) : rlkBlocHtmlOrig7(b); };
+
+// ── Éditeur de fiche recette (Réglaj > Ladilafé) ──
+var rlkRec = {id: null, cover: null, ingr: [], autres: []};
+var RLK_MODELE_ACHARDS = {
+  titre: 'Achards de mangue verte', fruit: 'Mangue verte', ref_kg: 5, precision: 'épluchée et dénoyautée, poids net', rend_n: 40, rend_fmt: 'pots de 250 g (environ 10 kg de produit fini)',
+  duree: 'Une demi-journée en équipe', allergenes: 'Aucun des 14 allergènes en principe. Fénugrec (légumineuse) et huile de colza raffinée à signaler par précaution.',
+  conservation: 'Au froid (0 à 4 °C), date courte, tant que la DAAF n\'a pas validé une conservation ambiante.',
+  avertissement: '**Recette proposée, à valider avec la DAAF** avant toute vente. Pas de moutarde, d\'arachide, d\'ail ni de vinaigre dans la base.',
+  ingr: [
+    {n: 'Oignons', q: 500, u: 'g', m: 'prop', note: ''}, {n: 'Gingembre', q: 100, u: 'g', m: 'prop', note: ''},
+    {n: 'Gros piments', q: 10, u: '', m: 'prop', note: ''}, {n: 'Petits piments', q: 10, u: '', m: 'prop', note: ''},
+    {n: 'Bilimbis', q: 1, u: 'kg', m: 'prop', note: 'non échaudés'}, {n: 'Curcuma', q: 2, u: 'c. à soupe', m: 'prop', note: ''},
+    {n: 'Fénugrec (graines)', q: 1, u: 'c. à soupe', m: 'prop', note: 'pleine'}, {n: 'Gros sel', q: 2, u: 'c. à soupe', m: 'prop', note: 'rases'},
+    {n: 'Huile de colza raffinée', q: 25, u: 'cl', m: 'prop', note: ''},
+    {n: 'Vinaigre de kombucha', q: '', u: '', m: 'fixe', note: 'seulement si le pH dépasse 3,5, puis remesurer'}
+  ],
+  materiel: 'Balance 5 kg et balance 0,1 g pour les épices\npH-mètre étalonné\nGants (piments, lait de mangue), gant anti-coupure, gants anti-chaleur\nBassine de trempage réservée aux fruits, passoires, bacs alimentaires\nMarmite inox, mandoline, mortier et pilon\nBocaux et couvercles neufs, entonnoir inox, pince à bocaux\nGlace potable, minuteur',
+  etapes: [
+    '## Phase 0. Avant de commencer',
+    'Mettre bocaux et couvercles à stériliser dans l\'eau bouillante, au moins 30 min, et les laisser dans l\'eau chaude jusqu\'au remplissage.',
+    '## Phase 1. Zone sale : tri, lavage, épluchage',
+    '**Trier** : jeter les mangues piquées, écrasées ou moisies. Peser le lot et remplir la fiche de réception.',
+    '**Évacuer le lait** : retirer le pédoncule, poser les mangues tête en bas sur des passoires, loin de l\'eau de lavage. Gants (lait irritant).',
+    '**Équeuter** les piments et les bilimbis.',
+    '**Eau vinaigrée** : 1 volume de vinaigre blanc pour 10 volumes d\'eau potable, dans la bassine réservée aux fruits.',
+    '**Laver d\'abord** les mangues entières avec leur peau, une à une, sous l\'eau potable. On n\'épluche jamais avant de laver.',
+    '**Tremper 10 minutes** mangues entières, piments et bilimbis équeutés. Jamais de produit épluché ou coupé dans ce bain.',
+    '**Sortir**, jeter l\'eau de trempage, rincer à l\'eau potable.',
+    '**Éplucher** les mangues, retirer les noyaux et **peser** (poids net de la recette).',
+    'Fin de phase : nettoyer les tables sales, laver la vaisselle sale, se laver les mains.',
+    '## Phase 2. Zone propre : découpe',
+    'Couper les mangues en bâtonnets de 0,5 cm (gant anti-coupure si mandoline).',
+    '**Échauder** les bâtonnets (durée courte, à tester pour garder le croquant), puis les refroidir complètement dans l\'eau glacée potable. **Égoutter à fond**.',
+    '**Bilimbis** (non échaudés) : lamelles de 2 mm maximum, dans le sens de la longueur, graines gardées. Gants.',
+    '**Piments** coupés de la même façon. Gants.',
+    'Piler finement le gros sel et le fénugrec, ajouter les petits piments, puis le gingembre.',
+    '**Oignons en dernier** : émincer juste avant le roussissage.',
+    '## Phase 3. Cuisson et mélange',
+    '**Roussir** dans l\'huile les oignons, le gingembre, les piments pilés, le curcuma, le fénugrec et le sel. Gants anti-chaleur.',
+    '**Verser chaud** sur les mangues refroidies et égouttées et sur les bilimbis, mélanger à fond.',
+    '**Goûter** avec une cuillère propre à chaque fois et rectifier.',
+    '**Mesurer le pH** (échantillon mixé, refroidi, phase aqueuse). Au-dessus de 3,5 : vinaigre de kombucha, mélanger, remesurer. Si le pH reste trop haut, le lot n\'est pas conforme.',
+    '## Phase 4. Mise en bocaux',
+    '**Dégager la table** : ne laisser que le contenant des achards.',
+    'Laisser sécher les bocaux ouverture vers le haut, sans les essuyer.',
+    '**Remplir** à la fourchette inox propre avec entonnoir, tasser, **jusqu\'à 1,5 cm du bord**, nettoyer soigneusement les bords, fermer.',
+    '## Phase 5. Traitement thermique',
+    '**20 minutes après ébullition**, uniquement après validation par la DAAF. Avant validation : conservation au froid. Sortir à la pince, laisser refroidir sur la grille.',
+    '## Phase 6. Étiquetage et fin',
+    'Table nettoyée, étiquettes posées (lot, date, ingrédients, allergènes), fiche de traçabilité remplie.',
+    'Ranger les pots de la boutique au froid, nettoyer, replier.'
+  ].join('\n'),
+  controles: 'pH avant mise en bocal : 3,5 maximum (noté)\nTraitement thermique : 20 min après ébullition (si validé)\nRemplissage : 1,5 cm du bord, bords propres\nAucune denrée cuite plus de 2 heures à température ambiante'
+};
+function rlkRecIngrRender() {
+  var box = document.getElementById('rec-ingr'); if (!box) return;
+  box.innerHTML = rlkRec.ingr.map(function(i, k) {
+    return '<div class="fr-row"><div class="fr-top"><input type="text" placeholder="Ingrédient" value="' + rlkEsc(i.n) + '" oninput="rlkRecIngrSet(' + k + ',\'n\',this.value)">'
+      + '<button type="button" class="btn btn-ghost btn-xs" onclick="rlkRecIngrMove(' + k + ',-1)" aria-label="Monter">↑</button><button type="button" class="btn btn-ghost btn-xs" onclick="rlkRecIngrMove(' + k + ',1)" aria-label="Descendre">↓</button>'
+      + '<button type="button" class="btn btn-ghost btn-xs" style="color:#B3261E" onclick="rlkRecIngrDel(' + k + ')" aria-label="Supprimer">✕</button></div>'
+      + '<div><label>Quantité (pour le poids de référence)</label><input type="number" step="any" min="0" value="' + (i.q === '' || i.q == null ? '' : i.q) + '" oninput="rlkRecIngrSet(' + k + ',\'q\',this.value)"></div>'
+      + '<div><label>Unité</label><select onchange="rlkRecIngrSet(' + k + ',\'u\',this.value)">' + RLK_UNITES.map(function(u) { return '<option value="' + u + '"' + (u === (i.u || '') ? ' selected' : '') + '>' + rlkEsc(rlkUniteNom(u)) + '</option>'; }).join('') + '</select></div>'
+      + '<div><label>Évolution</label><select onchange="rlkRecIngrSet(' + k + ',\'m\',this.value)"><option value="prop"' + (i.m !== 'fixe' ? ' selected' : '') + '>Suit le poids du fruit</option><option value="fixe"' + (i.m === 'fixe' ? ' selected' : '') + '>Quantité fixe</option></select></div>'
+      + '<div><label>Précision (facultatif)</label><input type="text" placeholder="rases, non échaudés…" value="' + rlkEsc(i.note || '') + '" oninput="rlkRecIngrSet(' + k + ',\'note\',this.value)"></div></div>';
+  }).join('');
+}
+function rlkRecIngrSet(k, f, v) { if (!rlkRec.ingr[k]) return; rlkRec.ingr[k][f] = (f === 'q') ? (v === '' ? '' : parseFloat(v)) : v; }
+function rlkRecIngrAdd() { rlkRec.ingr.push({n: '', q: '', u: 'g', m: 'prop', note: ''}); rlkRecIngrRender(); var b = document.getElementById('rec-ingr'); if (b && b.lastElementChild) { var i = b.lastElementChild.querySelector('input'); if (i) i.focus(); } }
+function rlkRecIngrDel(k) { rlkRec.ingr.splice(k, 1); rlkRecIngrRender(); }
+function rlkRecIngrMove(k, d) { var j = k + d; if (j < 0 || j >= rlkRec.ingr.length) return; var x = rlkRec.ingr.splice(k, 1)[0]; rlkRec.ingr.splice(j, 0, x); rlkRecIngrRender(); }
+function rlkRecCoverPrev() { var e = document.getElementById('rec-cover-prev'); if (e) e.innerHTML = rlkRec.cover ? '<img src="' + rlkRec.cover + '" style="max-width:100%;max-height:150px;border-radius:8px;display:block;margin:6px 0"><button class="btn btn-ghost btn-xs" type="button" onclick="rlkRec.cover=null;rlkRecCoverPrev()">Retirer la photo</button>' : ''; }
+function rlkRecCover(inp) { var f = inp.files && inp.files[0]; if (f) rlkResizeImg(f, 1000, function(d) { rlkRec.cover = d; rlkRecCoverPrev(); }); }
+function rlkRecFill(d) {
+  var set = function(i, v) { var x = document.getElementById(i); if (x) x.value = v == null ? '' : v; };
+  set('rec-fruit', d.fruit); set('rec-ref', d.ref_kg); set('rec-prec', d.precision); set('rec-rend', d.rend_n); set('rec-rendfmt', d.rend_fmt); set('rec-duree', d.duree);
+  set('rec-allerg', d.allergenes); set('rec-conserv', d.conservation); set('rec-avert', d.avertissement); set('rec-materiel', d.materiel); set('rec-etapes', d.etapes); set('rec-controles', d.controles);
+  rlkRec.ingr = JSON.parse(JSON.stringify(d.ingr || [])); if (!rlkRec.ingr.length) rlkRec.ingr = [{n: '', q: '', u: 'g', m: 'prop', note: ''}];
+  rlkRecIngrRender();
+}
+function rlkRecModele() {
+  var vide = !rlkVal('rec-fruit').trim() && !rlkVal('rec-etapes').trim();
+  if (!vide && !confirm('Remplacer le contenu actuel par le modèle « achards de mangue verte » ?')) return;
+  rlkRecFill(RLK_MODELE_ACHARDS);
+  if (!rlkVal('rec-titre').trim()) document.getElementById('rec-titre').value = RLK_MODELE_ACHARDS.titre;
+  document.getElementById('rec-publie').value = '0';
+  toast('Modèle chargé en brouillon : relisez puis enregistrez');
+}
+function rlkRecEdit(p) {
+  var blocs = (p && p.blocs) || [], rb = blocs.filter(function(b) { return b.t === 'recette'; })[0], d = rb ? rb.d : {};
+  rlkRec = {id: p ? p.id : null, cover: p ? p.couverture : null, ingr: [], autres: blocs.filter(function(b) { return b.t !== 'recette'; })};
+  document.getElementById('rec-ttl').textContent = p ? 'Modifier la fiche recette' : 'Nouvelle fiche recette';
+  document.getElementById('rec-titre').value = p ? p.titre : '';
+  document.getElementById('rec-chapeau').value = p ? p.chapeau || '' : '';
+  document.getElementById('rec-publie').value = p && p.publie ? '1' : '0';
+  var cats = RLK.blog.cats.filter(function(c) { return c.id !== '__old'; }), sel = (p && p.cat_id) || (cats.filter(function(c) { return /^(res[eè]t|recette)/i.test(c.nom); })[0] || {}).id || '__new';
+  document.getElementById('rec-cat').innerHTML = cats.map(function(c) { return '<option value="' + c.id + '"' + (c.id === sel ? ' selected' : '') + '>' + rlkEsc(c.nom) + '</option>'; }).join('') + '<option value="__new"' + (sel === '__new' ? ' selected' : '') + '>Resèt (créer la catégorie)</option>';
+  rlkRecFill(rb ? d : {ref_kg: 5, ingr: []});
+  document.getElementById('rec-del').style.display = p ? 'inline-flex' : 'none';
+  rlkRecCoverPrev(); openModal('m-recette');
+}
+function rlkRecNew() { rlkRecEdit(null); }
+function rlkRecSave() {
+  var titre = rlkVal('rec-titre').trim(); if (!titre) { toast('Le titre est obligatoire'); return; }
+  var ref = parseFloat(String(rlkVal('rec-ref')).replace(',', '.')); if (!(ref > 0)) { toast('Indiquez le poids de référence du fruit principal (en kg)'); return; }
+  if (!rlkVal('rec-fruit').trim()) { toast('Indiquez le fruit ou légume principal'); return; }
+  var ingr = rlkRec.ingr.filter(function(i) { return String(i.n || '').trim(); }).map(function(i) { return {n: String(i.n).trim(), q: (i.q === '' || i.q == null || isNaN(i.q)) ? '' : Number(i.q), u: i.u || '', m: i.m === 'fixe' ? 'fixe' : 'prop', note: String(i.note || '').trim()}; });
+  if (!ingr.length) { toast('Ajoutez au moins un ingrédient'); return; }
+  var rn = parseFloat(String(rlkVal('rec-rend')).replace(',', '.'));
+  var d = {fruit: rlkVal('rec-fruit').trim(), ref_kg: ref, precision: rlkVal('rec-prec').trim(), rend_n: rn > 0 ? rn : null, rend_fmt: rlkVal('rec-rendfmt').trim(), duree: rlkVal('rec-duree').trim(),
+    allergenes: rlkVal('rec-allerg').trim(), conservation: rlkVal('rec-conserv').trim(), avertissement: rlkVal('rec-avert').trim(), ingr: ingr,
+    materiel: rlkVal('rec-materiel').trim(), etapes: rlkVal('rec-etapes').trim(), controles: rlkVal('rec-controles').trim()};
+  var go = function(catId) {
+    var row = {titre: titre, cat_id: catId || null, chapeau: rlkVal('rec-chapeau').trim() || ('Fiche recette : ' + d.fruit + '. Les quantités s\'adaptent au poids disponible sur le site.'), couverture: rlkRec.cover,
+      blocs: [{t: 'recette', d: d}].concat(rlkRec.autres), publie: rlkVal('rec-publie') === '1', updated_at: new Date().toISOString()};
+    var q = rlkRec.id ? sb.from('rlk_blog_posts').update(row).eq('id', rlkRec.id) : sb.from('rlk_blog_posts').insert(Object.assign({auteur: currentUser.id}, row));
+    q.then(function(r) {
+      if (r.error) { toast(rlkErr(r.error)); return; }
+      toast(row.publie ? '✓ Fiche publiée dans Ladilafé' : '✓ Brouillon enregistré'); closeModal('m-recette'); rlkBlogLoad();
+    });
+  };
+  var c = rlkVal('rec-cat');
+  if (c === '__new') {
+    sb.from('rlk_blog_cats').insert({nom: 'Resèt', ordre: RLK.blog.cats.length + 1}).select().then(function(r) {
+      if (r.error || !r.data || !r.data[0]) { toast(rlkErr(r.error || {message: 'Catégorie non créée'})); return; }
+      go(r.data[0].id);
+    });
+  } else go(c);
+}
+function rlkRecDel() {
+  if (!rlkRec.id || !confirm('Supprimer définitivement cette fiche recette ?')) return;
+  sb.from('rlk_blog_posts').delete().eq('id', rlkRec.id).then(function(r) { if (r.error) { toast(rlkErr(r.error)); return; } toast('Fiche supprimée'); closeModal('m-recette'); rlkBlogLoad(); });
+}
+var rlkPostEditOrig7 = rlkPostEdit;
+rlkPostEdit = function(id) {
+  if (!id) { rlkPostEditOrig7(id); return; }
+  sb.from('rlk_blog_posts').select('*').eq('id', id).maybeSingle().then(function(r) {
+    var p = r.data;
+    if (p && (p.blocs || []).some(function(b) { return b.t === 'recette'; })) rlkRecEdit(p); else rlkPostEditOrig7(id);
+  });
+};
+
+// ── Matériel apporté par les adhérents (Biyetri) ──
+RLK.mat = {}; RLK.matOK = false;
+function rlkMatLoad() {
+  return sb.rpc('rlk_materiel_evenements').then(function(r) {
+    RLK.mat = {}; RLK.matOK = !r.error;
+    (r.data || []).forEach(function(x) { RLK.mat[x.event_id] = x; });
+  });
+}
+function rlkMatBesoin(txt) {
+  return String(txt || '').split('\n').map(function(l) { var p = l.split('|'); return {o: p[0].trim(), q: p.slice(1).join('|').trim()}; }).filter(function(x) { return x.o; });
+}
+function rlkMatRender() {
+  if (!RLK.matOK) return;
+  Object.keys(RLK.mat).forEach(function(id) {
+    var box = document.getElementById('evmat-' + id); if (!box) return;
+    var x = RLK.mat[id], besoin = rlkMatBesoin(x.besoin), inscrit = x.mon_materiel !== null && x.mon_materiel !== undefined;
+    var mine = String(x.mon_materiel || '').split('\n').map(function(l) { return l.trim(); }).filter(Boolean);
+    var apports = x.apports || [], h = '';
+    if (!besoin.length && !inscrit && !apports.length) { box.innerHTML = ''; return; }
+    h += '<div class="rlk-mat"><div class="rlk-mat-t">Matériel pour l\'atelier</div>';
+    if (besoin.length && !inscrit) h += '<ul class="rlk-bp" style="margin:6px 0">' + besoin.map(function(b) { return '<li>' + rlkEsc(b.o) + (b.q ? ' <b>× ' + rlkEsc(b.q) + '</b>' : '') + '</li>'; }).join('') + '</ul><div class="rlk-note">Réservez votre place pour dire ce que vous apportez.</div>';
+    if (inscrit) {
+      var pris = {};
+      h += '<div class="rlk-note" style="margin:0 0 6px">Cochez ce que vous apportez, ajoutez le reste en dessous.</div>';
+      h += besoin.map(function(b, k) {
+        var on = mine.indexOf(b.o) >= 0; if (on) pris[b.o] = 1;
+        return '<label class="rlk-mat-l"><input type="checkbox" class="mat-cb-' + id + '" value="' + rlkEsc(b.o) + '"' + (on ? ' checked' : '') + '> ' + rlkEsc(b.o) + (b.q ? ' <small>(il en faut ' + rlkEsc(b.q) + ')</small>' : '') + '</label>';
+      }).join('');
+      var autres = mine.filter(function(m) { return !pris[m]; });
+      h += '<div class="fr" style="margin-top:8px"><label>Autre matériel que j\'apporte (un objet par ligne)</label><textarea id="matx-' + id + '" rows="3" placeholder="2 planches à découper&#10;1 casserole inox">' + rlkEsc(autres.join('\n')) + '</textarea></div>'
+        + '<button type="button" class="btn btn-primary btn-sm" onclick="rlkMatSave(\'' + id + '\')">Enregistrer mon matériel</button>';
+    }
+    if (apports.length) h += '<div class="rlk-mat-t" style="margin-top:12px">Déjà prévu par les participants</div><ul class="rlk-bp" style="margin:4px 0">' + apports.map(function(a) { return '<li><b>' + rlkEsc(a.prenom || 'Un adhérent') + '</b> : ' + rlkEsc(String(a.materiel || '').split('\n').filter(Boolean).join(', ')) + '</li>'; }).join('') + '</ul>';
+    box.innerHTML = h + '</div>';
+  });
+}
+function rlkMatSave(id) {
+  var l = []; document.querySelectorAll('.mat-cb-' + id + ':checked').forEach(function(c) { l.push(c.value); });
+  String(rlkVal('matx-' + id)).split('\n').forEach(function(t) { t = t.trim(); if (t && l.indexOf(t) < 0) l.push(t); });
+  sb.from('rlk_inscriptions').update({materiel: l.join('\n')}).eq('event_id', id).eq('user_id', currentUser.id).then(function(r) {
+    if (r.error) { toast(/materiel/i.test(r.error.message || '') ? 'Fonction à activer : exécuter phase3_v24_additif.sql dans Supabase' : rlkErr(r.error)); return; }
+    toast(l.length ? '✓ Merci ! Votre matériel est enregistré' : 'Matériel retiré'); rlkMatLoad().then(rlkMatRender);
+  });
+}
+// Réglaj > Lazenda : voir ce qui est apporté
+function rlkEvMatAdmin(id) {
+  var box = document.getElementById('evm-' + id); if (!box) return;
+  if (box.innerHTML) { box.innerHTML = ''; return; }
+  rlkMatLoad().then(function() {
+    var x = RLK.mat[id];
+    if (!RLK.matOK) { box.innerHTML = '<div class="rlk-dbwarn">Exécutez d\'abord phase3_v24_additif.sql dans Supabase (SQL Editor).</div>'; return; }
+    if (!x) { box.innerHTML = '<div class="rlk-note">Aucune donnée (événement passé ?).</div>'; return; }
+    var need = rlkMatBesoin(x.besoin), ap = x.apports || [], all = ap.map(function(a) { return String(a.materiel || '').toLowerCase(); }).join('\n');
+    box.innerHTML = '<div class="rlk-note" style="margin:6px 0"><b>Recherché</b> : ' + (need.length ? need.map(function(b) { var ok = all.indexOf(b.o.toLowerCase()) >= 0; return (ok ? '✓ ' : '○ ') + rlkEsc(b.o) + (b.q ? ' ×' + rlkEsc(b.q) : ''); }).join(' · ') : 'rien de précisé') + '</div>'
+      + '<div class="rlk-note" style="margin:0 0 6px"><b>Apporté</b> : ' + (ap.length ? ap.map(function(a) { return rlkEsc(a.prenom || 'Adhérent') + ' (' + rlkEsc(String(a.materiel || '').split('\n').filter(Boolean).join(', ')) + ')'; }).join(' · ') : 'personne pour le moment') + '</div>';
+  });
+}
+var rlkEvMatHad = false;
+rlkLoadEventsAdmin = function() {
+  sb.from('rlk_evenements').select('id,titre,date_debut').order('date_debut', {ascending: false}).limit(40).then(function(res) {
+    var el = document.getElementById('ev-admin-list'); if (!el) return;
+    if (res.error) { el.textContent = rlkErr(res.error); return; }
+    var rows = res.data || [];
+    el.innerHTML = rows.length ? rows.map(function(e) {
+      return '<div style="padding:6px 0;border-bottom:1px solid var(--border)"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span style="flex:1;min-width:140px">' + rlkDate(e.date_debut) + ' · ' + rlkEsc(e.titre) + '</span>'
+        + '<button class="btn btn-ghost btn-xs" onclick="rlkEvMatAdmin(\'' + e.id + '\')">Matériel</button><button class="btn btn-outline btn-xs" onclick="rlkEditEvent(\'' + e.id + '\')">Modifier</button><button class="btn btn-ghost btn-xs" onclick="rlkDelEvent(\'' + e.id + '\')">Supprimer</button></div><div id="evm-' + e.id + '"></div></div>';
+    }).join('') : 'Aucun événement.';
+  });
+};
+
+// ── Protocole de préparation de l'atelier (Réglaj) ──
+var RLK_PROTO = [
+  {id: 'A', t: 'A. Installation (veille ou 1 heure avant)', i: [
+    ['Animaux éloignés ou enfermés pour toute la durée'],
+    ['Zone dégagée, feuilles et fruits gâtés enlevés, sol arrosé sur 3 m pour éviter la poussière'],
+    ['Chapiteau monté parois côté vent, parois et sous-face lavées au jet'],
+    ['Plan respecté : zone sale (éplucher, laver), zone propre (préparer), zone cuisson'],
+    ['Tables lavées à l\'eau savonneuse, rincées ; nappe plastique alimentaire si la surface n\'est pas lisse'],
+    ['Eau potable uniquement, en contenants alimentaires propres. Jamais de tuyau d\'arrosage, d\'arrosoir ou de seau ménager', 1],
+    ['Point de lavage des mains installé : eau potable, savon liquide, essuie-tout', 1],
+    ['Foyer sur socles horizontaux ; bouteilles de gaz à l\'extérieur, détendeurs et dates vérifiés ; extincteur à portée', 1],
+    ['Espace devant le foyer entièrement dégagé (ni passage, ni table, ni banc)'],
+    ['Glace potable prête pour refroidir les mangues échaudées ; poubelle fermée à l\'écart'],
+    ['Aucun bois, aucune fonte, aucun torchon au contact des aliments']]},
+  {id: 'B', t: 'B. Hygiène des personnes', i: [
+    ['Personne malade (diarrhée, nausées, vomissements, plaie infectée) à l\'écart des aliments', 1],
+    ['Mains lavées 20 secondes (eau potable, savon liquide, rinçage, essuie-tout) avant de commencer, à chaque changement de tâche, après les toilettes, après manipulation de déchets ou de cartons, avant et après les gants', 1],
+    ['Charlotte ou bandana propre, tablier propre, ongles courts, sans bijoux aux mains ni aux poignets'],
+    ['Plaie à la main : pansement et gant, changé à chaque tâche'],
+    ['Gants pour couper les piments et pour le lait de mangue ; gant anti-coupure pour la mandoline ; gants anti-chaleur pour les marmites'],
+    ['Chaussures fermées, semelle antidérapante']]},
+  {id: 'C', t: 'C. Réception des fruits', i: [
+    ['Fruits triés : piqués, écrasés ou moisis écartés'],
+    ['Donateur, kilos reçus, état à réception et décision (accepté, paré, refusé) notés'],
+    ['Lot pesé et fiche de réception remplie']]},
+  {id: 'D', t: 'D. Pendant la préparation', i: [
+    ['Fruits triés puis lavés (ne jamais éplucher avant de laver)'],
+    ['Aucun produit déjà épluché ou coupé dans l\'eau vinaigrée de trempage'],
+    ['Un ustensile et une planche par tâche, jamais posés au sol'],
+    ['Tout est pesé au gramme près et noté (balance 5 kg, balance 0,1 g pour les épices)'],
+    ['pH mesuré avant la mise en bocal et noté', 1],
+    ['Aucune denrée cuite laissée plus de 2 heures à température ambiante', 1],
+    ['Marche en avant : tables sales nettoyées, vaisselle sale lavée et mains lavées avant de passer à la zone propre'],
+    ['Table de préparation dégagée avant la mise en bocaux (ne reste que le contenant)'],
+    ['Table nettoyée entre la mise en bocaux et l\'étiquetage ; bocaux refroidis, secs et propres'],
+    ['Déchets sortis par l\'arrière, jamais par la zone propre ; on ne goûte qu\'avec une cuillère propre']]},
+  {id: 'E', t: 'E. Fin d\'atelier', i: [
+    ['Plans de travail et tables nettoyés puis désinfectés ; ustensiles lavés, rincés, séchés à l\'air'],
+    ['Bassines vidées et rincées ; déchets évacués'],
+    ['Bocaux étiquetés et rangés : produits de la boutique au froid'],
+    ['Fiches de réception, de recette et de traçabilité complétées et signées']]}
+];
+RLK.proto = {c: {}, ev: '', date: '', resp: '', lieu: '', nc: ''};
+var RLK_PROTO_KEY = 'rlk-protocole-atelier';
+function rlkProtoLoad() { try { var s = JSON.parse(localStorage.getItem(RLK_PROTO_KEY) || 'null'); if (s && s.c) RLK.proto = Object.assign(RLK.proto, s); } catch (e) {} }
+function rlkProtoSave() { try { localStorage.setItem(RLK_PROTO_KEY, JSON.stringify(RLK.proto)); } catch (e) {} }
+function rlkProtoCount() {
+  var t = 0, c = 0, manq = [];
+  RLK_PROTO.forEach(function(g) { g.i.forEach(function(it, k) { t++; if (RLK.proto.c[g.id + (k + 1)]) c++; else manq.push({k: g.id + (k + 1), t: it[0], crit: !!it[1]}); }); });
+  return {t: t, c: c, manq: manq};
+}
+function rlkProtoRender() {
+  var box = document.getElementById('pr-groups'); if (!box) return;
+  var P = RLK.proto;
+  box.innerHTML = RLK_PROTO.map(function(g) {
+    var done = g.i.filter(function(it, k) { return P.c[g.id + (k + 1)]; }).length;
+    return '<details class="rlk-pr-g" open><summary>' + rlkEsc(g.t) + ' <span class="rlk-pr-n" id="prn-' + g.id + '">' + done + '/' + g.i.length + '</span></summary>'
+      + g.i.map(function(it, k) {
+        var key = g.id + (k + 1);
+        return '<label class="rlk-pr-i' + (P.c[key] ? ' ok' : '') + '"><input type="checkbox" data-k="' + key + '"' + (P.c[key] ? ' checked' : '') + ' onchange="rlkProtoTick(this)"><span>' + rlkEsc(it[0]) + (it[1] ? ' <b class="rlk-pr-crit">à ne jamais sauter</b>' : '') + '</span></label>';
+      }).join('') + '</details>';
+  }).join('');
+  rlkProtoStatus();
+}
+function rlkProtoTick(el) {
+  RLK.proto.c[el.dataset.k] = el.checked ? 1 : 0; el.parentNode.classList.toggle('ok', el.checked);
+  rlkProtoSave(); rlkProtoStatus();
+}
+function rlkProtoStatus() {
+  var r = rlkProtoCount(), bar = document.getElementById('pr-bar'), v = document.getElementById('pr-verdict'), n = document.getElementById('pr-count'); if (!bar) return;
+  bar.style.width = Math.round(100 * r.c / r.t) + '%'; n.textContent = r.c + ' / ' + r.t + ' cases cochées';
+  RLK_PROTO.forEach(function(g) { var e = document.getElementById('prn-' + g.id); if (e) e.textContent = g.i.filter(function(it, k) { return RLK.proto.c[g.id + (k + 1)]; }).length + '/' + g.i.length; });
+  if (r.c === r.t) { v.className = 'rlk-pr-v ok'; v.innerHTML = '<b>Atelier conforme au protocole.</b> Toutes les vérifications sont faites : vous pouvez démarrer.'; }
+  else {
+    var crit = r.manq.filter(function(m) { return m.crit; });
+    v.className = 'rlk-pr-v ko';
+    v.innerHTML = '<b>Il reste ' + (r.t - r.c) + ' vérification' + (r.t - r.c > 1 ? 's' : '') + ' avant de démarrer.</b>' + (crit.length ? '<br>Points à ne jamais sauter encore ouverts : ' + crit.map(function(m) { return rlkEsc(m.t.split(' ').slice(0, 6).join(' ')) + '…'; }).join(' · ') : '');
+  }
+  var ln = document.getElementById('lot-proto'); if (ln) ln.innerHTML = r.c ? 'Protocole de préparation : <b>' + r.c + ' / ' + r.t + '</b> cases cochées (jointes au lot à l\'enregistrement).' : 'Protocole de préparation : non rempli (onglet Protokol).';
+}
+function rlkProtoMeta() {
+  var P = RLK.proto; P.ev = rlkVal('pr-event'); P.date = rlkVal('pr-date'); P.resp = rlkVal('pr-resp'); P.lieu = rlkVal('pr-lieu'); P.nc = rlkVal('pr-nc');
+  var o = document.getElementById('pr-event'), opt = o && o.options[o.selectedIndex];
+  if (opt && opt.dataset.d && document.activeElement === o) { P.date = opt.dataset.d; document.getElementById('pr-date').value = P.date; }
+  rlkProtoSave();
+}
+function rlkProtoInit() {
+  rlkProtoLoad();
+  var P = RLK.proto, set = function(i, v) { var e = document.getElementById(i); if (e) e.value = v || ''; };
+  if (!P.date) P.date = new Date().toISOString().slice(0, 10);
+  if (!P.resp && profile) P.resp = ((profile.prenom || '') + ' ' + (profile.nom || '')).trim();
+  set('pr-date', P.date); set('pr-resp', P.resp); set('pr-lieu', P.lieu); set('pr-nc', P.nc);
+  var sel = document.getElementById('pr-event');
+  if (sel) {
+    sel.innerHTML = '<option value="">Atelier du jour (sans événement publié)</option>';
+    sb.from('rlk_evenements').select('id,titre,date_debut').order('date_debut', {ascending: false}).limit(15).then(function(r) {
+      (r.data || []).forEach(function(e) { var o = document.createElement('option'); o.value = e.id; o.dataset.d = String(e.date_debut).slice(0, 10); o.textContent = rlkDate(e.date_debut) + ' · ' + e.titre; sel.appendChild(o); });
+      sel.value = P.ev || '';
+    });
+  }
+  rlkProtoRender();
+}
+function rlkProtoReset() {
+  if (!confirm('Décocher toutes les cases pour préparer un nouvel atelier ?')) return;
+  RLK.proto.c = {}; RLK.proto.nc = ''; document.getElementById('pr-nc').value = ''; rlkProtoSave(); rlkProtoRender();
+}
+function rlkProtoSummary() {
+  var r = rlkProtoCount(), P = RLK.proto, o = document.getElementById('pr-event'), opt = o && o.options[o.selectedIndex];
+  if (!r.c) return null;
+  return {date: P.date, atelier: opt && opt.value ? opt.textContent : '', responsable: P.resp, lieu: P.lieu, coches: r.c, total: r.t, conforme: r.c === r.t, non_coches: r.manq.map(function(m) { return m.k; }), ecarts: P.nc || ''};
+}
+function rlkProtoPrint() {
+  var P = RLK.proto, E = rlkEsc, logo = new URL('logo-96.png', location.href).href, r = rlkProtoCount(), o = document.getElementById('pr-event'), opt = o && o.options[o.selectedIndex];
+  var html = '<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Protocole de préparation de l\'atelier</title><style>body{font-family:Arial,sans-serif;font-size:11.5px;color:#111;margin:14mm}h1{font-size:18px;margin:6px 0}h2{font-size:12.5px;border-bottom:1px solid #111;margin:14px 0 5px;padding-bottom:2px}'
+    + '.hd{display:flex;align-items:center;gap:10px;border-bottom:2px solid #111;padding-bottom:8px}.hd img{width:44px;height:44px}.i{display:flex;gap:7px;margin:3px 0}.c{flex:none;width:12px;height:12px;border:1px solid #111;text-align:center;line-height:11px;font-size:11px;margin-top:1px}.m{border:1px solid #111;padding:6px 8px;margin:8px 0}@page{margin:10mm}</style></head><body>'
+    + '<div class="hd"><img src="' + logo + '" alt=""><div><b>Rézo la Kour</b><br>Protocole de préparation de l\'atelier</div></div><h1>Check-lists sanitaires</h1>'
+    + '<div class="m">Atelier : <b>' + E(opt && opt.value ? opt.textContent : 'Atelier du jour') + '</b> · Date : <b>' + E(P.date || '') + '</b><br>Responsable : <b>' + E(P.resp || '') + '</b> · Lieu : <b>' + E(P.lieu || '') + '</b><br>Cases cochées : <b>' + r.c + ' / ' + r.t + '</b></div>'
+    + RLK_PROTO.map(function(g) { return '<h2>' + E(g.t) + '</h2>' + g.i.map(function(it, k) { return '<div class="i"><span class="c">' + (P.c[g.id + (k + 1)] ? '✓' : '') + '</span><span>' + E(it[0]) + (it[1] ? ' <b>(à ne jamais sauter)</b>' : '') + '</span></div>'; }).join(''); }).join('')
+    + '<h2>Écarts constatés et actions correctives</h2><div class="m" style="min-height:40px">' + E(P.nc || '') + '</div><p style="margin-top:16px">Rempli par : ______________________ Visa : ______________ Date : ___________</p></body></html>';
+  var w = window.open('', '_blank'); if (!w) { toast('Autorisez les fenêtres pour imprimer'); return; }
+  w.document.open(); w.document.write(html); w.document.close(); setTimeout(function() { w.focus(); w.print(); }, 400);
+}
+var rlkShowReglajOrig7 = showReglaj;
+showReglaj = function(section) {
+  rlkShowReglajOrig7(section);
+  var s = String(section).replace('é', 'e');
+  if (s === 'protocole') rlkProtoInit();
+  if (s === 'atelier') { rlkProtoLoad(); rlkProtoStatus(); }
+};
+
+// ── Chargement du matériel avec l'agenda ──
+document.addEventListener('DOMContentLoaded', function() { rlkProtoLoad(); });
 </script>
 
 
