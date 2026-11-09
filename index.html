@@ -611,6 +611,22 @@ details.rlk-bar{margin-top:10px}
 .rlk-saison tr.sa-r{cursor:pointer}
 .rlk-saison tr.sa-d td{text-align:left;background:#F7F7F5;padding:8px 10px}
 .sa-k{padding:5px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.5}.sa-k span{color:var(--text2)}
+
+/* ═══ v2.6 ═══ */
+.nav-tab{font-weight:500;letter-spacing:.07em}
+.nav-tab.active{font-weight:700}
+#page-akey{margin-top:-20px}
+.rlk-strip{display:flex;flex-direction:column;justify-content:flex-end;min-height:84px;border-radius:12px;padding:12px 16px;margin:8px 0;color:#fff;background-size:cover;background-position:center;cursor:pointer;text-decoration:none}
+.rlk-strip b{font-family:'Merienda','DM Sans',cursive;font-size:1.05rem;line-height:1.3}
+.rlk-strip span{font-size:.82rem;opacity:.95;margin-top:2px}
+.rlk-st{font-family:'Merienda','DM Sans',cursive;color:var(--accent);font-size:1.15rem;font-weight:700;margin:18px 0 4px;display:flex;align-items:center;gap:8px}
+.rlk-mat-pris span{text-decoration:line-through;color:var(--text3)}
+.rlk-mat-qui{color:var(--accent2);font-weight:600;margin-left:4px}
+.rlk-ev2-desc{white-space:pre-line}
+#page-kont .rlk-grid{display:block}
+#page-kont details.rlk-bar{margin-top:10px}
+#page-kont details .card{box-shadow:none;border:0;padding:0}
+.rlk-ttl .rlk-dot{flex:none}
 </style>
 </head>
 <body>
@@ -654,10 +670,8 @@ details.rlk-bar{margin-top:10px}
   </div>
   <nav class="nav-tabs" id="nav">
     <button class="nav-tab active" onclick="navTo('akey',this)">Akey</button>
-    <button class="nav-tab" onclick="navTo('dekouv',this)">Dékouv</button>
     <button class="nav-tab" data-access="member" onclick="navTo('don',this)">Trok</button>
     <button class="nav-tab" data-access="member" onclick="navTo('boutik',this)">Boutik</button>
-    <button class="nav-tab" data-access="member" onclick="navTo('lakour',this)">Mon Kour</button>
     <button class="nav-tab" data-access="member" onclick="navTo('blog',this)">Ladilafé</button>
     <button class="nav-tab" onclick="navTo('biyetri',this)">Biyetri</button>
     <button class="nav-tab" data-access="member" onclick="navTo('tchat',this)">Tchat <span id="tchat-badge" class="rlk-badge-n" style="display:none"></span></button>
@@ -709,42 +723,10 @@ details.rlk-bar{margin-top:10px}
     <div class="stat rlk-band"><div class="stat-val" id="c-transfo">—</div><div class="stat-label">produits transformés</div></div>
   </div>
 
-  <button class="rlk-lien" type="button" onclick="navTo('dekouv')">Dékouv nout Rézo</button>
-
-  <details class="rlk-bar" id="bar-kour">
-    <summary><span class="rlk-ttl" style="margin:0"><span class="rlk-dot"></span>La Kour domoun</span></summary>
-    <div class="rlk-bar-body">
-      <div style="font-size:12px;color:var(--text3);margin:0 0 10px">Nombre de jardins par commune, puis par quartier. Touchez une commune pour zoomer.</div>
-      <div class="rlk-map-wrap" style="border:0;padding:0;margin:0">
-        <div id="rlk-map-home">Chargement de la carte…</div>
-        <div id="rlk-map-info"></div>
-      </div>
-    </div>
-  </details>
-
-  <details class="rlk-bar">
-    <summary><span class="rlk-ttl" style="margin:0"><span class="rlk-dot"></span>Lé Statu</span></summary>
-    <div class="rlk-bar-body" id="akey-statuts">Chargement…</div>
-  </details>
-
-  <div class="rlk-row rlk-same">
-    <button class="btn btn-primary" onclick="navTo('biyetri')">Kossa néna sé tan si</button>
-    <button class="btn btn-primary" onclick="rlkInstallApp()">Instal l'apli su out téléfon</button>
-  </div>
-
-  <div id="akey-cycle" class="card" style="display:none;margin-top:14px">
-    <div class="card-title">Cycle de la semaine</div>
-    <div style="display:flex;gap:0;overflow-x:auto" id="cycle-semaine"></div>
-  </div>
-</div>
-
-<!-- ══ DÉKOUV ══ -->
-<div id="page-dekouv" class="page">
-  <div class="rlk-dek">
-  <div class="page-title">Dékouv nout Rézo</div>
-  <div class="page-sub">Touchez un titre pour l'ouvrir.</div>
-
-  <details class="rlk-bar" open>
+  <details class="rlk-bar" id="bar-dek">
+    <summary><span class="rlk-ttl" style="margin:0"><span class="rlk-dot"></span>Dékouv nout Rézo</span></summary>
+    <div class="rlk-bar-body rlk-dek">
+<details class="rlk-bar">
     <summary><span class="rlk-ttl" style="margin:0"><span class="rlk-dot"></span>Dékouv Nout Rézo</span></summary>
     <div class="rlk-bar-body rlk-prose">
       <p><b>Zéro gaspillage, zéro moustique.</b> En ramassant les fruits avant qu'ils ne tombent, nous réduisons les mouches des fruits, les rats et les moustiques vecteurs de dengue et de chikungunya.</p>
@@ -759,7 +741,7 @@ details.rlk-bar{margin-top:10px}
         <ol class="rlk-etapes" style="margin-bottom:0">
           <li><span>Votre produit est rangé dans une <b>classe</b> : usuel, basique, rare, cher ou exception.</span></li>
           <li><span>Plus le produit est <b>rare ou cher</b>, plus il rapporte de FEY pour un même poids. C'est le tableau ci-dessous qui fixe la valeur, jamais au cas par cas.</span></li>
-          <li><span>Les FEY obtenus sont <b>répartis</b> : ¼ pour vous, ¼ pour l'équipe, ½ pour financer l'association.</span></li>
+          <li><span>Les FEY obtenus sont <b>répartis</b> : <span class="rlk-ph">20 %</span> pour l'hôte, <span class="rlk-pe">40 %</span> pour l'équipe, <span class="rlk-pv">40 %</span> pour financer l'association.</span></li>
         </ol>
       </div>
       <p><b>Peut-on rapporter les valeurs selon que le fruit est rare, cher ou basique ?</b> Oui, c'est exactement le rôle du tableau : chaque classe a sa propre valeur par kilo. Lisez-le ligne par ligne : la colonne « Frais » donne la quantité de fruits, la colonne « Transformé » donne les FEY de pots obtenus pour cette même quantité.</p>
@@ -781,9 +763,9 @@ details.rlk-bar{margin-top:10px}
       <p class="rlk-h">Qui reçoit quoi ?</p>
       <p>Chaque kilo de fruits apporté au troc devient des pots de produits transformés, valorisés en FEY et redistribués ainsi :</p>
       <ul>
-        <li><b>¼</b> des FEY pour l'hôte (donateur), en plus d'un petit nettoyage sous l'arbre.</li>
-        <li><b>¼</b> des FEY à partager entre les cueilleurs et les cuisiniers.</li>
-        <li><b>½</b> des FEY mis en vente via notre boutique en ligne pour financer les frais de l'association.</li>
+        <li><b><span class="rlk-ph">20 %</span></b> des FEY pour l'hôte (donateur), en plus d'un petit nettoyage sous l'arbre.</li>
+        <li><b><span class="rlk-pe">40 %</span></b> des FEY à partager entre les cueilleurs et les cuisiniers.</li>
+        <li><b><span class="rlk-pv">40 %</span></b> des FEY mis en vente via notre boutique en ligne pour financer les frais de l'association.</li>
       </ul>
     </div>
   </details>
@@ -817,6 +799,37 @@ details.rlk-bar{margin-top:10px}
       </ol>
     </div>
   </details>
+  <details class="rlk-bar">
+    <summary><span class="rlk-ttl" style="margin:0"><span class="rlk-dot"></span>Plants, bois, compost</span></summary>
+    <div class="rlk-bar-body rlk-prose">
+      <p>On peut aussi troquer des plants, du bois de feu, du compost, du broyat ou du fumier. Chaque contenant a une valeur en FEY (1 FEY = <span class="rlk-fey-eur">5</span> € au maximum). <b>Valeurs proposées, à ajuster avec l'équipe.</b></p>
+      <div id="au-table"></div>
+    </div>
+  </details>
+    </div>
+  </details>
+
+  <div class="card" id="bar-kour" style="margin-top:12px">
+    <div class="card-title">La Kour domoun</div>
+    <div>
+      <div style="font-size:12px;color:var(--text3);margin:0 0 10px">Nombre de jardins par commune, puis par quartier. Touchez une commune pour zoomer.</div>
+      <div class="rlk-map-wrap" style="border:0;padding:0;margin:0">
+        <div id="rlk-map-home">Chargement de la carte…</div>
+        <div id="rlk-map-info"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rlk-st"><span class="rlk-dot"></span>Kossa néna sé tan si</div>
+  <div id="akey-evts"><div class="rlk-note">Chargement…</div></div>
+
+  <div class="rlk-row rlk-same" style="margin-top:14px">
+    <button class="btn btn-primary" onclick="rlkInstallApp()">Instal l'apli su out téléfon</button>
+  </div>
+
+  <div id="akey-cycle" class="card" style="display:none;margin-top:14px">
+    <div class="card-title">Cycle de la semaine</div>
+    <div style="display:flex;gap:0;overflow-x:auto" id="cycle-semaine"></div>
   </div>
 </div>
 
@@ -976,11 +989,25 @@ details.rlk-bar{margin-top:10px}
     <div class="card-title">Ce que vous allez recevoir</div>
     <div id="don-preview" class="rlk-note">Ajoutez un produit et une quantité.</div>
     <div class="rlk-note"><b>Quand arrivent vos FEY ?</b> Vos kilos sont comptés tout de suite dans l'accueil. Vos FEY sont crédités dans votre solde <b>après l'atelier</b> : l'équipe enregistre le lot transformé et la part de l'hôte est ajoutée à votre compte.</div>
-    <div class="rlk-note">Règle des parts : ¼ des FEY produits pour vous, ¼ partagé entre cueilleurs et cuisiniers, ½ mis en vente pour financer l'association. Quota minimal pour que nous nous déplacions : <span id="quota-txt">5 kg de fruits mûrs, 10 kg de fruits verts, 1 kg de tisanes et aromates, 3 kg de café</span>.</div>
+    <div class="rlk-note">Règle des parts : <span class="rlk-ph">20 %</span> des FEY produits pour vous, <span class="rlk-pe">40 %</span> partagé entre cueilleurs et cuisiniers, <span class="rlk-pv">40 %</span> mis en vente pour financer l'association. Quota minimal pour que nous nous déplacions : <span id="quota-txt">5 kg de fruits mûrs, 10 kg de fruits verts, 1 kg de tisanes et aromates, 3 kg de café</span>.</div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">Solde réel et prévisionnel</div>
+    <div id="fey-prev-don" class="rlk-note">Connectez-vous pour voir votre solde.</div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">Autres échanges : plants, bois, compost…</div>
+    <div class="rlk-note" style="margin:0 0 10px">Plants indigènes ou fruitiers, aromates, boutures, bois de feu, compost, broyat, fumier. Valeur en FEY dans « Dékouv nout Rézo ».</div>
+    <div class="fr"><label>Produit</label><select id="au-prod" onchange="rlkAutresPrev()"><option value="">Choisir…</option></select></div>
+    <div class="fr"><label>Quantité</label><input type="number" id="au-q" min="0" step="1" inputmode="decimal" oninput="rlkAutresPrev()"></div>
+    <div id="au-prev"></div>
+    <button class="btn btn-primary" type="button" style="width:100%" onclick="rlkAutresDeclarer()">Déclarer cet échange</button>
   </div>
 </div>
 
-<!-- ══ PANYÉ ══ -->
+<!-- ══ PANYÉ ══
 <div id="page-panye" class="page">
   <div class="page-title">Panyé de la semaine</div>
   <div class="page-sub">Commande avant jeudi minuit · Retrait samedi matin</div>
@@ -1022,6 +1049,8 @@ details.rlk-bar{margin-top:10px}
   </div>
   <div id="bk-dbwarn"></div>
   <div class="rlk-ok" id="boutik-solde" style="display:none"></div>
+  <div id="boutik-prev" class="rlk-note" style="margin-bottom:10px"></div>
+  <div class="rlk-warn" id="boutik-pay" style="margin-bottom:14px"></div>
   <div id="produits-grid" class="g3">
     <div class="loading"><div class="spinner"></div>Chargement…</div>
   </div>
@@ -1050,67 +1079,6 @@ details.rlk-bar{margin-top:10px}
         <div><button class="btn btn-sm" onclick="navTo('don')">Je troque mes fruits</button></div>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- ══ LA KOUR (mon espace) ══ -->
-<div id="page-lakour" class="page">
-  <div class="page-title">Mon Kour</div>
-  <div class="page-sub">Mon jardin et mon questionnaire.</div>
-  <div id="lk-dbwarn"></div>
-
-  <div class="card" style="margin-bottom:20px">
-    <div class="card-title">Mon kour</div>
-    <div class="fr2">
-      <div><label>Commune</label><select id="jd-commune" onchange="rlkFillQuartiers()"></select></div>
-      <div><label>Quartier</label><select id="jd-quartier" onchange="rlkQuartierAutre()"></select></div>
-    </div>
-    <div class="fr" id="jd-autre-wrap" style="display:none"><label>Nom du quartier</label><input type="text" id="jd-autre" placeholder="Préciser le quartier"></div>
-    <div class="fr2">
-      <div><label>Altitude (mètres)</label><input type="number" id="jd-alt" min="0" max="3100" placeholder="ex : 450"></div>
-      <div><label>Surface approximative (m²)</label><input type="number" id="jd-surf" min="0"></div>
-    </div>
-    <div class="rlk-chk"><label><input type="checkbox" id="jd-accueil"> J'accepte d'accueillir des ateliers culinaires dans mon jardin et je dispose d'un espace d'au moins 12 m² de gazon plat, de terrasse ou de varangue pour l'installer</label></div>
-    <div class="rlk-chk"><label><input type="checkbox" id="jd-visible"> J'accepte d'apparaître sur la carte publique (quartier et nombre de jardins seulement, jamais mon nom ni mon adresse)</label></div>
-    <button class="btn btn-primary btn-sm" onclick="rlkSaveJardin()">Enrejistr mon kour</button>
-    <div id="jd-list" class="rlk-note"></div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">Kossa mi don · Kossa mi giny</div>
-
-    <span class="rlk-qt">Mes fruits et légumes</span>
-    <div class="rlk-note" style="margin:0 0 8px">Produit, période de fructification, quantité approximative.</div>
-    <div id="q-fruits"></div>
-    <button class="btn btn-ghost btn-sm" onclick="rlkAddFruitQ()">+ Ajouter un fruit</button>
-
-    <span class="rlk-qt">Autres produits que je peux donner</span>
-    <div id="q-autres"></div>
-    <button class="btn btn-ghost btn-sm" onclick="rlkAddAutreQ()">+ Ajouter un produit</button>
-
-    <span class="rlk-qt">Mes compétences</span>
-    <div class="rlk-chk" id="q-comp"></div>
-
-    <span class="rlk-qt">Mes disponibilités</span>
-    <div class="rlk-note" style="margin:0 0 8px">Une demi-journée à la fois.</div>
-    <div class="fr2">
-      <div><select id="q-freq"><option value="">Fréquence…</option><option>Hebdomadaire</option><option>Bi-hebdomadaire (toutes les 2 semaines)</option><option>Mensuelle</option><option>Ponctuelle</option></select></div>
-      <div></div>
-    </div>
-    <div class="rlk-chk" id="q-dispo"></div>
-
-    <span class="rlk-qt">Matériel que je peux prêter</span>
-    <span class="rlk-qs">Cuisine</span><div class="rlk-chk" id="q-mat-cuisine"></div>
-    <span class="rlk-qs">Bricolage</span><div class="rlk-chk" id="q-mat-bricolage"></div>
-    <span class="rlk-qs">Jardin</span><div class="rlk-chk" id="q-mat-jardin"></div>
-    <div class="rlk-chk" id="q-mat-autre"></div>
-
-    <span class="rlk-qt">Ce dont j'ai besoin</span>
-    <div class="rlk-chk" id="q-besoin"></div>
-
-    <span class="rlk-qt">Autre chose à nous dire</span>
-    <textarea id="q-libre" rows="3" style="margin-bottom:14px"></textarea>
-    <button class="btn btn-primary btn-sm" onclick="rlkSaveQuest()">Enrejistr mé répons</button>
   </div>
 </div>
 
@@ -1209,6 +1177,13 @@ details.rlk-bar{margin-top:10px}
     <div class="card" style="margin-bottom:14px"><div class="card-title">Dispo : produits déclarés cette semaine</div>
       <div id="stock-table-wrap"><div class="rlk-note">Aucune disponibilité saisie cette semaine.</div></div>
       <div class="rlk-lecture" style="margin-top:14px">
+        <b>Ajuster les FEY d'un adhérent</b> (troc hors fruits, correction d'un atelier)
+        <div class="rlk-note" style="margin:4px 0 10px">Nombre positif pour créditer, négatif pour retirer. Le motif apparaît dans son historique.</div>
+        <select id="cm-adh"><option value="">— Choisir un adhérent —</option></select>
+        <div class="fr2" style="margin-top:8px"><div><label>FEY</label><input type="number" id="cm-n" step="1" placeholder="négatif pour retirer"></div><div><label>Motif</label><input type="text" id="cm-motif" placeholder="2 plants de goyavier"></div></div>
+        <button class="btn btn-primary btn-sm" type="button" onclick="rlkCreditManuel()">Créditer</button>
+      </div>
+      <div class="rlk-lecture" style="margin-top:14px">
         <b>Saisir le troc d'un adhérent</b>
         <div class="rlk-note" style="margin:4px 0 10px">Pour un adhérent qui n'utilise pas l'application. La saisie se fait dans l'onglet Trok, au nom de la personne choisie.</div>
         <select id="dispo-prod" onchange="rlkLoadMesTrocs()"><option value="">— Choisir un adhérent —</option></select>
@@ -1267,6 +1242,12 @@ details.rlk-bar{margin-top:10px}
 
   <!-- PRIX & FEY -->
   <div id="reglaj-prix" style="display:none">
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Paiement en euros (Yapla)</div>
+      <div class="rlk-note" style="margin:0 0 10px">Collez l'adresse de la page Yapla où l'on peut payer (ouvrez cette page dans votre navigateur et copiez l'adresse affichée en haut). Elle apparaît en Boutik. Laissez vide pour n'afficher que « en main propre lors des événements ».</div>
+      <div class="fr"><label>Adresse de la page de paiement</label><input type="url" id="yp-url" placeholder="https://rezo-la-kour.s2.yapla.com/..."></div>
+      <button class="btn btn-primary btn-sm" onclick="rlkYaplaSave()">Enregistrer</button>
+    </div>
     <div class="g2" style="margin-bottom:16px">
       <div class="card">
         <div class="card-title">Valeur de la FEY</div>
@@ -1314,10 +1295,25 @@ details.rlk-bar{margin-top:10px}
 
   <!-- ATELIER & LOTS -->
   <div id="reglaj-atelier" style="display:none">
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Répartition des FEY d'un atelier</div>
+      <div class="rlk-note" style="margin:0 0 10px">Part pour l'hôte (celui qui donne les fruits) et part pour l'équipe (cueilleurs et cuisiniers). Le reste est mis en vente. S'applique aux prochains ateliers enregistrés, pas aux lots déjà faits.</div>
+      <div class="fr2">
+        <div><label>Part hôte (%)</label><input type="number" id="pt-h" min="0" max="100" value="20" oninput="rlkPartsSimul()"></div>
+        <div><label>Part équipe (%)</label><input type="number" id="pt-e" min="0" max="100" value="40" oninput="rlkPartsSimul()"></div>
+      </div>
+      <div class="rlk-note" style="margin:0 0 6px">Simulation :</div>
+      <div class="fr2">
+        <div><label>Pots produits</label><input type="number" id="pt-t" min="0" value="139" oninput="rlkPartsSimul()"></div>
+        <div><label>Personnes dans l'équipe</label><input type="number" id="pt-n" min="1" value="8" oninput="rlkPartsSimul()"></div>
+      </div>
+      <div id="pt-simul" class="rlk-ok"></div>
+      <button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="rlkSaveParts()">Enregistrer la répartition</button>
+    </div>
     <div class="rlk-grid">
       <div class="card">
         <div class="card-title">Combien de personnes à l'atelier ?</div>
-        <div class="rlk-note" style="margin:0 0 10px">Le nombre dépend des kilos et des FEY qu'ils représentent : minimum <b>20 FEY</b> produits pour lancer l'atelier, et <b>1 participant par FEY</b> réservé aux préparants (¼ des FEY produits). Exemple : 20 FEY produits, 5 participants au maximum.</div>
+        <div class="rlk-note" style="margin:0 0 10px">Le nombre dépend des kilos et des FEY qu'ils représentent : minimum <b>20 FEY</b> produits pour lancer l'atelier, et <b>1 participant par FEY</b> réservé aux préparants (40 % des FEY produits). Exemple : 20 FEY produits, 8 participants au maximum.</div>
         <div id="at-lines"></div>
         <button class="btn btn-ghost btn-sm" type="button" onclick="rlkAtAddLine()">+ Ajouter un produit</button>
         <div class="fr" style="margin-top:10px"><label>Participants prévus</label><input type="number" id="at-prevus" value="5" min="1" oninput="rlkCalcAtelier()"></div>
@@ -1333,6 +1329,10 @@ details.rlk-bar{margin-top:10px}
         <div class="fr2">
           <div><label>Donateur des fruits</label><select id="lot-donateur"></select></div>
           <div><label>ou donateur non inscrit</label><input type="text" id="lot-donlibre" placeholder="Nom"></div>
+        </div>
+        <div class="rlk-chk">
+          <label><input type="checkbox" id="lot-hote-eq" onchange="rlkHoteEq()"> L'hôte a participé à l'atelier (il reçoit aussi une part d'équipe)</label>
+          <label><input type="checkbox" id="lot-livre"> Fruits apportés par l'hôte (pas de cueillette par l'équipe)</label>
         </div>
         <div class="fr2">
           <div><label>Fruit</label><input type="text" id="lot-fruit" list="produits-list" placeholder="Pamplemousses"></div>
@@ -1740,13 +1740,16 @@ details.rlk-bar{margin-top:10px}
 <!-- ══ MON KONT ══ -->
 <div id="page-kont" class="page">
   <div class="page-title">Mon kont</div>
-  <div class="page-sub">Vos coordonnées, votre mot de passe, vos FEY, vos trocs et vos commandes.</div>
+  <div class="page-sub">Votre espace : FEY, adhésion, coordonnées, jardin et questionnaire.</div>
+  <div id="kont-exp"></div>
   <div id="kont-adh"></div>
 
   <div class="rlk-grid" style="margin-bottom:14px">
     <div class="card">
       <div class="card-title">Kombien FEY mwin néna</div>
       <div class="rlk-res"><div class="k">Disponible</div><div class="v" id="fey-solde-lk">—</div><div class="s">Utilisable à la BOUTIK, lors d'une réunion ou d'un atelier</div></div>
+      <div id="fey-prev-lk" class="rlk-note" style="margin:10px 0"></div>
+      <div class="rlk-qt" style="margin-top:12px">Historique des FEY</div>
       <div id="fey-hist" class="rlk-note"></div>
       <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
         <button class="btn btn-primary btn-sm" onclick="navTo('boutik')">Choisir mes pots</button>
@@ -1788,6 +1791,11 @@ details.rlk-bar{margin-top:10px}
     <div class="rlk-note">Votre mot de passe actuel vous sera demandé pour confirmer.</div>
   </div>
 
+  <details class="rlk-bar" id="bar-statuts">
+    <summary><span class="rlk-ttl" style="margin:0"><span class="rlk-dot"></span>Lé Statu</span></summary>
+    <div class="rlk-bar-body" id="akey-statuts">Chargement…</div>
+  </details>
+
   <div class="card" style="margin-top:14px;display:none">
     <div class="card-title">Mes FEY <span id="k-solde" style="float:right;color:var(--accent)">—</span></div>
     <div id="k-fey" class="rlk-note">Chargement…</div>
@@ -1804,6 +1812,61 @@ details.rlk-bar{margin-top:10px}
     <div class="card-title">Mes abonnements au panyé</div>
     <div id="k-abos" class="rlk-note">Chargement…</div>
   </div>
+  <div id="lk-dbwarn"></div>
+  <div class="card">
+    <div class="card-title">Mon kour</div>
+    <div class="fr2">
+      <div><label>Commune</label><select id="jd-commune" onchange="rlkFillQuartiers()"></select></div>
+      <div><label>Quartier</label><select id="jd-quartier" onchange="rlkQuartierAutre()"></select></div>
+    </div>
+    <div class="fr" id="jd-autre-wrap" style="display:none"><label>Nom du quartier</label><input type="text" id="jd-autre" placeholder="Préciser le quartier"></div>
+    <div class="fr2">
+      <div><label>Altitude (mètres)</label><input type="number" id="jd-alt" min="0" max="3100" placeholder="ex : 450"></div>
+      <div><label>Surface approximative (m²)</label><input type="number" id="jd-surf" min="0"></div>
+    </div>
+    <div class="rlk-chk"><label><input type="checkbox" id="jd-accueil"> J'accepte d'accueillir des ateliers culinaires dans mon jardin et je dispose d'un espace d'au moins 12 m² de gazon plat, de terrasse ou de varangue pour l'installer</label></div>
+    <div class="rlk-chk"><label><input type="checkbox" id="jd-visible"> J'accepte d'apparaître sur la carte publique (quartier et nombre de jardins seulement, jamais mon nom ni mon adresse)</label></div>
+    <button class="btn btn-primary btn-sm" onclick="rlkSaveJardin()">Enrejistr mon kour</button>
+    <div id="jd-list" class="rlk-note"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Kossa mi don · Kossa mi giny</div>
+
+    <span class="rlk-qt">Mes fruits et légumes</span>
+    <div class="rlk-note" style="margin:0 0 8px">Produit, période de fructification, quantité approximative.</div>
+    <div id="q-fruits"></div>
+    <button class="btn btn-ghost btn-sm" onclick="rlkAddFruitQ()">+ Ajouter un fruit</button>
+
+    <span class="rlk-qt">Autres produits que je peux donner</span>
+    <div id="q-autres"></div>
+    <button class="btn btn-ghost btn-sm" onclick="rlkAddAutreQ()">+ Ajouter un produit</button>
+
+    <span class="rlk-qt">Mes compétences</span>
+    <div class="rlk-chk" id="q-comp"></div>
+
+    <span class="rlk-qt">Mes disponibilités</span>
+    <div class="rlk-note" style="margin:0 0 8px">Une demi-journée à la fois.</div>
+    <div class="fr2">
+      <div><select id="q-freq"><option value="">Fréquence…</option><option>Hebdomadaire</option><option>Bi-hebdomadaire (toutes les 2 semaines)</option><option>Mensuelle</option><option>Ponctuelle</option></select></div>
+      <div></div>
+    </div>
+    <div class="rlk-chk" id="q-dispo"></div>
+
+    <span class="rlk-qt">Matériel que je peux prêter</span>
+    <span class="rlk-qs">Cuisine</span><div class="rlk-chk" id="q-mat-cuisine"></div>
+    <span class="rlk-qs">Bricolage</span><div class="rlk-chk" id="q-mat-bricolage"></div>
+    <span class="rlk-qs">Jardin</span><div class="rlk-chk" id="q-mat-jardin"></div>
+    <div class="rlk-chk" id="q-mat-autre"></div>
+
+    <span class="rlk-qt">Ce dont j'ai besoin</span>
+    <div class="rlk-chk" id="q-besoin"></div>
+
+    <span class="rlk-qt">Autre chose à nous dire</span>
+    <textarea id="q-libre" rows="3" style="margin-bottom:14px"></textarea>
+    <button class="btn btn-primary btn-sm" onclick="rlkSaveQuest()">Enrejistr mé répons</button>
+  </div>
+
   <div style="margin-top:16px"><button class="btn btn-ghost btn-sm" type="button" onclick="doLogout()">Dékonekte</button></div>
 </div>
 
@@ -1906,6 +1969,8 @@ details.rlk-bar{margin-top:10px}
     <div class="modal-hdr"><div class="modal-title" id="le-ttl">Modifier le lot</div><button class="modal-close" onclick="closeModal('m-lot-edit')">✕</button></div>
     <div class="modal-body">
       <div id="le-info" class="rlk-note" style="margin:0 0 12px"></div>
+      <div class="fr"><label>Pots produits (corriger si la saisie était fausse)</label><input type="number" id="le-prod" min="0"></div>
+      <div class="rlk-note">Les FEY déjà crédités ne bougent pas : régularisez-les avec « Ajuster les FEY d'un adhérent » dans Réglaj.</div>
       <div class="fr"><label>Produit</label><input type="text" id="le-produit"></div>
       <div class="fr2">
         <div><label>DDM ou DLC</label><input type="date" id="le-dlc"></div>
@@ -5523,13 +5588,13 @@ function rlkCalcAtelier() {
     kg += q; fey += q * tr; det.push(rlkEsc(f.nom) + ' : ' + rlkFmt(q, 1) + ' kg × ' + tr + ' = ' + rlkFmt(q * tr, 1) + ' FEY');
   });
   fey = Math.floor(fey + 1e-9);
-  var seuil = RLK.seuil, ok = fey >= seuil, pool = ok ? Math.floor(fey / 4) : 0, prevus = Math.max(1, Math.floor(rlkNum('at-prevus', 1)));
+  var seuil = RLK.seuil, ok = fey >= seuil, pool = ok ? Math.floor(fey * RLK.pEquipe + 1e-9) : 0, prevus = Math.max(1, Math.floor(rlkNum('at-prevus', 1)));
   document.getElementById('at-max').textContent = ok ? pool + ' pers.' : '—';
   document.getElementById('at-detail').innerHTML = (det.length ? det.join('<br>') + '<br>' : '') + '<b>' + rlkFmt(kg, 1) + ' kg, ' + fey + ' FEY produits</b> (minimum ' + seuil + ' pour lancer l\'atelier)';
   var v = document.getElementById('at-verdict');
   if (!fey) { v.innerHTML = 'Choisissez un produit et des kilos.'; return; }
   if (!ok) { v.innerHTML = '<b style="color:var(--red)">Atelier non lancé :</b> il manque ' + (seuil - fey) + ' FEY. Regroupez des donateurs.'; return; }
-  if (prevus <= pool) v.innerHTML = '<b style="color:var(--accent2)">' + prevus + ' participant' + (prevus > 1 ? 's' : '') + ' : OK.</b> Maximum ' + pool + ' (1 par FEY réservé aux préparants, soit ¼ de ' + fey + ' FEY). Chacun repart avec ' + Math.floor(pool / prevus) + ' FEY au moins.';
+  if (prevus <= pool) v.innerHTML = '<b style="color:var(--accent2)">' + prevus + ' participant' + (prevus > 1 ? 's' : '') + ' : OK.</b> Maximum ' + pool + ' (1 par FEY réservé aux préparants, soit ' + Math.round(RLK.pEquipe * 100) + ' % de ' + fey + ' FEY). Chacun repart avec ' + Math.floor(pool / prevus) + ' FEY au moins.';
   else v.innerHTML = '<b style="color:var(--red)">' + prevus + ' participants : trop nombreux.</b> Limitez à ' + pool + ' personnes (1 par FEY réservé aux préparants).';
 }
 function rlkLotQte() {
@@ -6763,7 +6828,7 @@ rlkSaveLot = function() {
       ingredients: rlkVal('lot-ingr'), allergenes: rlkVal('lot-allerg'), dlc: rlkVal('lot-dlc') || null, qte_produite: q, fey_donateur: p.donateur, fey_equipe: equipeFey, fey_boutik: boutik,
       donateur_id: rlkVal('lot-donateur') || null, donateur_libre: rlkVal('lot-donlibre'), participants: equipe, qte_app: p.donateur + equipeFey, qte_yapla: boutik,
       ca_previsionnel: boutik * RLK.fey, created_by: currentUser.id,
-      releve: {dtype: rlkVal('lot-dtype') || 'DDM', reception: {etat: rlkVal('lot-etat'), decision: rlkVal('lot-decision')}, hygiene: hyg, observations: rlkVal('lot-obs'), protocole: rlkProtoSummary(), conservation: rlkVal('lot-conserv'), photos: RLK.lotPhotos.slice()}};
+      releve: {dtype: rlkVal('lot-dtype') || 'DDM', reception: {etat: rlkVal('lot-etat'), decision: rlkVal('lot-decision')}, hygiene: hyg, observations: rlkVal('lot-obs'), protocole: rlkProtoSummary(), conservation: rlkVal('lot-conserv'), photos: RLK.lotPhotos.slice(), livre: !!(document.getElementById('lot-livre') || {}).checked, hote_participe: rlkHoteDansEquipe()}};
     sb.from('rlk_lots').insert(row).select().then(function(res) {
       if (res.error) { toast(rlkErr(res.error)); return; }
       var lot = res.data && res.data[0], ledger = [];
@@ -6786,7 +6851,7 @@ function rlkLotEdit(id) {
   RLK.lotEdit = {id: id, photos: (r.photos || []).slice()};
   document.getElementById('le-ttl').textContent = 'Modifier le lot ' + l.numero_lot;
   set('le-produit', l.produit); set('le-dlc', l.dlc || ''); set('le-ingr', l.ingredients); set('le-allerg', l.allergenes); set('le-conserv', r.conservation);
-  set('le-app', l.qte_app); set('le-yap', l.qte_yapla); set('le-retire', 0); set('le-motif', ''); set('le-obs', r.observations);
+  set('le-prod', l.qte_produite); set('le-app', l.qte_app); set('le-yap', l.qte_yapla); set('le-retire', 0); set('le-motif', ''); set('le-obs', r.observations);
   document.getElementById('le-info').innerHTML = 'Pots produits : <b>' + l.qte_produite + '</b> · stock échanges <b>' + l.qte_app + '</b> · stock boutique en ligne <b>' + l.qte_yapla + '</b>.';
   var ret = (r.retraits || []); document.getElementById('le-hist').innerHTML = ret.length ? '<b>Retraits déjà notés :</b><br>' + ret.map(function(x) { return rlkDate(x.date) + ' : ' + x.n + ' pot(s), ' + rlkEsc(x.canal) + ', ' + rlkEsc(x.motif || 'sans motif'); }).join('<br>') : '';
   rlkLotEditPhotos(); openModal('m-lot-edit');
@@ -6804,7 +6869,7 @@ function rlkLotEditSave() {
   var l = (RLK.lots || []).filter(function(x) { return x.id === E.id; })[0]; if (!l) return;
   var retire = Math.max(0, parseInt(rlkVal('le-retire')) || 0), canal = rlkVal('le-canal'), app = parseInt(rlkVal('le-app')) || 0, yap = parseInt(rlkVal('le-yap')) || 0;
   if (retire) { if (canal === 'yapla') yap = Math.max(0, yap - retire); else app = Math.max(0, app - retire); }
-  var qte = Math.max(0, l.qte_produite - retire), r = JSON.parse(JSON.stringify(l.releve || {}));
+  var pv = rlkVal('le-prod'), base = pv === '' ? l.qte_produite : Math.max(0, parseInt(pv) || 0), qte = Math.max(0, base - retire), r = JSON.parse(JSON.stringify(l.releve || {}));
   if (retire) { r.retraits = (r.retraits || []).concat([{date: new Date().toISOString(), n: retire, canal: canal === 'yapla' ? 'boutique en ligne' : 'échanges', motif: rlkVal('le-motif').trim()}]); }
   r.conservation = rlkVal('le-conserv'); r.observations = rlkVal('le-obs'); r.photos = E.photos;
   var row = {produit: rlkVal('le-produit').trim() || l.produit, dlc: rlkVal('le-dlc') || null, ingredients: rlkVal('le-ingr'), allergenes: rlkVal('le-allerg'), qte_produite: qte, qte_app: app, qte_yapla: yap, ca_previsionnel: yap * RLK.fey, releve: r};
@@ -7045,6 +7110,338 @@ rlkLoadLots = function() {
     }).join('') + '</table>' : 'Aucun lot enregistré.';
   });
 };
+
+// ═══════════════════════════════════════════════════════════════
+// MODULE 9 (v2.6) : accueil, Mon Kont en menus, historique FEY, autres troc, matériel, adhésions, répartition
+// ═══════════════════════════════════════════════════════════════
+
+// ── Navigation : « Mon Kour » est fusionné dans « Mon Kont » ──
+var rlkNavToOrig9 = navTo;
+navTo = function(p, b) {
+  if (p === 'lakour' || p === 'dekouv') p = (p === 'lakour' ? 'kont' : 'akey');
+  rlkNavToOrig9(p, b);
+  if (p === 'kont') { rlkKontAccordion(); if (currentUser) { rlkInitLaKour(); rlkKontExtra(); } }
+  if (p === 'akey') rlkAkeyEvents();
+};
+
+// ── Mon Kont : chaque paragraphe devient un menu déroulant ──
+function rlkKontAccordion() {
+  var root = document.getElementById('page-kont'); if (!root || root.dataset.acc) return; root.dataset.acc = '1';
+  var first = true;
+  root.querySelectorAll('.card').forEach(function(c) {
+    var t = c.querySelector(':scope > .card-title'); if (!t) return;
+    var d = document.createElement('details'); d.className = 'rlk-bar';
+    if (c.style.display === 'none') d.style.display = 'none'; else if (first) { d.open = true; first = false; }
+    var s = document.createElement('summary'); s.innerHTML = '<span class="rlk-ttl" style="margin:0"><span class="rlk-dot"></span>' + t.innerHTML + '</span>';
+    var b = document.createElement('div'); b.className = 'rlk-bar-body';
+    Array.prototype.slice.call(c.children).forEach(function(x) { if (x !== t) b.appendChild(x); });
+    d.appendChild(s); d.appendChild(b); c.parentNode.replaceChild(d, c);
+  });
+}
+
+// ── Solde réel et prévisionnel, historique avec lots ──
+function rlkEnsure(id, afterId, cls) {
+  var e = document.getElementById(id); if (e) return e;
+  var a = document.getElementById(afterId); if (!a) return null;
+  e = document.createElement('div'); e.id = id; e.className = cls || 'rlk-note'; a.parentNode.insertBefore(e, a.nextSibling); return e;
+}
+function rlkClasseDepuisNom(n) {
+  n = String(n || '');
+  if (/\(vert\)/.test(n)) return 'basique'; if (/\(rare\)/.test(n)) return 'rare'; if (/\(cher\)/.test(n)) return 'cher'; if (/\(exception\)/.test(n)) return 'exception';
+  return 'usuel';
+}
+function rlkSoldePrev(histRows) {
+  var last = null;
+  (histRows || []).forEach(function(r) { if (/troc/i.test(r.motif || '') && (!last || r.created_at > last)) last = r.created_at; });
+  var since = last ? last.slice(0, 10) : new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10);
+  return rlkTrocRows(currentUser.id, since).then(function(rows) {
+    var fey = 0, kg = 0;
+    rows.filter(function(t) { return !last || (t.created_at || '') > last; }).forEach(function(t) {
+      var k = t.kg != null ? Number(t.kg) : (t.unite === 'kg' ? Number(t.quantite) : 0); if (!(k > 0)) return;
+      kg += k; fey += k * rlkClasse(rlkClasseDepuisNom(t.produit)).transforme_par_kg * RLK.pHote;
+    });
+    return {fey: Math.ceil(fey - 1e-9), kg: kg};
+  });
+}
+function rlkSoldeAffiche(prev) {
+  var reel = RLK.solde || 0, txt = '<b>Solde réel : ' + reel + ' FEY</b> (déjà crédités)<br>Solde prévisionnel : <b>' + (reel + prev.fey) + ' FEY</b>' + (prev.fey ? ' (dont environ ' + prev.fey + ' FEY en attente, pour ' + rlkFmt(prev.kg, 1) + ' kg déclarés)' : '') + '<div style="margin-top:4px;opacity:.85">Les FEY ne sont crédités qu\'après l\'atelier, une fois validés par l\'équipe. Le prévisionnel est une estimation.</div>';
+  ['fey-prev-lk', 'fey-prev-don', 'boutik-prev'].forEach(function(id) { var e = document.getElementById(id); if (e) e.innerHTML = txt; });
+}
+rlkLoadHist = function() {
+  if (!currentUser) return;
+  sb.rpc('rlk_mon_historique').then(function(res) {
+    var el = document.getElementById('fey-hist');
+    var render = function(rows) {
+      if (el) el.innerHTML = rows.length ? '<table class="rlk-tbl">' + rows.map(function(r) {
+        var det = r.numero_lot ? '<br><span style="color:var(--text2);font-size:.82rem">Lot ' + rlkEsc(r.numero_lot) + (r.produit ? ' · ' + rlkEsc(r.produit) : '') + (r.qte_produite ? ' · ' + rlkFmt(r.qte_produite) + ' pots obtenus' : '') + '</span>' : '';
+        return '<tr><td>' + rlkDate(r.created_at) + ' · ' + rlkEsc(r.motif || '') + det + '</td><td style="white-space:nowrap"><b style="color:' + (r.delta < 0 ? 'var(--red)' : 'var(--accent2)') + '">' + (r.delta > 0 ? '+' : '') + r.delta + '</b></td></tr>';
+      }).join('') + '</table>' : 'Aucun mouvement pour le moment.';
+      rlkSoldePrev(rows).then(rlkSoldeAffiche);
+    };
+    if (res.error) {
+      sb.from('rlk_fey').select('*').eq('user_id', currentUser.id).order('created_at', {ascending: false}).limit(100).then(function(r) { render(r.data || []); });
+      return;
+    }
+    render(res.data || []);
+  });
+};
+var rlkLoadSoldeOrig9 = rlkLoadSolde;
+rlkLoadSolde = function() { rlkLoadSoldeOrig9(); if (currentUser) { rlkEnsure('fey-prev-don', 'fey-solde-don'); rlkEnsure('boutik-prev', 'boutik-solde'); rlkLoadHist(); } };
+
+// ── Mon Kont : alerte d'échéance de l'adhésion ──
+function rlkEcheance(p) {
+  if (!p || p.est_fondateur || !p.cotisation_expiration) return null;
+  var j = Math.ceil((new Date(p.cotisation_expiration + 'T12:00:00') - new Date()) / 864e5);
+  return {jours: j, date: p.cotisation_expiration, payeLe: p.cotisation_date};
+}
+function rlkKontExtra() {
+  sb.from('profiles').select('*').eq('id', currentUser.id).maybeSingle().then(function(r) {
+    var box = document.getElementById('kont-exp'); if (!box) return;
+    var e = rlkEcheance(r.data);
+    if (!e) { box.innerHTML = ''; return; }
+    box.innerHTML = e.jours < 0 ? '<div class="rlk-warn"><b>Votre adhésion est échue</b> depuis le ' + rlkDate(e.date) + '. Pensez à la renouveler.</div>'
+      : e.jours <= 30 ? '<div class="rlk-warn"><b>Votre adhésion se termine dans ' + e.jours + ' jour' + (e.jours > 1 ? 's' : '') + '</b> (le ' + rlkDate(e.date) + '). Pensez à la renouveler.</div>'
+      : '<div class="rlk-ok">Adhésion à jour' + (e.payeLe ? ', payée le ' + rlkDate(e.payeLe) : '') + ', valable jusqu\'au ' + rlkDate(e.date) + '.</div>';
+  });
+}
+
+// ── Réglaj > Zadéran : paiement reçu, date, échéance ──
+loadAdherents = function() {
+  sb.from('profiles').select('*').order('created_at', {ascending: false}).then(function(res) {
+    var data = res.data || [], list = document.getElementById('adherents-list'), proches = 0;
+    if (list) {
+      var html = data.length ? data.map(function(p) {
+        var ini = ((p.prenom || '?')[0] + (p.nom || '')[0]).toUpperCase(), adm = p.role === 'admin', me = currentUser && p.id === currentUser.id, e = rlkEcheance(p);
+        var ok = (p.cotisation_payee || p.est_fondateur) && !(e && e.jours < 0), alerte = '';
+        if (e && e.jours >= 0 && e.jours <= 30) { proches++; alerte = ' <span class="badge b-wait">Échéance dans ' + e.jours + ' j</span>'; }
+        if (e && e.jours < 0) alerte = ' <span class="badge b-wait">Échue</span>';
+        var detail = e ? '<div class="client-detail">' + (e.payeLe ? 'Payé le ' + rlkDate(e.payeLe) + ' · ' : '') + 'échéance le ' + rlkDate(e.date) + '</div>' : '';
+        return '<div class="client-row"><div class="avatar">' + rlkEsc(ini) + '</div><div style="flex:1;min-width:0"><div class="client-name">' + rlkEsc((p.prenom || '') + ' ' + (p.nom || '')) + '</div>'
+          + '<div class="client-detail">' + rlkEsc(p.numero_adherent || '—') + ' · <span class="badge b-' + (p.role || 'jardinier') + '">' + (adm ? 'admin' : (p.role || 'membre')) + '</span> <span class="badge ' + (ok ? 'b-ok' : 'b-wait') + '">' + (ok ? 'À jour' : 'En attente') + '</span>' + alerte + '</div>' + detail
+          + '<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">' + (ok && !(e && e.jours <= 30) ? '' : '<button class="btn btn-primary btn-xs" onclick="rlkConfirmAdh(\'' + p.id + '\')">Paiement reçu par Yapla</button>')
+          + (me ? '' : (adm ? '<button class="btn btn-ghost btn-xs" onclick="rlkSetRole(\'' + p.id + '\',\'jardinier\')">Retirer admin</button>' : '<button class="btn btn-outline btn-xs" onclick="rlkSetRole(\'' + p.id + '\',\'admin\')">Nommer administrateur</button>')) + '</div></div></div>';
+      }).join('') : '<div style="color:var(--text3);font-size:0.85rem;padding:12px">Aucun adhérent pour le moment.</div>';
+      list.innerHTML = (proches ? '<div class="rlk-warn" style="margin-bottom:10px"><b>' + proches + ' adhésion' + (proches > 1 ? 's' : '') + ' à renouveler dans les 30 jours.</b></div>' : '') + html;
+    }
+    var donSel = document.getElementById('don-adherent');
+    if (donSel) { donSel.innerHTML = '<option value="">— Sélectionner —</option>' + data.filter(function(p) { return p.cotisation_payee || p.est_fondateur; }).map(function(p) { return '<option value="' + p.id + '">' + rlkEsc((p.prenom || '') + ' ' + (p.nom || '')) + '</option>'; }).join(''); }
+  });
+};
+rlkConfirmAdh = function(uid) {
+  sb.rpc('rlk_confirmer_paiement', {cible: uid}).then(function(r) {
+    if (r.error) { toast(/function|exist|schema/i.test(r.error.message || '') ? 'Exécutez d\'abord phase5_v26_additif.sql dans Supabase' : rlkErr(r.error)); return; }
+    toast('✓ Paiement noté : adhésion à jour pour un an'); if (typeof rlkLoadAdhConfirm === 'function') rlkLoadAdhConfirm(); loadAdherents();
+  });
+};
+
+// ── Accueil : bandes photo des événements ──
+function rlkGoEvent(id) {
+  navTo('biyetri', document.querySelector('#nav [onclick*="biyetri"]'));
+  setTimeout(function() { var e = document.getElementById('evsh-' + id) || document.getElementById('evmat-' + id); if (e) e.scrollIntoView({behavior: 'smooth', block: 'center'}); }, 1100);
+}
+function rlkAkeyEvents() {
+  var box = document.getElementById('akey-evts'); if (!box) return;
+  sb.rpc('rlk_evenements_liste').then(function(r) {
+    var rows = (r.data || []).slice(0, 6);
+    if (!rows.length) { box.innerHTML = '<div class="rlk-note">Aucun événement programmé pour le moment.</div>'; return; }
+    box.innerHTML = rows.map(function(e) {
+      var d = new Date(e.date_debut), bg = e.photo ? 'linear-gradient(90deg,rgba(26,61,43,.88),rgba(26,61,43,.25)),url(\'' + String(e.photo).replace(/'/g, '%27') + '\')' : 'linear-gradient(90deg,#1A3D2B,#2D6A4F)';
+      return '<a class="rlk-strip" style="background-image:' + bg + '" onclick="rlkGoEvent(\'' + e.id + '\')"><b>' + rlkEsc(e.titre) + '</b><span>' + d.toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric', month: 'long'}) + (e.quartier ? ' · ' + rlkEsc(e.quartier) : '') + '</span></a>';
+    }).join('');
+  });
+}
+document.addEventListener('DOMContentLoaded', function() { setTimeout(rlkAkeyEvents, 700); });
+
+// ── Répartition des FEY d'un atelier (réglable) ──
+RLK.pHote = 0.20; RLK.pEquipe = 0.40;
+rlkParts = function(total) {
+  total = Math.max(0, Math.floor(total));
+  var d = Math.ceil(total * RLK.pHote - 1e-9), e = Math.floor(total * RLK.pEquipe + 1e-9);
+  return {total: total, donateur: d, equipe: e, boutik: Math.max(0, total - d - e)};
+};
+function rlkPartsTexte() {
+  var h = Math.round(RLK.pHote * 100), e = Math.round(RLK.pEquipe * 100), v = 100 - h - e;
+  document.querySelectorAll('.rlk-ph').forEach(function(x) { x.textContent = h + ' %'; });
+  document.querySelectorAll('.rlk-pe').forEach(function(x) { x.textContent = e + ' %'; });
+  document.querySelectorAll('.rlk-pv').forEach(function(x) { x.textContent = v + ' %'; });
+  var a = document.getElementById('pt-h'), b = document.getElementById('pt-e'); if (a) a.value = h; if (b) b.value = e;
+  rlkPartsSimul();
+}
+function rlkPartsSimul() {
+  var el = document.getElementById('pt-simul'); if (!el) return;
+  var h = Math.max(0, rlkNum('pt-h', 20)) / 100, e = Math.max(0, rlkNum('pt-e', 40)) / 100, n = Math.max(1, rlkNum('pt-n', 8)), t = Math.max(0, rlkNum('pt-t', 139));
+  if (h + e > 1) { el.innerHTML = '<div class="rlk-warn">Hôte + équipe dépassent 100 %.</div>'; return; }
+  var d = Math.ceil(t * h - 1e-9), q = Math.floor(t * e + 1e-9), ch = Math.floor(q / n), v = t - d - ch * n;
+  el.innerHTML = 'Pour <b>' + t + ' pots</b> et <b>' + n + ' personnes</b> dans l\'équipe : hôte <b>' + d + ' FEY</b> (' + rlkFmt(d * RLK.fey) + ' €), <b>' + ch + ' FEY chacun</b> pour l\'équipe (' + rlkFmt(ch * RLK.fey) + ' €), <b>' + v + ' pots</b> pour la vente (' + rlkFmt(v * RLK.fey) + ' €).';
+}
+function rlkSaveParts() {
+  var h = rlkNum('pt-h', 20), e = rlkNum('pt-e', 40);
+  if (h < 0 || e < 0 || h + e > 100) { toast('Les parts doivent faire 100 % au plus au total'); return; }
+  sb.from('rlk_params').upsert([{cle: 'part_hote', valeur: h}, {cle: 'part_equipe', valeur: e}], {onConflict: 'cle'}).then(function(r) {
+    if (r.error) { toast(rlkErr(r.error)); return; }
+    RLK.pHote = h / 100; RLK.pEquipe = e / 100; rlkPartsTexte(); toast('✓ Nouvelle répartition enregistrée (valable pour les prochains ateliers)');
+  });
+}
+var rlkLoadParamsOrig9 = rlkLoadParams;
+rlkLoadParams = function() {
+  var p = rlkLoadParamsOrig9();
+  sb.from('rlk_params').select('cle,valeur').then(function(res) {
+    (res.data || []).forEach(function(r) { if (r.cle === 'part_hote') RLK.pHote = Number(r.valeur) / 100; if (r.cle === 'part_equipe') RLK.pEquipe = Number(r.valeur) / 100; });
+    rlkPartsTexte();
+  });
+  return p;
+};
+
+// ── Boutik : paiement en euros via Yapla (lien réglé par l'administratrice) ──
+RLK.yaplaPay = '';
+function rlkYaplaLoad() {
+  return sb.from('rlk_config').select('valeur').eq('cle', 'yapla_boutique_url').maybeSingle().then(function(r) {
+    RLK.yaplaPay = (r.data && r.data.valeur) || ''; var i = document.getElementById('yp-url'); if (i) i.value = RLK.yaplaPay;
+    var b = document.getElementById('boutik-pay'); if (!b) return;
+    b.innerHTML = '<b>Troc d\'abord.</b> Les pots s\'obtiennent en FEY. Le paiement en euros est possible ' + (RLK.yaplaPay ? 'sur Yapla ou ' : '') + 'en main propre lors des événements.'
+      + (RLK.yaplaPay ? '<div style="margin-top:8px"><button class="btn btn-outline btn-sm" type="button" onclick="openYapla(RLK.yaplaPay)">Payer en euros sur Yapla</button></div>' : '');
+  });
+}
+function rlkYaplaSave() {
+  var v = rlkVal('yp-url').trim();
+  if (v && !/^https:\/\//i.test(v)) { toast('L\'adresse doit commencer par https://'); return; }
+  sb.from('rlk_config').upsert([{cle: 'yapla_boutique_url', valeur: v}], {onConflict: 'cle'}).then(function(r) {
+    if (r.error) { toast(rlkErr(r.error)); return; } toast(v ? '✓ Lien Yapla enregistré' : '✓ Lien Yapla retiré'); rlkYaplaLoad();
+  });
+}
+var rlkLoadProduitsOrig9 = loadProduits;
+loadProduits = function() { rlkYaplaLoad(); return rlkLoadProduitsOrig9.apply(this, arguments); };
+
+// ── Trok : plants, bois, compost, broyat, fumier ──
+var RLK_AUTRES = [
+  {g: 'Plants et boutures', n: 'Plant indigène ou fruitier en godet (jusqu\'à 2 L)', u: 'plant', p: 1},
+  {g: 'Plants et boutures', n: 'Grand plant (pot de plus de 5 L ou plus d\'1 m)', u: 'plant', p: 3},
+  {g: 'Plants et boutures', n: 'Plant d\'aromate ou de légume en godet', u: 'plant', p: 0.5},
+  {g: 'Plants et boutures', n: 'Bouture ou marcotte', u: 'bouture', p: 0.33},
+  {g: 'Matières pour le jardin', n: 'Compost mûr (seau de 10 L)', u: 'seau', p: 1},
+  {g: 'Matières pour le jardin', n: 'Broyat (grand sac de riz ou 50 L)', u: 'sac', p: 1},
+  {g: 'Matières pour le jardin', n: 'Fumier composté (seau de 10 L)', u: 'seau', p: 1},
+  {g: 'Bois', n: 'Bois de feu (sac de riz de 25 kg rempli)', u: 'sac', p: 1}
+];
+function rlkAutresInit() {
+  var s = document.getElementById('au-prod'); if (!s || s.options.length > 1) return;
+  var gs = {}; RLK_AUTRES.forEach(function(a, i) { (gs[a.g] = gs[a.g] || []).push('<option value="' + i + '">' + rlkEsc(a.n) + '</option>'); });
+  s.innerHTML = '<option value="">Choisir…</option>' + Object.keys(gs).map(function(g) { return '<optgroup label="' + rlkEsc(g) + '">' + gs[g].join('') + '</optgroup>'; }).join('');
+  rlkAutresPrev();
+}
+function rlkAutresPrev() {
+  var box = document.getElementById('au-prev'), a = RLK_AUTRES[rlkVal('au-prod')], q = rlkNum('au-q', 0); if (!box) return;
+  if (!a || !(q > 0)) { box.innerHTML = ''; return; }
+  var fey = Math.ceil(q * a.p - 1e-9);
+  box.innerHTML = '<div class="rlk-ok">' + q + ' × ' + rlkEsc(a.u) + ' → environ <b>' + fey + ' FEY</b> (' + rlkFmt(fey * RLK.fey) + ' €), crédités après validation de l\'équipe.</div>';
+}
+function rlkAutresDeclarer() {
+  if (!currentUser) { toast('Connectez-vous d\'abord'); openModal('m-login'); return; }
+  var a = RLK_AUTRES[rlkVal('au-prod')], q = rlkNum('au-q', 0); if (!a || !(q > 0)) { toast('Choisissez un produit et une quantité'); return; }
+  var uid = (rlkIsAdmin() && rlkVal('dispo-prod')) ? rlkVal('dispo-prod') : currentUser.id;
+  sb.from('disponibilites').insert({profile_id: uid, produit: a.n + ' (autre troc)', quantite: q, unite: a.u, semaine: new Date().toISOString().split('T')[0]}).then(function(r) {
+    if (r.error) { toast(rlkErr(r.error)); return; }
+    toast('✓ Déclaré, merci ! Les FEY seront crédités après validation.'); document.getElementById('au-q').value = ''; rlkAutresPrev(); loadStockTable();
+  });
+}
+function rlkAutresTable() {
+  var el = document.getElementById('au-table'); if (!el) return;
+  el.innerHTML = '<table class="rlk-tbl"><tr><th>Produit</th><th>Valeur</th></tr>' + RLK_AUTRES.map(function(a) { return '<tr><td>' + rlkEsc(a.n) + '</td><td>' + (a.p >= 1 ? '1 ' + rlkEsc(a.u) + ' = ' + a.p + ' FEY' : Math.round(1 / a.p) + ' ' + rlkEsc(a.u) + 's = 1 FEY') + '</td></tr>'; }).join('') + '</table>';
+}
+var rlkInitDonOrig9 = rlkInitDon;
+rlkInitDon = function() { rlkInitDonOrig9(); rlkAutresInit(); };
+document.addEventListener('DOMContentLoaded', function() { rlkAutresTable(); });
+
+// Réglaj : valider un troc hors fruits (crédit manuel de FEY)
+function rlkCreditManuel() {
+  var uid = rlkVal('cm-adh'), n = Math.round(rlkNum('cm-n', 0)), motif = rlkVal('cm-motif').trim();
+  if (!uid || !n || !motif) { toast('Adhérent, nombre de FEY et motif sont obligatoires'); return; }
+  sb.from('rlk_fey').insert({user_id: uid, delta: n, motif: motif}).then(function(r) {
+    if (r.error) { toast(rlkErr(r.error)); return; } toast('✓ ' + n + ' FEY crédités'); document.getElementById('cm-n').value = ''; document.getElementById('cm-motif').value = '';
+  });
+}
+function rlkFillCreditSelect() {
+  if (!rlkIsAdmin()) return;
+  sb.from('profiles').select('id,prenom,nom').order('prenom').then(function(r) {
+    var s = document.getElementById('cm-adh'); if (!s) return;
+    s.innerHTML = '<option value="">— Choisir un adhérent —</option>' + (r.data || []).map(function(p) { return '<option value="' + p.id + '">' + rlkEsc(((p.prenom || '') + ' ' + (p.nom || '')).trim() || 'Adhérent') + '</option>'; }).join('');
+  });
+}
+var rlkShowReglajOrig9 = showReglaj;
+showReglaj = function(section) {
+  rlkShowReglajOrig9(section);
+  var s = String(section).replace('é', 'e');
+  if (s === 'kompoz') rlkFillCreditSelect();
+  if (s === 'atelier' || s === 'prix') { rlkPartsTexte(); rlkYaplaLoad(); }
+};
+
+// ── Biyetri : matériel, cases cochables par tous, lignes déjà prévues barrées ──
+rlkMatRender = function() {
+  if (!RLK.matOK) return;
+  Object.keys(RLK.mat).forEach(function(id) {
+    var box = document.getElementById('evmat-' + id); if (!box) return;
+    var x = RLK.mat[id], besoin = rlkMatBesoin(x.besoin), inscrit = x.mon_materiel !== null && x.mon_materiel !== undefined;
+    var mine = String(x.mon_materiel || '').split('\n').map(function(l) { return l.trim(); }).filter(Boolean);
+    var apports = x.apports || [], autres = apports.filter(function(a) { return !a.moi; });
+    if (!besoin.length && !apports.length) { box.innerHTML = ''; return; }
+    var h = '<div class="rlk-mat"><div class="rlk-mat-t">Matériel pour l\'atelier</div>';
+    if (!currentUser) { h += '<ul class="rlk-bp" style="margin:6px 0">' + besoin.map(function(b) { return '<li>' + rlkEsc(b.o) + (b.q ? ' <b>× ' + rlkEsc(b.q) + '</b>' : '') + '</li>'; }).join('') + '</ul><div class="rlk-note">Connectez-vous pour dire ce que vous apportez.</div></div>'; box.innerHTML = h; return; }
+    var pris = {};
+    if (besoin.length) h += '<div class="rlk-note" style="margin:0 0 6px">Cochez ce que vous apportez. Une ligne barrée est déjà prévue par un autre adhérent.</div>';
+    h += besoin.map(function(b) {
+      var on = mine.indexOf(b.o) >= 0; if (on) pris[b.o] = 1;
+      var qui = autres.filter(function(a) { return String(a.materiel || '').split('\n').map(function(l) { return l.trim(); }).indexOf(b.o) >= 0; }).map(function(a) { return a.prenom || 'Un adhérent'; });
+      var need = parseInt(b.q) || 1, full = qui.length >= need && !on;
+      return '<label class="rlk-mat-l' + (full ? ' rlk-mat-pris' : '') + '"><input type="checkbox" class="mat-cb-' + id + '" value="' + rlkEsc(b.o) + '"' + (on ? ' checked' : '') + (full ? ' disabled' : '') + '> <span>' + rlkEsc(b.o) + (b.q ? ' <small>(il en faut ' + rlkEsc(b.q) + ')</small>' : '') + '</span>'
+        + (qui.length ? ' <small class="rlk-mat-qui">' + (full ? 'prévu par ' : 'déjà ' + qui.length + ' : ') + rlkEsc(qui.join(', ')) + '</small>' : '') + '</label>';
+    }).join('');
+    var libres = mine.filter(function(m) { return !pris[m]; });
+    h += '<div class="fr" style="margin-top:8px"><label>Autre matériel que j\'apporte (un objet par ligne)</label><textarea id="matx-' + id + '" rows="3" placeholder="2 planches à découper&#10;1 casserole inox">' + rlkEsc(libres.join('\n')) + '</textarea></div>'
+      + '<button type="button" class="btn btn-primary btn-sm" onclick="rlkMatSave(\'' + id + '\')">' + (inscrit ? 'Enregistrer mon matériel' : 'M\'inscrire et enregistrer mon matériel') + '</button>'
+      + (inscrit ? '' : '<div class="rlk-note" style="margin-top:6px">Cocher du matériel vous inscrit à l\'atelier (1 place).</div>');
+    if (autres.length) h += '<div class="rlk-mat-t" style="margin-top:12px">Déjà prévu par les autres participants</div><ul class="rlk-bp" style="margin:4px 0">' + autres.map(function(a) { return '<li><b>' + rlkEsc(a.prenom || 'Un adhérent') + '</b> : ' + rlkEsc(String(a.materiel || '').split('\n').filter(Boolean).join(', ')) + '</li>'; }).join('') + '</ul>';
+    box.innerHTML = h + '</div>';
+  });
+};
+rlkMatSave = function(id) {
+  if (!currentUser) { toast('Connectez-vous d\'abord'); return; }
+  var l = []; document.querySelectorAll('.mat-cb-' + id + ':checked').forEach(function(c) { l.push(c.value); });
+  String(rlkVal('matx-' + id)).split('\n').forEach(function(t) { t = t.trim(); if (t && l.indexOf(t) < 0) l.push(t); });
+  var x = RLK.mat[id] || {}, inscrit = x.mon_materiel !== null && x.mon_materiel !== undefined;
+  var upd = function() {
+    return sb.from('rlk_inscriptions').update({materiel: l.join('\n')}).eq('event_id', id).eq('user_id', currentUser.id).then(function(r) {
+      if (r.error) { toast(/materiel/i.test(r.error.message || '') ? 'Fonction à activer : exécuter phase3_v24_additif.sql dans Supabase' : rlkErr(r.error)); return; }
+      toast(l.length ? '✓ Merci ! Votre matériel est enregistré' : 'Matériel retiré'); rlkMatLoad().then(rlkMatRender);
+    });
+  };
+  if (inscrit) { upd(); return; }
+  sb.from('rlk_inscriptions').insert({event_id: id, user_id: currentUser.id, nb_personnes: 1}).then(function(r) {
+    if (r.error && !/duplicate|unique/i.test(r.error.message || '')) { toast(rlkErr(r.error)); return; }
+    upd(); if (typeof rlkLoadEvents === 'function') setTimeout(rlkLoadEvents, 800);
+  });
+};
+
+// v2.6c : l'hote dans l'equipe, case explicite
+function rlkHoteDansEquipe() {
+  var d = rlkVal('lot-donateur'); if (!d) return false;
+  var c = document.querySelector('#lot-equipe input[value="' + d + '"]'); return !!(c && c.checked);
+}
+function rlkHoteEq() {
+  var d = rlkVal('lot-donateur'), box = document.getElementById('lot-hote-eq');
+  if (!d) { if (box) box.checked = false; toast("Choisissez d'abord l'hôte dans la liste des inscrits"); return; }
+  var c = document.querySelector('#lot-equipe input[value="' + d + '"]'); if (c) c.checked = !!box.checked;
+  rlkLotPreview();
+}
+var rlkLotPreviewOrig10 = rlkLotPreview;
+rlkLotPreview = function() {
+  rlkLotPreviewOrig10();
+  var box = document.getElementById('lot-hote-eq'); if (box) box.checked = rlkHoteDansEquipe();
+  var el = document.getElementById('lot-preview'), d = rlkVal('lot-donateur');
+  if (el && d) el.innerHTML += '<br>Hôte : <b>' + (rlkHoteDansEquipe() ? "dans l'équipe (reçoit aussi une part d'équipe)" : "ne participe pas (part d'hôte seulement)") + '</b>';
+};
+document.addEventListener('change', function(e) { if (e.target && e.target.id === 'lot-donateur') rlkLotPreview(); });
+
+RLK_VERSION = '2.6';
 </script>
 
 
