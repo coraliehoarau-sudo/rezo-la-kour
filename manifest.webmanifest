@@ -27,5 +27,13 @@
       "type": "image/png",
       "purpose": "maskable"
     }
+  ],
+  "id": "/",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
+  "categories": [
+    "food",
+    "lifestyle",
+    "social"
   ]
 }
