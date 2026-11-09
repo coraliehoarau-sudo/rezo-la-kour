@@ -1970,7 +1970,9 @@ details.rlk-bar{margin-top:10px}
     <div class="modal-body">
       <div id="le-info" class="rlk-note" style="margin:0 0 12px"></div>
       <div class="fr"><label>Pots produits (corriger si la saisie était fausse)</label><input type="number" id="le-prod" min="0"></div>
-      <div class="rlk-note">Les FEY déjà crédités ne bougent pas : régularisez-les avec « Ajuster les FEY d'un adhérent » dans Réglaj.</div>
+      <div class="rlk-note">Les FEY déjà crédités ne bougent pas tant que vous ne les régularisez pas. Enregistrez d'abord les pots, puis rouvrez le lot.</div>
+      <button type="button" class="btn btn-outline btn-sm" onclick="rlkLotRegul()">Régulariser les FEY selon la règle actuelle</button>
+      <div id="le-regul" class="rlk-note" style="margin-top:8px"></div>
       <div class="fr"><label>Produit</label><input type="text" id="le-produit"></div>
       <div class="fr2">
         <div><label>DDM ou DLC</label><input type="date" id="le-dlc"></div>
@@ -7440,6 +7442,41 @@ rlkLotPreview = function() {
   if (el && d) el.innerHTML += '<br>Hôte : <b>' + (rlkHoteDansEquipe() ? "dans l'équipe (reçoit aussi une part d'équipe)" : "ne participe pas (part d'hôte seulement)") + '</b>';
 };
 document.addEventListener('change', function(e) { if (e.target && e.target.id === 'lot-donateur') rlkLotPreview(); });
+// v2.6d : regularisation des FEY d'un lot deja enregistre
+function rlkRegulCalc(l, rows) {
+  var p = rlkParts(l.qte_produite), eq = l.participants || [], n = eq.length;
+  var share = n ? Math.floor(p.equipe / n) : 0, equipeFey = share * n, boutik = p.boutik + (p.equipe - equipeFey);
+  var target = {}, cur = {};
+  if (l.donateur_id && p.donateur) target[l.donateur_id] = (target[l.donateur_id] || 0) + p.donateur;
+  eq.forEach(function(u) { target[u] = (target[u] || 0) + share; });
+  (rows || []).forEach(function(r) { cur[r.user_id] = (cur[r.user_id] || 0) + Number(r.delta); });
+  var ids = {}; Object.keys(target).forEach(function(k) { ids[k] = 1; }); Object.keys(cur).forEach(function(k) { ids[k] = 1; });
+  var d = Object.keys(ids).map(function(u) { return {user_id: u, actuel: cur[u] || 0, cible: target[u] || 0, delta: (target[u] || 0) - (cur[u] || 0)}; }).filter(function(x) { return x.delta !== 0; });
+  return {parts: p, share: share, equipeFey: equipeFey, boutik: boutik, deltas: d};
+}
+function rlkLotRegul() {
+  var E = RLK.lotEdit; if (!E) return;
+  var l = (RLK.lots || []).filter(function(x) { return x.id === E.id; })[0]; if (!l) return;
+  var box = document.getElementById('le-regul'); box.innerHTML = 'Calcul en cours…';
+  Promise.all([sb.from('rlk_fey').select('user_id,delta').eq('lot_id', l.id), rlkProfils()]).then(function(a) {
+    if (a[0].error) { box.innerHTML = 'Lecture impossible : ' + rlkEsc(rlkErr(a[0].error)); return; }
+    var pm = a[1] || {}, c = rlkRegulCalc(l, a[0].data || []); RLK.regul = {lot: l, calc: c};
+    if (!c.deltas.length) { box.innerHTML = '<b>Rien à régulariser :</b> les FEY crédités correspondent déjà à la règle actuelle (' + Math.round(RLK.pHote * 100) + ' / ' + Math.round(RLK.pEquipe * 100) + ').'; return; }
+    box.innerHTML = '<b>Règle ' + Math.round(RLK.pHote * 100) + ' / ' + Math.round(RLK.pEquipe * 100) + ' sur ' + l.qte_produite + ' pots :</b> hôte ' + c.parts.donateur + ', ' + c.share + ' par personne d\'équipe.<table class="rlk-tbl"><tr><th>Adhérent</th><th>Crédité</th><th>Nouveau</th><th>Ajustement</th></tr>'
+      + c.deltas.map(function(x) { return '<tr><td>' + rlkEsc(pm[x.user_id] || 'Adhérent') + '</td><td>' + x.actuel + '</td><td>' + x.cible + '</td><td><b>' + (x.delta > 0 ? '+' : '') + x.delta + '</b></td></tr>'; }).join('')
+      + '</table><button type="button" class="btn btn-primary btn-sm" style="margin-top:8px" onclick="rlkLotRegulApply()">Appliquer ces ajustements</button>';
+  });
+}
+function rlkLotRegulApply() {
+  var R = RLK.regul; if (!R) return; var l = R.lot, c = R.calc;
+  var rows = c.deltas.map(function(x) { return {user_id: x.user_id, delta: x.delta, motif: 'Régularisation lot ' + l.numero_lot + ' (règle ' + Math.round(RLK.pHote * 100) + '/' + Math.round(RLK.pEquipe * 100) + '/' + (100 - Math.round(RLK.pHote * 100) - Math.round(RLK.pEquipe * 100)) + ')', lot_id: l.id}; });
+  sb.from('rlk_fey').insert(rows).then(function(r) {
+    if (r.error) { toast(rlkErr(r.error)); return; }
+    sb.from('rlk_lots').update({fey_donateur: c.parts.donateur, fey_equipe: c.equipeFey, fey_boutik: c.boutik}).eq('id', l.id).then(function() {
+      RLK.regul = null; toast('✓ ' + rows.length + ' ajustement(s) enregistré(s)'); document.getElementById('le-regul').innerHTML = '<b>Régularisation appliquée.</b>'; rlkLoadLots();
+    });
+  });
+}
 
 RLK_VERSION = '2.6';
 </script>
