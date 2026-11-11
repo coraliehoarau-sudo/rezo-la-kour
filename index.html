@@ -1132,7 +1132,7 @@ details.rlk-bar{margin-top:10px}
     <button class="btn btn-ghost btn-sm" data-s="agenda" onclick="showReglaj('agenda')">Biyetri</button>
     <button class="btn btn-ghost btn-sm" data-s="messagerie" onclick="showReglaj('messagerie')">Mesaj <span id="msg-badge" class="rlk-badge-n" style="display:none">0</span></button>
     <button class="btn btn-ghost btn-sm" data-s="ladilafe" onclick="showReglaj('ladilafe')">Ladilafé</button>
-    <button class="btn btn-ghost btn-sm" data-s="kour" onclick="showReglaj('kour')">Kour</button><button class="btn btn-ghost btn-sm" data-s="stats" onclick="showReglaj('stats')">Stat</button>
+    <button class="btn btn-ghost btn-sm" data-s="kour" onclick="showReglaj('kour')">Kour</button><button class="btn btn-ghost btn-sm" data-s="jounal" onclick="showReglaj('jounal')">Jounal</button><button class="btn btn-ghost btn-sm" data-s="stats" onclick="showReglaj('stats')">Stat</button>
   </div>
 
   <!-- ZADÉRAN -->
@@ -1567,6 +1567,7 @@ details.rlk-bar{margin-top:10px}
 
   <!-- STATISTIQUES -->
   <div id="reglaj-kour" style="display:none"><div class="card"><div class="card-title">Kour des adhérents <button class="btn btn-ghost btn-xs" style="float:right" type="button" onclick="rlkKourCsv()">Exporter CSV</button></div><div class="rlk-note" style="margin-top:0">Une ligne par adhérent. Touchez une ligne pour voir sa fiche. « À relancer » = questionnaire, jardin ou fruits manquants.</div><input type="text" id="kour-q" placeholder="Rechercher un nom, un quartier, un fruit…" oninput="rlkKourRender()" style="margin-bottom:8px"><select id="kour-com" onchange="rlkKourRender()" style="margin-bottom:8px"></select><div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px;font-size:13px"><label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:13px;margin:0"><input type="checkbox" style="width:auto;margin:0" id="kour-at" onchange="rlkKourRender()"> Accueillent des ateliers</label><label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:13px;margin:0"><input type="checkbox" style="width:auto;margin:0" id="kour-re" onchange="rlkKourRender()"> À relancer</label></div><div class="rlk-note" id="kour-count" style="margin:0 0 8px"></div><div id="kour-body" class="rlk-note">Chargement…</div></div></div>
+  <div id="reglaj-jounal" style="display:none"><div class="card" style="margin-bottom:14px"><div class="card-title">Jounal d'activité</div><div class="rlk-note" style="margin-top:0">Journal de toutes les opérations (apports, FEY, lots, commandes, adhésions, ateliers) pour le rapport d'activité, le point mensuel du comptable ou un dossier de rescrit. Les adhérents sont désignés par leur n° Yapla.</div><div class="fr2"><div><label>Mois</label><input type="month" id="jn-mois" onchange="rlkJnMois()"></div><div></div></div><div class="fr2"><div><label>Du</label><input type="date" id="jn-d1"></div><div><label>Au</label><input type="date" id="jn-d2"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px"><button class="btn btn-primary btn-sm" type="button" onclick="rlkJnGenerer()">Générer</button><button class="btn btn-outline btn-sm" type="button" onclick="rlkJnExcel()">Excel</button><button class="btn btn-outline btn-sm" type="button" onclick="rlkJnPdf()">PDF</button><button class="btn btn-outline btn-sm" id="jn-clore" type="button" style="display:none" onclick="rlkJnCloturer()">Clôturer le mois</button></div><div id="jn-out" class="rlk-note">Choisissez un mois, ou une période libre pour un rapport, puis « Générer ». Seul un mois entier et terminé peut être clôturé.</div></div><div class="card"><div class="card-title">Mois clôturés</div><div class="rlk-note" style="margin-top:0">Un mois clôturé est figé avec une empreinte numérique : il ne peut plus être modifié ni supprimé.</div><div id="jn-clot" class="rlk-note">Chargement…</div></div></div>
   <div id="reglaj-stats" style="display:none">
     <div class="card" style="margin-bottom:14px"><div class="card-title">Rapport d'activité</div>
       <div class="fr2"><div><label>Du</label><input type="date" id="rp-d1"></div><div><label>Au</label><input type="date" id="rp-d2"></div></div>
@@ -8103,7 +8104,7 @@ function rlkKourLoad() {
     (rs[2].data || []).forEach(function(x) { q[x.user_id] = x; });
     RLK_KOUR.rows = (rs[0].data || []).map(function(p) {
       var rep = (q[p.id] && q[p.id].reponses) || {};
-      return {id: p.id, nom: ((p.prenom || '') + ' ' + (p.nom || '')).trim() || 'Adhérent', tel: p.telephone || '', jardins: jar[p.id] || [], q: q[p.id] || null, rep: rep, fruits: rep.fruits || [], maj: q[p.id] ? q[p.id].updated_at : ''};
+      return {id: p.id, nom: ((p.prenom || '') + ' ' + (p.nom || '')).trim() || 'Adhérent', tel: p.telephone || '', numY: p.numero_yapla || '', jardins: jar[p.id] || [], q: q[p.id] || null, rep: rep, fruits: rep.fruits || [], maj: q[p.id] ? q[p.id].updated_at : ''};
     }).sort(function(a, b) { return a.nom.localeCompare(b.nom, 'fr'); });
     var cs = {}; RLK_KOUR.rows.forEach(function(r) { r.jardins.forEach(function(j) { if (j.commune) cs[j.commune] = 1; }); });
     var sel = document.getElementById('kour-com');
@@ -8140,7 +8141,7 @@ function rlkKourOpen(id) { RLK_KOUR.open = (RLK_KOUR.open === id) ? null : id; r
 function rlkKourListe(t, a) { return a && a.length ? '<div style="margin-top:6px"><b>' + t + '</b> : ' + a.map(rlkEsc).join(', ') + '</div>' : ''; }
 function rlkKourFiche(r) {
   var x = r.rep || {}, h = '<div style="font-size:13px;line-height:1.5;padding:4px 2px">';
-  if (r.tel) h += '<div>Tél. : ' + rlkEsc(r.tel) + '</div>';
+  if (r.tel) h += '<div>Tél. : ' + rlkEsc(r.tel) + '</div>'; h += '<div>N° Yapla : ' + (r.numY ? rlkEsc(r.numY) : '<span style="color:#b45309">non attribué</span>') + '</div>';
   h += r.jardins.length ? r.jardins.map(function(j) {
     return '<div style="margin-top:6px"><b>Jardin</b> : ' + rlkEsc(j.quartier || '') + (j.commune ? ' (' + rlkEsc(j.commune) + ')' : '') + (j.surface_m2 ? ' · ' + j.surface_m2 + ' m²' : '') + (j.altitude_m ? ' · ' + j.altitude_m + ' m' : '') + (j.accueil_ateliers ? ' · accueille des ateliers' : '') + (j.visible_carte ? ' · visible sur la carte' : ' · non visible sur la carte') + (j.productions ? '<br>Productions : ' + rlkEsc(j.productions) : '') + '</div>';
   }).join('') : '<div style="margin-top:6px"><b>Jardin</b> : non renseigné</div>';
@@ -8287,6 +8288,7 @@ loadAdherents = function() {
         var detail = e ? '<div class="client-detail"' + (c.fg ? ' style="color:' + c.fg + ';font-weight:600"' : '') + '>' + (e.payeLe ? 'Adhésion Yapla le ' + rlkDate(e.payeLe) + ' · ' : '') + c.txt + '</div>' : '';
         var dval = p.cotisation_date ? String(p.cotisation_date).slice(0, 10) : '';
         var saisie = '<div style="margin-top:6px;display:flex;gap:6px;align-items:center;flex-wrap:wrap"><label style="margin:0;font-size:11px;text-transform:none;letter-spacing:0">Date d\'adhésion Yapla</label><input type="date" id="adh-d-' + p.id + '" value="' + dval + '" style="width:auto;margin:0"><button class="btn btn-primary btn-xs" type="button" onclick="rlkAdhDate(\'' + p.id + '\')">Enregistrer</button></div>';
+        saisie += '<div style="margin-top:6px;display:flex;gap:6px;align-items:center;flex-wrap:wrap"><label style="margin:0;font-size:11px;text-transform:none;letter-spacing:0">N° adhérent Yapla</label><input type="text" id="adh-n-' + p.id + '" value="' + rlkEsc(p.numero_yapla || '') + '" placeholder="' + (p.numero_yapla ? '' : 'à saisir') + '" style="width:130px;margin:0"><button class="btn btn-primary btn-xs" type="button" onclick="rlkYaplaNum(\'' + p.id + '\')">Enregistrer</button></div>';
         return '<div class="client-row"' + (e && e.jours < 0 ? ' style="border-left:4px solid #B91C1C;padding-left:8px"' : (e && e.jours <= 30 ? ' style="border-left:4px solid #C2410C;padding-left:8px"' : '')) + '><div class="avatar">' + rlkEsc(ini) + '</div><div style="flex:1;min-width:0"><div class="client-name">' + rlkEsc((p.prenom || '') + ' ' + (p.nom || '')) + '</div>'
           + '<div class="client-detail">' + rlkEsc(p.numero_adherent || '—') + ' · <span class="badge b-' + (p.role || 'jardinier') + '">' + (adm ? 'admin' : (p.role || 'membre')) + '</span> <span class="badge ' + (ok ? 'b-ok' : 'b-wait') + '">' + (ok ? 'À jour' : 'En attente') + '</span>' + bdg + '</div>' + detail + saisie
           + '<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">' + (me ? '' : (adm ? '<button class="btn btn-ghost btn-xs" onclick="rlkSetRole(\'' + p.id + '\',\'jardinier\')">Retirer admin</button>' : '<button class="btn btn-outline btn-xs" onclick="rlkSetRole(\'' + p.id + '\',\'admin\')">Nommer administrateur</button>')) + '</div></div></div>';
@@ -8403,6 +8405,200 @@ function rlkKourHist(uid) {
     });
   });
 }
+
+// ═══ v3.3 : Réglaj > Jounal (journal d'activité, point mensuel, clôture) ═══
+var RLK_JN = {d1: '', d2: '', data: null, prof: {}, clots: []};
+var RLK_JN_COLS = ['Date', 'Type', 'N° adhérent (Yapla)', 'Libellé / produit', 'Quantité', 'Unité', 'kg', 'FEY (+/−)', 'Valeur en € des FEY', 'Euros via Yapla', 'Pièce (n° de lot ou de commande)', 'Observation'];
+function rlkJnDay(ts) { return new Date(new Date(ts).getTime() + 4 * 36e5).toISOString().slice(0, 10); }
+function rlkJnT(d, fin) { return new Date(d + (fin ? 'T23:59:59.999+04:00' : 'T00:00:00+04:00')).toISOString(); }
+function rlkJnNum(id) {
+  if (!id) return ''; var p = RLK_JN.prof[id]; if (!p) return 'INCONNU';
+  return p.numero_yapla ? p.numero_yapla : 'NON ATTRIBUÉ (' + (p.numero_adherent || 'sans n°') + ')';
+}
+function rlkJnAll(mk, optional) {
+  var out = [];
+  function pg(i) {
+    return mk().range(i, i + 999).then(function(r) {
+      if (r.error) { if (optional) return out; throw r.error; }
+      var d = r.data || []; out = out.concat(d); return d.length === 1000 ? pg(i + 1000) : out;
+    });
+  }
+  return pg(0);
+}
+function rlkJnR2(n) { return Math.round((Number(n) || 0) * 100) / 100; }
+function rlkJnCollect(d1, d2) {
+  var t1 = rlkJnT(d1), t2 = rlkJnT(d2, 1), fe = Number(RLK.fey) || 0, inP = function(day) { return day >= d1 && day <= d2; };
+  return Promise.all([
+    rlkJnAll(function() { return sb.from('profiles').select('*').order('created_at').order('id'); }),
+    rlkJnAll(function() { return sb.from('rlk_trok').select('*').gte('created_at', t1).lte('created_at', t2).order('created_at').order('id'); }),
+    rlkJnAll(function() { return sb.from('rlk_fey').select('*').lte('created_at', t2).order('created_at').order('id'); }),
+    rlkJnAll(function() { return sb.from('rlk_lots').select('*').order('date_transfo').order('id'); }),
+    rlkJnAll(function() { return sb.from('rlk_commandes').select('*').gte('created_at', t1).lte('created_at', t2).order('created_at').order('id'); }),
+    rlkJnAll(function() { return sb.from('rlk_evenements').select('id,titre,date_debut').gte('date_debut', t1).lte('date_debut', t2).order('date_debut').order('id'); }),
+    rlkJnAll(function() { return sb.from('rlk_inscriptions').select('event_id,nb_personnes').order('event_id'); }, true),
+    rlkJnAll(function() { return sb.from('disponibilites').select('*').gte('created_at', t1).lte('created_at', t2).order('created_at').order('id'); }, true)
+  ]).then(function(rs) {
+    RLK_JN.prof = {}; rs[0].forEach(function(p) { RLK_JN.prof[p.id] = p; });
+    var L = [], lots = {}, kgAp = 0, nbAp = 0, apUsers = {}, lotKg = 0, pots = 0, feyPlus = 0, feyMoins = 0, soldeDeb = 0, soldeFin = 0;
+    rs[3].forEach(function(l) { lots[l.id] = l; });
+    var trok = rs[1].filter(function(t) { return inP(rlkJnDay(t.created_at)); }), src = '';
+    if (!trok.length && rs[7].length) { src = 'source : disponibilités'; trok = rs[7].map(function(x) { return {created_at: x.created_at, user_id: x.profile_id, produit: x.produit, quantite: x.quantite, unite: x.unite, kg: x.unite === 'kg' ? Number(x.quantite) : null, etat: ''}; }); }
+    trok.forEach(function(t) { var k = t.kg != null ? Number(t.kg) : (t.unite === 'kg' ? Number(t.quantite) : 0); kgAp += k || 0; nbAp++; apUsers[t.user_id] = 1;
+      L.push([rlkJnDay(t.created_at), 'Apport de fruits ou produits', rlkJnNum(t.user_id), t.produit, rlkJnR2(t.quantite), t.unite, k ? rlkJnR2(k) : '', '', '', '', '', [t.etat, src].filter(Boolean).join(' · ')]); });
+    rs[2].forEach(function(f) {
+      var day = rlkJnDay(f.created_at), d = Number(f.delta) || 0;
+      if (day < d1) { soldeDeb += d; soldeFin += d; return; }
+      if (day > d2) return;
+      soldeFin += d; if (d > 0) feyPlus += d; else feyMoins += -d;
+      var l = lots[f.lot_id];
+      L.push([day, d >= 0 ? 'FEY crédité' : 'FEY dépensé', rlkJnNum(f.user_id), f.motif || '', '', '', '', d, rlkJnR2(d * fe), '', l ? l.numero_lot : '', '']);
+    });
+    var nbRet = 0;
+    rs[3].forEach(function(l) {
+      var day = String(l.date_transfo || '').slice(0, 10);
+      if (inP(day)) { lotKg += Number(l.kg_fruits) || 0; pots += Number(l.qte_produite) || 0;
+        L.push([day, 'Lot fabriqué', l.donateur_id ? rlkJnNum(l.donateur_id) : (l.donateur_libre ? 'Hors liste : ' + l.donateur_libre : ''), l.produit + (l.fruit ? ' (' + l.fruit + ')' : ''), Number(l.qte_produite) || 0, 'unités', rlkJnR2(l.kg_fruits), '', '', '', l.numero_lot, 'FEY répartis : donateur ' + (l.fey_donateur || 0) + ', équipe ' + (l.fey_equipe || 0) + ', boutique ' + (l.fey_boutik || 0)]); }
+      ((l.releve && l.releve.retraits) || []).forEach(function(r) { var rd = rlkJnDay(r.date); if (inP(rd)) { nbRet += Number(r.n) || 0; L.push([rd, 'Retrait de stock', '', l.produit, Number(r.n) || 0, 'unités', '', '', '', '', l.numero_lot, [r.canal, r.motif].filter(Boolean).join(' · ')]); } });
+    });
+    var cmds = rs[4].filter(function(c) { return inP(rlkJnDay(c.created_at)); }), cF = 0, cY = 0, cYp = 0, buyers = {}, nY = 0, nF = 0;
+    cmds.forEach(function(c) {
+      var ann = c.statut === 'annulee', q = (c.lignes || []).reduce(function(s, x) { return s + (Number(x.qty) || 0); }, 0), y = c.mode_paiement === 'yapla';
+      if (!ann) { buyers[c.user_id] = 1; if (y) { nY++; cY += Number(c.total_eur) || 0; if (c.payee_yapla) cYp += Number(c.total_eur) || 0; } else { nF++; cF += Number(c.total_fey) || 0; } }
+      L.push([rlkJnDay(c.created_at), 'Commande', rlkJnNum(c.user_id), (c.lignes || []).map(function(x) { return x.qty + ' × ' + x.nom; }).join(' ; '), q, 'unités', '', '', '', y && !ann ? rlkJnR2(c.total_eur) : '', 'CMD-' + String(c.id).slice(0, 8), 'Paiement ' + (y ? 'Yapla (' + (c.payee_yapla ? 'payée' : 'non marquée payée') + ')' : 'FEY (' + (c.total_fey || 0) + ' FEY)') + ' · statut ' + c.statut]);
+    });
+    var adh = 0; rs[0].forEach(function(p) { var cd = p.cotisation_date ? String(p.cotisation_date).slice(0, 10) : ''; if (cd && inP(cd)) { adh++; L.push([cd, 'Adhésion Yapla', rlkJnNum(p.id), 'Adhésion', '', '', '', '', '', p.cotisation_montant ? rlkJnR2(p.cotisation_montant) : '', '', 'Échéance ' + (p.cotisation_expiration || 'non renseignée')]); } });
+    var ins = {}; rs[6].forEach(function(i) { ins[i.event_id] = (ins[i.event_id] || 0) + (Number(i.nb_personnes) || 0); });
+    var evs = rs[5].filter(function(e) { return inP(rlkJnDay(e.date_debut)); }), partic = 0;
+    evs.forEach(function(e) { var n = ins[e.id] || 0; partic += n; L.push([rlkJnDay(e.date_debut), 'Atelier / événement', '', e.titre, n, 'participants inscrits', '', '', '', '', '', '']); });
+    var ord = ['Adhésion Yapla', 'Apport de fruits ou produits', 'Lot fabriqué', 'FEY crédité', 'FEY dépensé', 'Commande', 'Retrait de stock', 'Atelier / événement'];
+    L.sort(function(a, b) { return a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : (ord.indexOf(a[1]) - ord.indexOf(b[1])) || (JSON.stringify(a) < JSON.stringify(b) ? -1 : 1); });
+    var sansNum = rs[0].filter(function(p) { return !p.numero_yapla; }).length;
+    var cles = [
+      ['Période', 'du ' + rlkDate(d1 + 'T12:00:00') + ' au ' + rlkDate(d2 + 'T12:00:00')],
+      ['Valeur d\'un FEY (en €)', rlkJnR2(fe)],
+      ['Fruits et produits apportés (kg)', rlkJnR2(kgAp)], ['Nombre d\'apports', nbAp], ['Adhérents ayant apporté', Object.keys(apUsers).length],
+      ['Fruits reçus et transformés (kg)', rlkJnR2(lotKg)], ['Produits transformés fabriqués (unités)', pots], ['Unités retirées du stock', nbRet],
+      ['FEY crédités', feyPlus], ['FEY dépensés', feyMoins], ['FEY en circulation au début', soldeDeb], ['FEY en circulation à la fin', soldeFin], ['Valeur en € des FEY en circulation à la fin', rlkJnR2(soldeFin * fe)],
+      ['Commandes payées en FEY (nombre)', nF], ['FEY dépensés en commandes', cF], ['Commandes payées en euros via Yapla (nombre)', nY], ['Euros commandés via Yapla', rlkJnR2(cY)], ['dont marqués payés sur Yapla', rlkJnR2(cYp)], ['Acheteurs distincts (adhérents identifiés)', Object.keys(buyers).length],
+      ['Adhésions Yapla enregistrées', adh], ['Ateliers et événements', evs.length], ['Participants inscrits aux ateliers', partic]
+    ];
+    var mois = {}; L.forEach(function(r) { var m = r[0].slice(0, 7), o = mois[m] = mois[m] || {kg: 0, pots: 0, fp: 0, fm: 0, eur: 0, cmd: 0};
+      if (r[1] === 'Apport de fruits ou produits') o.kg += Number(r[6]) || 0; if (r[1] === 'Lot fabriqué') o.pots += Number(r[4]) || 0; if (r[1] === 'FEY crédité') o.fp += Number(r[7]) || 0; if (r[1] === 'FEY dépensé') o.fm += -(Number(r[7]) || 0);
+      if (r[1] === 'Commande') { o.cmd++; o.eur += Number(r[9]) || 0; } });
+    var pm = {tete: ['Mois', 'kg apportés', 'Unités fabriquées', 'FEY crédités', 'FEY dépensés', 'Commandes', 'Euros via Yapla'], lignes: Object.keys(mois).sort().map(function(m) { var o = mois[m]; return [m, rlkJnR2(o.kg), o.pots, o.fp, o.fm, o.cmd, rlkJnR2(o.eur)]; })};
+    return {d1: d1, d2: d2, fey: fe, lignes: L, synth: {cles: cles, parMois: pm}, sansNum: sansNum, nbProfils: rs[0].length};
+  });
+}
+function rlkJnHash(d) {
+  var txt = JSON.stringify({d1: d.d1, d2: d.d2, fey: d.fey, lignes: d.lignes});
+  if (window.crypto && crypto.subtle && window.TextEncoder) return crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt)).then(function(b) { return Array.prototype.map.call(new Uint8Array(b), function(x) { return ('0' + x.toString(16)).slice(-2); }).join(''); });
+  var h = 2166136261; for (var i = 0; i < txt.length; i++) { h ^= txt.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return Promise.resolve('fnv-' + h.toString(16));
+}
+function rlkJnInit() {
+  var m = document.getElementById('jn-mois');
+  if (m && !m.value) { var n = new Date(Date.now() + 4 * 36e5); n.setUTCDate(1); n.setUTCMonth(n.getUTCMonth() - 1); m.value = n.toISOString().slice(0, 7); rlkJnMois(); }
+  rlkJnClots();
+}
+function rlkJnMois() {
+  var v = rlkVal('jn-mois'); if (!/^\d{4}-\d{2}$/.test(v)) return;
+  var y = +v.slice(0, 4), mo = +v.slice(5, 7), last = new Date(Date.UTC(y, mo, 0)).getUTCDate();
+  document.getElementById('jn-d1').value = v + '-01'; document.getElementById('jn-d2').value = v + '-' + String(last).padStart(2, '0');
+}
+function rlkJnMoisExact(d1, d2) {
+  if (!/^\d{4}-\d{2}-01$/.test(d1)) return null;
+  var y = +d1.slice(0, 4), mo = +d1.slice(5, 7), last = new Date(Date.UTC(y, mo, 0)).getUTCDate();
+  return d2 === d1.slice(0, 8) + String(last).padStart(2, '0') ? d1.slice(0, 7) : null;
+}
+function rlkJnGenerer() {
+  var d1 = rlkVal('jn-d1'), d2 = rlkVal('jn-d2'), out = document.getElementById('jn-out'); if (!out) return;
+  if (!d1 || !d2 || d1 > d2) { toast('Choisissez une période valide'); return; }
+  out.innerHTML = '<div class="rlk-note">Calcul en cours…</div>';
+  rlkJnCollect(d1, d2).then(function(d) {
+    return rlkJnHash(d).then(function(h) {
+      d.hash = h; d.genere = new Date().toISOString(); RLK_JN.data = d; RLK_JN.d1 = d1; RLK_JN.d2 = d2;
+      var warn = '';
+      if (d.sansNum) warn += '<div class="rlk-warn"><b>' + d.sansNum + ' adhérent(s) sur ' + d.nbProfils + ' n\'ont pas de n° Yapla attribué.</b> Dans le journal, ils apparaissent « NON ATTRIBUÉ » avec leur n° interne : renseignez-le dans Zadéran avant d\'envoyer le journal au comptable.</div>';
+      var mx = rlkJnMoisExact(d1, d2), cl = mx && (RLK_JN.clots || []).filter(function(c) { return c.mois === mx; })[0];
+      if (cl) warn += cl.hash === h ? '<div class="rlk-ok">Ce mois est clôturé (le ' + rlkDate(cl.cree_le) + '). Les données actuelles sont identiques au journal figé.</div>' : '<div class="rlk-warn" style="background:#FEE2E2;color:#B91C1C"><b>Ce mois est clôturé, mais les données actuelles ont changé depuis.</b> Le journal figé fait foi : téléchargez-le dans « Mois clôturés ».</div>';
+      var s = d.synth;
+      out.innerHTML = warn + '<table class="rlk-tbl" style="width:100%"><tbody>' + s.cles.map(function(r) { return '<tr><td>' + rlkEsc(r[0]) + '</td><td><b>' + rlkEsc(typeof r[1] === 'number' ? rlkFmt(r[1], 2) : r[1]) + '</b></td></tr>'; }).join('') + '</tbody></table>'
+        + (s.parMois.lignes.length > 1 ? '<div style="font-weight:700;margin:12px 0 4px">Par mois</div><div style="overflow-x:auto"><table class="rlk-tbl"><tr>' + s.parMois.tete.map(function(t) { return '<th>' + rlkEsc(t) + '</th>'; }).join('') + '</tr>' + s.parMois.lignes.map(function(r) { return '<tr>' + r.map(function(c) { return '<td>' + rlkEsc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</table></div>' : '')
+        + '<div class="rlk-note" style="margin-top:10px">' + d.lignes.length + ' ligne(s) de journal. Empreinte (SHA-256) : <code style="word-break:break-all;font-size:11px">' + rlkEsc(h) + '</code></div>';
+      var b = document.getElementById('jn-clore'); if (b) b.style.display = (mx && d2 < rlkISO(new Date()) && !cl) ? 'inline-flex' : 'none';
+    });
+  }).catch(function(e) { out.innerHTML = '<div class="rlk-warn">' + rlkEsc(rlkErr(e)) + '</div>'; });
+}
+function rlkJnXlsxLoad() {
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  return new Promise(function(res, rej) { var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.onload = function() { window.XLSX ? res(window.XLSX) : rej(new Error('xlsx')); }; s.onerror = function() { rej(new Error('xlsx')); }; document.head.appendChild(s); });
+}
+function rlkJnNom(d) { return 'journal-rezo-la-kour-' + d.d1 + '-' + d.d2; }
+function rlkJnExcel(d) {
+  d = d || RLK_JN.data; if (!d) { toast('Générez d\'abord le journal'); return; }
+  rlkJnXlsxLoad().then(function(X) {
+    var wb = X.utils.book_new(), s = d.synth;
+    var a1 = [['Rézo la Kour : journal d\'activité'], [], ['Période', 'du ' + d.d1 + ' au ' + d.d2], ['Généré le', d.genere ? d.genere.slice(0, 16).replace('T', ' ') + ' UTC' : ''], ['Empreinte SHA-256', d.hash], []].concat(s.cles.map(function(r) { return [r[0], r[1]]; }));
+    var w1 = X.utils.aoa_to_sheet(a1); w1['!cols'] = [{wch: 52}, {wch: 34}]; X.utils.book_append_sheet(wb, w1, 'Synthèse');
+    if (s.parMois.lignes.length) { var w2 = X.utils.aoa_to_sheet([s.parMois.tete].concat(s.parMois.lignes)); w2['!cols'] = s.parMois.tete.map(function() { return {wch: 18}; }); X.utils.book_append_sheet(wb, w2, 'Par mois'); }
+    var w3 = X.utils.aoa_to_sheet([RLK_JN_COLS].concat(d.lignes)); w3['!cols'] = [{wch: 11}, {wch: 28}, {wch: 26}, {wch: 44}, {wch: 10}, {wch: 12}, {wch: 8}, {wch: 10}, {wch: 14}, {wch: 12}, {wch: 24}, {wch: 50}]; w3['!autofilter'] = {ref: 'A1:L' + (d.lignes.length + 1)}; X.utils.book_append_sheet(wb, w3, 'Journal');
+    var leg = [['Légende'], [], ['FEY', 'Unité d\'échange interne du réseau. Valeur retenue : ' + d.fey + ' € par FEY (paramètre modifiable, la valeur utilisée est figée dans ce fichier).'], ['N° adhérent', 'N° attribué dans Yapla. « NON ATTRIBUÉ » signale un adhérent dont le n° Yapla n\'a pas encore été saisi (le n° interne RLK est alors indiqué).'], ['Euros via Yapla', 'Montants des commandes passées en euros dans l\'application et des adhésions saisies. Les encaissements réels sont ceux de Yapla et de la comptabilité de l\'association.'], ['Apport', 'Fruits et produits déclarés par les adhérents. Les FEY ne sont crédités qu\'après l\'atelier.'], ['Dates', 'Heure de La Réunion.'], ['Intégrité', 'Le journal est figé à la clôture du mois et son empreinte SHA-256 est conservée ; toute modification ultérieure change l\'empreinte.']];
+    var w4 = X.utils.aoa_to_sheet(leg); w4['!cols'] = [{wch: 18}, {wch: 110}]; X.utils.book_append_sheet(wb, w4, 'Légende');
+    X.writeFile(wb, rlkJnNom(d) + '.xlsx');
+  }).catch(function() { toast('Excel indisponible, export CSV à la place'); rlkJnCsv(d); });
+}
+function rlkJnCsv(d) {
+  d = d || RLK_JN.data; if (!d) return;
+  var esc = function(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; };
+  var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + [RLK_JN_COLS].concat(d.lignes).map(function(r) { return r.map(esc).join(';'); }).join('\n')], {type: 'text/csv'})); a.download = rlkJnNom(d) + '.csv'; a.click();
+}
+function rlkJnPdf(d) {
+  d = d || RLK_JN.data; if (!d) { toast('Générez d\'abord le journal'); return; }
+  var s = d.synth, th = 'text-align:left;border-bottom:1px solid #000;padding:2px 4px;font-size:8pt', td = 'border-bottom:1px solid #ccc;padding:2px 4px;font-size:8pt;vertical-align:top';
+  var h = '<div style="font-family:Arial,sans-serif;font-size:10pt;color:#000"><img src="logo-96.png" style="width:20mm;float:right"><h2 style="margin:0 0 4px">Rézo la Kour : journal d\'activité</h2><div>Période du ' + rlkDate(d.d1 + 'T12:00:00') + ' au ' + rlkDate(d.d2 + 'T12:00:00') + ' · valeur d\'un FEY : ' + d.fey + ' €</div>'
+    + '<h3 style="margin:12px 0 4px">Synthèse</h3><table style="width:100%;border-collapse:collapse">' + s.cles.slice(2).map(function(r) { return '<tr><td style="' + td + '">' + rlkEsc(r[0]) + '</td><td style="' + td + ';text-align:right"><b>' + rlkEsc(typeof r[1] === 'number' ? rlkFmt(r[1], 2) : r[1]) + '</b></td></tr>'; }).join('') + '</table>'
+    + (s.parMois.lignes.length > 1 ? '<h3 style="margin:12px 0 4px">Par mois</h3><table style="width:100%;border-collapse:collapse"><tr>' + s.parMois.tete.map(function(t) { return '<th style="' + th + '">' + rlkEsc(t) + '</th>'; }).join('') + '</tr>' + s.parMois.lignes.map(function(r) { return '<tr>' + r.map(function(c) { return '<td style="' + td + '">' + rlkEsc(c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</table>' : '')
+    + '<h3 style="margin:12px 0 4px;page-break-before:always">Journal détaillé (' + d.lignes.length + ' lignes)</h3><table style="width:100%;border-collapse:collapse"><tr>' + [0, 1, 2, 3, 4, 5, 6, 7, 9, 10].map(function(i) { return '<th style="' + th + '">' + rlkEsc(RLK_JN_COLS[i]) + '</th>'; }).join('') + '</tr>'
+    + d.lignes.map(function(r) { return '<tr>' + [0, 1, 2, 3, 4, 5, 6, 7, 9, 10].map(function(i) { return '<td style="' + td + '">' + rlkEsc(r[i]) + '</td>'; }).join('') + '</tr>'; }).join('') + '</table>'
+    + '<p style="font-size:8pt;margin-top:12px">Les euros indiqués sont ceux enregistrés dans l\'application ; les encaissements réels figurent dans Yapla et dans la comptabilité de l\'association. Les adhérents sont désignés par leur n° Yapla. Empreinte SHA-256 : ' + rlkEsc(d.hash) + '</p></div>';
+  rlkPrintHtml(h, 'A4', true);
+}
+function rlkJnClots() {
+  var box = document.getElementById('jn-clot'); if (!box) return;
+  sb.from('rlk_journal_cloture').select('id,mois,cree_le,nb_lignes,hash').order('mois', {ascending: false}).then(function(r) {
+    if (r.error) { box.innerHTML = '<div class="rlk-warn">' + (/relation|exist|schema/i.test(r.error.message || '') ? 'Exécutez d\'abord phase10_v33_additif.sql dans Supabase.' : rlkEsc(rlkErr(r.error))) + '</div>'; return; }
+    RLK_JN.clots = r.data || [];
+    box.innerHTML = RLK_JN.clots.length ? RLK_JN.clots.map(function(c) {
+      return '<div style="padding:8px 0;border-bottom:1px solid var(--border)"><b>' + rlkEsc(c.mois) + '</b> · clôturé le ' + rlkDate(c.cree_le) + ' · ' + c.nb_lignes + ' lignes<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-outline btn-xs" type="button" onclick="rlkJnClotAction(\'' + c.id + '\',\'xlsx\')">Excel</button><button class="btn btn-outline btn-xs" type="button" onclick="rlkJnClotAction(\'' + c.id + '\',\'pdf\')">PDF</button><button class="btn btn-ghost btn-xs" type="button" onclick="rlkJnClotAction(\'' + c.id + '\',\'check\')">Vérifier l\'intégrité</button></div><div id="jn-chk-' + c.id + '" class="rlk-note" style="margin:4px 0 0"></div></div>';
+    }).join('') : '<div class="rlk-note">Aucun mois clôturé pour le moment.</div>';
+  });
+}
+function rlkJnClotAction(id, act) {
+  sb.from('rlk_journal_cloture').select('*').eq('id', id).maybeSingle().then(function(r) {
+    var c = r.data; if (!c) { toast(rlkErr(r.error || {message: 'Introuvable'})); return; }
+    var d = {d1: c.d1, d2: c.d2, fey: Number(c.fey_eur), lignes: c.lignes, synth: c.synthese, hash: c.hash, genere: c.cree_le};
+    if (act === 'xlsx') rlkJnExcel(d); else if (act === 'pdf') rlkJnPdf(d);
+    else rlkJnHash(d).then(function(h) { var e = document.getElementById('jn-chk-' + id); if (e) e.innerHTML = h === c.hash ? '<span style="color:#15803d"><b>✓ Intact</b> : l\'empreinte recalculée correspond à celle enregistrée à la clôture.</span>' : '<span style="color:#B91C1C"><b>✗ Différent</b> : le contenu ne correspond plus à l\'empreinte enregistrée.</span>'; });
+  });
+}
+function rlkJnCloturer() {
+  var d = RLK_JN.data; if (!d) { toast('Générez d\'abord le journal'); return; }
+  var mx = rlkJnMoisExact(d.d1, d.d2); if (!mx || d.d2 >= rlkISO(new Date())) { toast('Seul un mois entier et terminé peut être clôturé'); return; }
+  if (d.sansNum && !confirm(d.sansNum + ' adhérent(s) n\'ont pas de n° Yapla. Clôturer quand même ? (le journal figé ne pourra plus être modifié)')) return;
+  else if (!d.sansNum && !confirm('Clôturer ' + mx + ' ? Le journal sera figé et ne pourra plus être modifié.')) return;
+  sb.from('rlk_journal_cloture').insert({mois: mx, d1: d.d1, d2: d.d2, fey_eur: d.fey, nb_lignes: d.lignes.length, synthese: d.synth, lignes: d.lignes, hash: d.hash, cree_par: currentUser.id}).then(function(r) {
+    if (r.error) { toast(/duplicate|unique/i.test(r.error.message || '') ? 'Ce mois est déjà clôturé' : /relation|exist|schema/i.test(r.error.message || '') ? 'Exécutez d\'abord phase10_v33_additif.sql dans Supabase' : rlkErr(r.error)); return; }
+    toast('✓ Mois clôturé et figé'); rlkJnClots(); setTimeout(rlkJnGenerer, 600);
+  });
+}
+function rlkYaplaNum(uid) {
+  var v = rlkVal('adh-n-' + uid).trim();
+  sb.rpc('rlk_fixer_numero_yapla', {cible: uid, numero: v}).then(function(r) {
+    if (r.error) { toast(/function|exist|schema/i.test(r.error.message || '') ? 'Exécutez d\'abord phase10_v33_additif.sql dans Supabase' : rlkErr(r.error)); return; }
+    toast(v ? '✓ N° Yapla enregistré' : '✓ N° Yapla effacé'); loadAdherents();
+  });
+}
+var rlkShowReglajJn = showReglaj;
+showReglaj = function(section) { rlkShowReglajJn(section); if (String(section) === 'jounal') rlkJnInit(); };
 
 RLK_VERSION = '2.6';
 </script>
