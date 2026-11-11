@@ -1129,10 +1129,10 @@ details.rlk-bar{margin-top:10px}
     <button class="btn btn-ghost btn-sm" data-s="equilibre" onclick="showReglaj('equilibre')">Lékilib</button>
     <button class="btn btn-ghost btn-sm" data-s="commandes" onclick="showReglaj('commandes')">Komand <span id="cmd-badge" class="rlk-badge-n" style="display:none">0</span></button>
     <button class="btn btn-ghost btn-sm" data-s="stock" onclick="showReglaj('stock')">Stok</button>
-    <button class="btn btn-ghost btn-sm" data-s="agenda" onclick="showReglaj('agenda')">Lazenda</button>
+    <button class="btn btn-ghost btn-sm" data-s="agenda" onclick="showReglaj('agenda')">Biyetri</button>
     <button class="btn btn-ghost btn-sm" data-s="messagerie" onclick="showReglaj('messagerie')">Mesaj <span id="msg-badge" class="rlk-badge-n" style="display:none">0</span></button>
     <button class="btn btn-ghost btn-sm" data-s="ladilafe" onclick="showReglaj('ladilafe')">Ladilafé</button>
-    <button class="btn btn-ghost btn-sm" data-s="stats" onclick="showReglaj('stats')">Stat</button>
+    <button class="btn btn-ghost btn-sm" data-s="kour" onclick="showReglaj('kour')">Kour</button><button class="btn btn-ghost btn-sm" data-s="stats" onclick="showReglaj('stats')">Stat</button>
   </div>
 
   <!-- ZADÉRAN -->
@@ -1566,6 +1566,7 @@ details.rlk-bar{margin-top:10px}
   </div>
 
   <!-- STATISTIQUES -->
+  <div id="reglaj-kour" style="display:none"><div class="card"><div class="card-title">Kour des adhérents <button class="btn btn-ghost btn-xs" style="float:right" type="button" onclick="rlkKourCsv()">Exporter CSV</button></div><div class="rlk-note" style="margin-top:0">Une ligne par adhérent. Touchez une ligne pour voir sa fiche. « À relancer » = questionnaire, jardin ou fruits manquants.</div><input type="text" id="kour-q" placeholder="Rechercher un nom, un quartier, un fruit…" oninput="rlkKourRender()" style="margin-bottom:8px"><select id="kour-com" onchange="rlkKourRender()" style="margin-bottom:8px"></select><div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px;font-size:13px"><label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:13px;margin:0"><input type="checkbox" style="width:auto;margin:0" id="kour-at" onchange="rlkKourRender()"> Accueillent des ateliers</label><label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:13px;margin:0"><input type="checkbox" style="width:auto;margin:0" id="kour-re" onchange="rlkKourRender()"> À relancer</label></div><div class="rlk-note" id="kour-count" style="margin:0 0 8px"></div><div id="kour-body" class="rlk-note">Chargement…</div></div></div>
   <div id="reglaj-stats" style="display:none">
     <div class="card" style="margin-bottom:14px"><div class="card-title">Rapport d'activité</div>
       <div class="fr2"><div><label>Du</label><input type="date" id="rp-d1"></div><div><label>Au</label><input type="date" id="rp-d2"></div></div>
@@ -1865,7 +1866,7 @@ details.rlk-bar{margin-top:10px}
 
     <span class="rlk-qt">Autre chose à nous dire</span>
     <textarea id="q-libre" rows="3" style="margin-bottom:14px"></textarea>
-    <button class="btn btn-primary btn-sm" onclick="rlkSaveQuest()">Enrejistr mé répons</button>
+    <div class="rlk-note" style="margin:0 0 8px">L'équipe du Rézo voit vos réponses et les informations de votre kour pour organiser les échanges. Seules les kour cochées « visible sur la carte » apparaissent sur la carte.</div><button class="btn btn-primary btn-sm" onclick="rlkSaveQuest()">Enrejistr mé répons</button>
   </div>
 
   <div style="margin-top:16px"><button class="btn btn-ghost btn-sm" type="button" onclick="doLogout()">Dékonekte</button></div>
@@ -4068,7 +4069,7 @@ function rlkMapSvg(vb, sel) {
         lab += '<g id="rlk-ql-' + k + '" visibility="hidden" style="pointer-events:none"><rect x="' + (p[0] - tw / 2) + '" y="' + ly + '" width="' + tw + '" height="' + (fs * 1.9) + '" rx="' + (fs * 0.4) + '" fill="#fff" stroke="#1A3D2B" stroke-width="' + (fs * 0.1) + '"/>'
           + '<text x="' + p[0] + '" y="' + (ly + fs * 1.3) + '" text-anchor="middle" font-size="' + fs + '" font-weight="700" fill="#1A3D2B" font-family="DM Sans,sans-serif">' + t + '</text></g>';
       });
-      names.forEach(function(nm) { var n = st[sel] && st[sel].q[nm] || 0; if (n) s += rlkFlag(q2[nm][0], q2[nm][1], n, Math.max(ms, 0.35) * 1.1); });
+      names.forEach(function(nm) { var n = st[sel] && st[sel].q[nm] || 0; if (n) s += rlkFlag(q2[nm][0], q2[nm][1], n, Math.max(ms, 0.35) * 1.1); }); s += rlkMapExtra(st, sel, q2, o, ms);
       s += lab;
     } else if (st[sel]) { var pp = rlkQuartierPos(sel, null); if (pp) s += rlkFlag(pp[0], pp[1], st[sel].n, ms); }
   }
@@ -8003,6 +8004,348 @@ var rlkRgBlogOrig18 = rlkRgBlog;
 rlkRgBlog = function() { rlkRgProps(); return rlkRgBlogOrig18.apply(this, arguments); };
 var rlkShowReglajOrig18 = showReglaj;
 showReglaj = function(section) { rlkShowReglajOrig18(section); if (rlkIsAdmin()) rlkRgProps(); };
+
+// ═══ MODULE 19 (v2.9) : notifications sur l'écran du téléphone ═══
+var RLK_VAPID = 'BL6lZgTZBgMB0Y8gScfW-V1Rf6FJpRY3bh-mXHAA0KK9TPTqNmyqyE15GJAdNzeNSe2BnjJj9iSBwULpQRft4HU';
+function rlkPushOk() { return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
+function rlkB64(s) { var p = '='.repeat((4 - s.length % 4) % 4), b = (s + p).replace(/-/g, '+').replace(/_/g, '/'), r = atob(b), o = new Uint8Array(r.length); for (var i = 0; i < r.length; i++) o[i] = r.charCodeAt(i); return o; }
+function rlkPushReg() { return navigator.serviceWorker.getRegistration().then(function(r) { return r || navigator.serviceWorker.register('sw.js'); }).then(function() { return navigator.serviceWorker.ready; }); }
+function rlkPushPrefs() { return {msg: !!(document.getElementById('np-msg') || {}).checked, evt: !!(document.getElementById('np-evt') || {}).checked, art: !!(document.getElementById('np-art') || {}).checked}; }
+function rlkPushStatus() {
+  var s = document.getElementById('np-status'), on = document.getElementById('np-on'), off = document.getElementById('np-off'), opts = document.getElementById('np-opts'); if (!s) return;
+  if (!rlkPushOk()) {
+    var ios = /iphone|ipad/i.test(navigator.userAgent);
+    s.innerHTML = ios ? '<b>Sur iPhone</b>, ajoutez d\'abord l\'application à l\'écran d\'accueil (bouton Partager, puis « Sur l\'écran d\'accueil »), ouvrez-la depuis cette icône, puis revenez ici. iOS 16.4 ou plus récent est nécessaire.' : 'Ce navigateur ne permet pas les notifications. Essayez avec Chrome, ou avec l\'application installée sur l\'écran d\'accueil.';
+    on.style.display = off.style.display = opts.style.display = 'none'; return;
+  }
+  if (Notification.permission === 'denied') { s.textContent = 'Les notifications sont bloquées pour ce site dans les réglages du téléphone. Autorisez-les puis revenez ici.'; on.style.display = 'none'; off.style.display = 'none'; opts.style.display = 'none'; return; }
+  rlkPushReg().then(function(reg) { return reg.pushManager.getSubscription(); }).then(function(sub) {
+    var act = !!sub && Notification.permission === 'granted';
+    s.innerHTML = act ? '<b>Notifications activées sur ce téléphone.</b>' : 'Notifications désactivées sur ce téléphone.';
+    on.style.display = act ? 'none' : 'inline-flex'; off.style.display = act ? 'inline-flex' : 'none'; opts.style.display = act ? 'block' : 'none';
+    if (act) sb.from('rlk_push_subs').select('prefs').eq('endpoint', sub.endpoint).maybeSingle().then(function(r) {
+      var p = (r.data && r.data.prefs) || {msg: true, evt: true, art: true};
+      ['msg', 'evt', 'art'].forEach(function(k) { var e = document.getElementById('np-' + k); if (e) e.checked = p[k] !== false; });
+    });
+  }).catch(function() {});
+}
+function rlkPushOn() {
+  if (!currentUser) { toast('Connectez-vous d\'abord'); return; }
+  Notification.requestPermission().then(function(perm) {
+    if (perm !== 'granted') { toast('Autorisation refusée : les notifications restent désactivées'); rlkPushStatus(); return; }
+    return rlkPushReg().then(function(reg) {
+      return reg.pushManager.getSubscription().then(function(s) { return s || reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: rlkB64(RLK_VAPID)}); });
+    }).then(function(sub) {
+      var j = sub.toJSON();
+      return sb.from('rlk_push_subs').upsert({user_id: currentUser.id, endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth, prefs: {msg: true, evt: true, art: true}}, {onConflict: 'endpoint'});
+    }).then(function(r) {
+      if (r && r.error) { toast(/rlk_push_subs/.test(r.error.message || '') ? 'Fonction pas encore activée par l\'équipe (phase8_v29_additif.sql)' : rlkErr(r.error)); return; }
+      toast('✓ Notifications activées'); rlkPushStatus();
+    });
+  }).catch(function(e) { toast('Activation impossible : ' + ((e && e.message) || 'erreur')); });
+}
+function rlkPushOff() {
+  rlkPushReg().then(function(reg) { return reg.pushManager.getSubscription(); }).then(function(sub) {
+    if (!sub) { rlkPushStatus(); return; }
+    var ep = sub.endpoint;
+    return sub.unsubscribe().then(function() { return sb.from('rlk_push_subs').delete().eq('endpoint', ep); }).then(function() { toast('Notifications désactivées'); rlkPushStatus(); });
+  }).catch(function() { rlkPushStatus(); });
+}
+function rlkPushSavePrefs() {
+  rlkPushReg().then(function(reg) { return reg.pushManager.getSubscription(); }).then(function(sub) {
+    if (sub) sb.from('rlk_push_subs').update({prefs: rlkPushPrefs()}).eq('endpoint', sub.endpoint).then(function() { toast('✓ Choix enregistré'); });
+  });
+}
+function rlkPushMount() {
+  var root = document.getElementById('page-kont'); if (!root || document.getElementById('bar-notif')) { rlkPushStatus(); return; }
+  var d = document.createElement('details'); d.className = 'rlk-bar'; d.id = 'bar-notif';
+  d.innerHTML = '<summary><span class="rlk-ttl" style="margin:0"><span class="rlk-dot"></span>Notifications sur mon téléphone</span></summary>'
+    + '<div class="rlk-bar-body"><div class="rlk-note" style="margin:0 0 8px">Recevez une alerte à l\'écran pour un nouveau message, un nouvel événement ou un nouvel article. Réglage propre à ce téléphone.</div>'
+    + '<div id="np-status" class="rlk-note" style="margin:0 0 10px">Vérification…</div>'
+    + '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" id="np-on" type="button" onclick="rlkPushOn()" style="display:none">Activer les notifications</button><button class="btn btn-ghost btn-sm" id="np-off" type="button" onclick="rlkPushOff()" style="display:none">Désactiver</button></div>'
+    + '<div id="np-opts" style="display:none;margin-top:10px"><label class="rlk-pr-i"><input type="checkbox" id="np-msg" checked onchange="rlkPushSavePrefs()"><span>Messages (tchat et messages de l\'équipe)</span></label>'
+    + '<label class="rlk-pr-i"><input type="checkbox" id="np-evt" checked onchange="rlkPushSavePrefs()"><span>Nouveaux événements</span></label>'
+    + '<label class="rlk-pr-i"><input type="checkbox" id="np-art" checked onchange="rlkPushSavePrefs()"><span>Nouveaux articles et recettes</span></label></div></div>';
+  var bars = root.querySelectorAll('details.rlk-bar'), last = bars[bars.length - 1];
+  if (last) last.parentNode.insertBefore(d, last.nextSibling); else root.appendChild(d);
+  d.addEventListener('toggle', function() { if (d.open) rlkPushStatus(); });
+  rlkPushStatus();
+}
+var rlkNavToOrig19 = navTo;
+navTo = function(p, b) { rlkNavToOrig19(p, b); if (p === 'kont' && currentUser) setTimeout(rlkPushMount, 120); };
+function rlkGoHash(h) {
+  h = String(h || '');
+  if (h === '#tchat') navTo('tchat', document.querySelector('[onclick*="tchat"]'));
+  else if (h === '#ladilafe') navTo('blog', document.querySelector('[onclick*="\'blog\'"]'));
+  else if (h === '#biyetri') navTo('biyetri', document.querySelector('[onclick*="biyetri"]'));
+  else if (h === '#kont') navTo('kont', document.querySelector('[onclick*="kont"]'));
+  else if (h === '#reglaj') navTo('reglaj', document.querySelector('[onclick*="reglaj"]'));
+}
+if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('message', function(e) { if (e.data && e.data.go) rlkGoHash(e.data.go); });
+document.addEventListener('DOMContentLoaded', function() { var h = location.hash || ''; if (/^#(tchat|ladilafe|kont|reglaj)$/.test(h)) setTimeout(function() { rlkGoHash(h); }, 1100); });
+
+// ═══ v3.0 : Réglaj > Kour (vue administrateur, une ligne par adhérent) ═══
+var RLK_KOUR = {rows: [], open: null};
+function rlkKourEtat(r) {
+  if (!r.q && !r.jardins.length) return 'Rien renseigné';
+  if (!r.q) return 'Questionnaire manquant';
+  if (!r.jardins.length) return 'Sans jardin';
+  if (!r.fruits.length) return 'Sans fruits';
+  return '';
+}
+function rlkKourLoad() {
+  var box = document.getElementById('kour-body'); if (!box) return;
+  box.textContent = 'Chargement…';
+  Promise.all([sb.from('profiles').select('*'), sb.from('rlk_jardins').select('*'), sb.from('rlk_questionnaire').select('*')]).then(function(rs) {
+    if (rs[0].error) { box.textContent = rlkErr(rs[0].error); return; }
+    var jar = {}, q = {};
+    (rs[1].data || []).forEach(function(j) { (jar[j.user_id] = jar[j.user_id] || []).push(j); });
+    (rs[2].data || []).forEach(function(x) { q[x.user_id] = x; });
+    RLK_KOUR.rows = (rs[0].data || []).map(function(p) {
+      var rep = (q[p.id] && q[p.id].reponses) || {};
+      return {id: p.id, nom: ((p.prenom || '') + ' ' + (p.nom || '')).trim() || 'Adhérent', tel: p.telephone || '', jardins: jar[p.id] || [], q: q[p.id] || null, rep: rep, fruits: rep.fruits || [], maj: q[p.id] ? q[p.id].updated_at : ''};
+    }).sort(function(a, b) { return a.nom.localeCompare(b.nom, 'fr'); });
+    var cs = {}; RLK_KOUR.rows.forEach(function(r) { r.jardins.forEach(function(j) { if (j.commune) cs[j.commune] = 1; }); });
+    var sel = document.getElementById('kour-com');
+    if (sel) sel.innerHTML = '<option value="">Toutes les communes</option>' + Object.keys(cs).sort().map(function(c) { return '<option>' + rlkEsc(c) + '</option>'; }).join('');
+    rlkKourRender();
+  });
+}
+function rlkKourFiltre() {
+  var t = rlkVal('kour-q').trim().toLowerCase(), c = rlkVal('kour-com'), at = document.getElementById('kour-at') && document.getElementById('kour-at').checked, re = document.getElementById('kour-re') && document.getElementById('kour-re').checked;
+  return RLK_KOUR.rows.filter(function(r) {
+    if (c && !r.jardins.some(function(j) { return j.commune === c; })) return false;
+    if (at && !r.jardins.some(function(j) { return j.accueil_ateliers; })) return false;
+    if (re && !rlkKourEtat(r)) return false;
+    if (!t) return true;
+    var hay = [r.nom].concat(r.jardins.map(function(j) { return (j.quartier || '') + ' ' + (j.commune || '') + ' ' + (j.productions || ''); })).concat(r.fruits.map(function(f) { return f.fruit; })).join(' ').toLowerCase();
+    return hay.indexOf(t) >= 0;
+  });
+}
+function rlkKourRender() {
+  var box = document.getElementById('kour-body'); if (!box) return;
+  var all = RLK_KOUR.rows, rows = rlkKourFiltre(), nrel = all.filter(function(r) { return rlkKourEtat(r); }).length;
+  var cnt = document.getElementById('kour-count'); if (cnt) cnt.textContent = rows.length + ' sur ' + all.length + ' adhérent(s) · ' + nrel + ' à relancer';
+  if (!rows.length) { box.innerHTML = '<div class="rlk-note">Aucun adhérent ne correspond à ces filtres.</div>'; return; }
+  var h = '<div style="overflow-x:auto"><table class="rlk-tbl" style="min-width:520px"><thead><tr><th>Adhérent</th><th>Lieu</th><th>m²</th><th>Fruits</th><th>Atelier</th><th>Carte</th><th>État</th></tr></thead><tbody>';
+  rows.forEach(function(r) {
+    var j = r.jardins[0] || {}, et = rlkKourEtat(r), at = r.jardins.some(function(x) { return x.accueil_ateliers; }), ca = r.jardins.some(function(x) { return x.visible_carte; });
+    var m2 = r.jardins.reduce(function(s, x) { return s + (+x.surface_m2 || 0); }, 0);
+    h += '<tr class="kr-r" style="cursor:pointer" onclick="rlkKourOpen(\'' + r.id + '\')"><td><b>' + rlkEsc(r.nom) + '</b></td><td>' + (j.quartier ? rlkEsc(j.quartier) + (j.commune ? ' (' + rlkEsc(j.commune) + ')' : '') : '—') + (r.jardins.length > 1 ? ' +' + (r.jardins.length - 1) : '') + '</td><td>' + (m2 || '—') + '</td><td>' + r.fruits.length + '</td><td>' + (at ? 'Oui' : '—') + '</td><td>' + (ca ? 'Oui' : '—') + '</td><td>' + (et ? '<span style="color:#b45309;font-weight:600">' + rlkEsc(et) + '</span>' : '<span style="color:#15803d">Complet</span>') + '</td></tr>';
+    if (RLK_KOUR.open === r.id) h += '<tr><td colspan="7" style="text-align:left;background:var(--bg2,#f6f8f4)">' + rlkKourFiche(r) + '</td></tr>';
+  });
+  box.innerHTML = h + '</tbody></table></div>';
+}
+function rlkKourOpen(id) { RLK_KOUR.open = (RLK_KOUR.open === id) ? null : id; rlkKourRender(); }
+function rlkKourListe(t, a) { return a && a.length ? '<div style="margin-top:6px"><b>' + t + '</b> : ' + a.map(rlkEsc).join(', ') + '</div>' : ''; }
+function rlkKourFiche(r) {
+  var x = r.rep || {}, h = '<div style="font-size:13px;line-height:1.5;padding:4px 2px">';
+  if (r.tel) h += '<div>Tél. : ' + rlkEsc(r.tel) + '</div>';
+  h += r.jardins.length ? r.jardins.map(function(j) {
+    return '<div style="margin-top:6px"><b>Jardin</b> : ' + rlkEsc(j.quartier || '') + (j.commune ? ' (' + rlkEsc(j.commune) + ')' : '') + (j.surface_m2 ? ' · ' + j.surface_m2 + ' m²' : '') + (j.altitude_m ? ' · ' + j.altitude_m + ' m' : '') + (j.accueil_ateliers ? ' · accueille des ateliers' : '') + (j.visible_carte ? ' · visible sur la carte' : ' · non visible sur la carte') + (j.productions ? '<br>Productions : ' + rlkEsc(j.productions) : '') + '</div>';
+  }).join('') : '<div style="margin-top:6px"><b>Jardin</b> : non renseigné</div>';
+  if (r.fruits.length) h += '<div style="margin-top:6px"><b>Fruits et légumes</b><ul style="margin:4px 0 0 18px;padding:0">' + r.fruits.map(function(f) { return '<li>' + rlkEsc(f.fruit) + ' : ' + rlkEsc(f.de || '?') + ' → ' + rlkEsc(f.a || '?') + (f.tranche ? ' · ' + rlkEsc(f.tranche) : '') + '</li>'; }).join('') + '</ul></div>';
+  else h += '<div style="margin-top:6px"><b>Fruits et légumes</b> : aucun déclaré</div>';
+  if ((x.autres_produits || []).length) h += '<div style="margin-top:6px"><b>Autres produits</b> : ' + x.autres_produits.map(function(a) { return rlkEsc(a.produit) + (a.qte ? ' (' + rlkEsc(a.qte) + ')' : ''); }).join(', ') + '</div>';
+  h += rlkKourListe('Compétences', x.comp) + rlkKourListe('Créneaux', x.dispo) + rlkKourListe('Besoins', x.besoin) + rlkKourListe('Matériel prêtable', x.mat);
+  if (x.freq) h += '<div style="margin-top:6px"><b>Fréquence</b> : ' + rlkEsc(x.freq) + '</div>';
+  if (x.libre) h += '<div style="margin-top:6px"><b>Mot libre</b> : ' + rlkEsc(x.libre) + '</div>';
+  var et = rlkKourEtat(r);
+  if (et) h += '<div style="margin-top:8px;color:#b45309"><b>À relancer</b> : ' + rlkEsc(et) + '</div>';
+  if (r.maj) h += '<div class="rlk-note" style="margin:6px 0 0">Questionnaire mis à jour le ' + new Date(r.maj).toLocaleDateString('fr-FR') + '</div>';
+  return h + '<button class="btn btn-primary btn-sm" style="margin-top:10px" type="button" onclick="rlkKourEcrire(\'' + r.id + '\')">Écrire à ' + rlkEsc(r.nom.split(' ')[0]) + '</button></div>';
+}
+function rlkKourEcrire(id) {
+  showReglaj('messagerie');
+  setTimeout(function() { rlkOpenThread(id); var el = document.getElementById('msg-reply-input'); if (el) el.focus(); }, 300);
+}
+function rlkKourCsv() {
+  var rows = rlkKourFiltre(); if (!rows.length) { toast('Rien à exporter'); return; }
+  var esc = function(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; };
+  var L = [['Adhérent', 'Téléphone', 'Commune', 'Quartier', 'Surface m²', 'Altitude m', 'Atelier', 'Carte', 'Fruits (fruit|de|à|quantité)', 'Compétences', 'Besoins', 'Matériel', 'Créneaux', 'État'].map(esc).join(';')];
+  rows.forEach(function(r) {
+    var j = r.jardins[0] || {}, x = r.rep || {};
+    L.push([r.nom, r.tel, j.commune, j.quartier, r.jardins.reduce(function(s, y) { return s + (+y.surface_m2 || 0); }, 0) || '', j.altitude_m, r.jardins.some(function(y) { return y.accueil_ateliers; }) ? 'oui' : 'non', r.jardins.some(function(y) { return y.visible_carte; }) ? 'oui' : 'non',
+      r.fruits.map(function(f) { return [f.fruit, f.de, f.a, f.tranche].join('|'); }).join(' ; '), (x.comp || []).join(' ; '), (x.besoin || []).join(' ; '), (x.mat || []).join(' ; '), (x.dispo || []).join(' ; '), rlkKourEtat(r) || 'Complet'].map(esc).join(';'));
+  });
+  var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + L.join('\n')], {type: 'text/csv'})); a.download = 'kour-rezo-la-kour.csv'; a.click();
+}
+var rlkShowReglajKour = showReglaj;
+showReglaj = function(section) { rlkShowReglajKour(section); if (String(section) === 'kour') rlkKourLoad(); };
+
+// ═══ v3.1 ═══
+
+// ── 1. Carte : un quartier saisi hors liste (ou écrit autrement) est tout de même dessiné au zoom ──
+function rlkNormQ(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
+function rlkMapExtra(st, sel, q2, o, ms) {
+  var c = st[sel]; if (!c) return '';
+  var out = '', k = 0, sc = Math.max(ms, 0.35) * 1.1, idx = {};
+  Object.keys(q2).forEach(function(nm) { idx[rlkNormQ(nm)] = nm; });
+  Object.keys(c.q).forEach(function(nm) {
+    if (q2[nm]) return;
+    var m = idx[rlkNormQ(nm)];
+    if (m) { out += rlkFlag(q2[m][0], q2[m][1], c.q[nm], sc); return; }
+    var p = o && o.pos ? o.pos : RLK_COMM[sel]; if (!p) return;
+    out += rlkFlag(p[0] + k * 46 * sc, p[1], c.q[nm], sc); k++;
+  });
+  return out;
+}
+
+// ── 2. Rectifier ses apports de la semaine (adhérent) ──
+RLK.trocEd = -1;
+function rlkTrocMatch(t, uid) {
+  var t0 = new Date(t.created_at || Date.now()).getTime();
+  return sb.from('disponibilites').select('*').eq('profile_id', uid).gte('created_at', new Date(t0 - 6e5).toISOString()).lte('created_at', new Date(t0 + 6e5).toISOString()).then(function(r) {
+    var base = String(t.produit || '');
+    var c = (r.data || []).filter(function(d) { return String(d.produit || '').indexOf(base) === 0; });
+    c.sort(function(a, b) { return Math.abs(new Date(a.created_at) - t0) - Math.abs(new Date(b.created_at) - t0); });
+    return c[0] || null;
+  });
+}
+function rlkTrocUid() { return (rlkIsAdmin() && rlkVal('dispo-prod')) ? rlkVal('dispo-prod') : currentUser.id; }
+var rlkTrocRowsOrig21 = rlkTrocRows;
+rlkTrocRows = function(uid, depuis) {
+  return rlkTrocRowsOrig21(uid, depuis).then(function(rows) { return rows; });
+};
+function rlkTrocLine(t, i) {
+  var ed = (RLK.trocEd === i);
+  var q = rlkFmt(t.quantite, 2) + ' ' + rlkEsc(t.unite) + (t.unite !== 'kg' && t.kg != null ? ' (≈ ' + rlkFmt(t.kg, 1) + ' kg)' : '');
+  var base = 'padding:6px 0;border-bottom:1px solid var(--border);font-size:.85rem';
+  if (ed) return '<div style="' + base + '"><div style="margin-bottom:6px">' + rlkEsc(t.produit) + '</div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><input type="number" id="troc-ed-q" min="0" step="any" value="' + t.quantite + '" style="width:90px;margin:0"> <span>' + rlkEsc(t.unite) + '</span>'
+    + '<button class="btn btn-primary btn-xs" type="button" onclick="rlkTrocSave(' + i + ')">Valider</button><button class="btn btn-ghost btn-xs" type="button" onclick="RLK.trocEd=-1;rlkLoadMesTrocs()">Annuler</button></div></div>';
+  return '<div style="' + base + '"><div style="display:flex;justify-content:space-between;gap:8px"><span>' + rlkEsc(t.produit) + '</span><span style="white-space:nowrap">' + q + '</span></div>'
+    + '<div style="margin-top:4px;display:flex;gap:6px"><button class="btn btn-ghost btn-xs" type="button" onclick="RLK.trocEd=' + i + ';rlkLoadMesTrocs()">Corriger la quantité</button><button class="btn btn-ghost btn-xs" style="color:var(--red)" type="button" onclick="rlkTrocDel(' + i + ')">Retirer</button></div></div>';
+}
+rlkLoadMesTrocs = function() {
+  var box = document.getElementById('trok-mes'); if (!box) return;
+  if (!currentUser) { box.innerHTML = '<div class="rlk-note">Connectez-vous pour voir vos déclarations.</div>'; return; }
+  var uid = rlkTrocUid(), lundi = rlkLundi(), fin = new Date(lundi); fin.setDate(fin.getDate() + 6);
+  rlkTrocRows(uid, rlkISO(lundi)).then(function(rows) {
+    RLK.trocRows = rows; var kg = 0; rows.forEach(function(t) { kg += Number(t.kg) || 0; });
+    box.innerHTML = '<div class="rlk-note" style="margin:0 0 8px">Semaine du ' + lundi.toLocaleDateString('fr-FR', {day: 'numeric', month: 'long'}) + ' au ' + fin.toLocaleDateString('fr-FR', {day: 'numeric', month: 'long'}) + ' (lundi au dimanche). Un imprévu ? Corrigez la quantité ou retirez la ligne : vos FEY seront calculés sur ce qui est réellement apporté.</div>'
+      + (rows.length ? rows.map(rlkTrocLine).join('') + '<div style="margin-top:8px"><b>Total de la semaine : ' + rlkFmt(kg, 1) + ' kg</b></div>' : '<div class="rlk-note">Aucune déclaration cette semaine.</div>')
+      + '<div style="margin-top:10px"><button class="btn btn-ghost btn-xs" type="button" onclick="navTo(\'kont\')">Voir tout mon historique</button></div>';
+  });
+};
+function rlkTrocApres() {
+  RLK.trocEd = -1; rlkLoadMesTrocs();
+  if (typeof rlkPrevuUpdate === 'function') rlkPrevuUpdate();
+  if (typeof loadStockTable === 'function') loadStockTable();
+  if (typeof rlkLoadHist === 'function') rlkLoadHist();
+  setTimeout(function() { if (typeof rlkLoadCompteurs === 'function') rlkLoadCompteurs(); }, 500);
+}
+function rlkTrocSave(i) {
+  var t = (RLK.trocRows || [])[i]; if (!t) return;
+  var nq = parseFloat(String(rlkVal('troc-ed-q')).replace(',', '.'));
+  if (!(nq >= 0)) { toast('Quantité invalide'); return; }
+  if (nq === 0) { rlkTrocDel(i, true); return; }
+  var uid = t.user_id || rlkTrocUid(), nkg = (t.kg != null && t.quantite > 0) ? Math.round(t.kg * nq / t.quantite * 100) / 100 : null;
+  rlkTrocMatch(t, uid).then(function(d) {
+    var maj = function() {
+      if (!d) { rlkTrocApres(); toast('✓ Quantité corrigée'); return; }
+      var np = d.produit;
+      if (t.unite !== 'kg') np = np.replace('(' + t.quantite + ' ' + t.unite + ')', '(' + nq + ' ' + t.unite + ')');
+      sb.from('disponibilites').update({quantite: t.unite === 'kg' || t.etat === 'a_classer' || /\(autre troc\)/.test(d.produit) ? nq : (nkg != null ? nkg : nq), produit: np}).eq('id', d.id).select().then(function(r2) {
+        if (r2.error || !(r2.data || []).length) { toast('Correction refusée : exécutez phase9_v31_additif.sql dans Supabase'); return; }
+        rlkTrocApres(); toast('✓ Quantité corrigée');
+      });
+    };
+    if (t.id) sb.from('rlk_trok').update({quantite: nq, kg: nkg}).eq('id', t.id).select().then(function(r) {
+      if (r.error || !(r.data || []).length) { toast('Correction refusée : exécutez phase9_v31_additif.sql dans Supabase'); return; } maj();
+    }); else maj();
+  });
+}
+function rlkTrocDel(i, silent) {
+  var t = (RLK.trocRows || [])[i]; if (!t) return;
+  if (!silent && !confirm('Retirer « ' + t.produit + ' » de vos déclarations ?')) return;
+  var uid = t.user_id || rlkTrocUid();
+  rlkTrocMatch(t, uid).then(function(d) {
+    var fin = function() { rlkTrocApres(); toast('✓ Ligne retirée'); };
+    var delD = function() { if (!d) { fin(); return; } sb.from('disponibilites').delete().eq('id', d.id).select().then(function(r) { if (r.error || !(r.data || []).length) { toast('Retrait refusé : exécutez phase9_v31_additif.sql dans Supabase'); return; } fin(); }); };
+    if (t.id) sb.from('rlk_trok').delete().eq('id', t.id).select().then(function(r) {
+      if (r.error || !(r.data || []).length) { toast('Retrait refusé : exécutez phase9_v31_additif.sql dans Supabase'); return; } delD();
+    }); else delD();
+  });
+}
+
+// ── 3. Adhésion Yapla : date saisie par l'administrateur, orange puis rouge ──
+function rlkAdhCouleur(e) {
+  if (!e) return null;
+  if (e.jours < 0) return {txt: 'Échue depuis le ' + rlkDate(e.date), bg: '#FEE2E2', fg: '#B91C1C', badge: 'Échue'};
+  if (e.jours <= 30) return {txt: 'Échéance dans ' + e.jours + ' j (le ' + rlkDate(e.date) + ')', bg: '#FFEDD5', fg: '#C2410C', badge: 'Échéance dans ' + e.jours + ' j'};
+  return {txt: 'Échéance le ' + rlkDate(e.date), bg: '', fg: '', badge: ''};
+}
+loadAdherents = function() {
+  sb.from('profiles').select('*').order('created_at', {ascending: false}).then(function(res) {
+    var data = res.data || [], list = document.getElementById('adherents-list'), proches = 0, echues = 0;
+    if (list) {
+      var html = data.length ? data.map(function(p) {
+        var ini = ((p.prenom || '?')[0] + (p.nom || '')[0]).toUpperCase(), adm = p.role === 'admin', me = currentUser && p.id === currentUser.id, e = rlkEcheance(p), c = rlkAdhCouleur(e);
+        var ok = (p.cotisation_payee || p.est_fondateur) && !(e && e.jours < 0), bdg = '';
+        if (e && e.jours < 0) { echues++; bdg = ' <span class="badge" style="background:' + c.bg + ';color:' + c.fg + '">Échue</span>'; }
+        else if (e && e.jours <= 30) { proches++; bdg = ' <span class="badge" style="background:' + c.bg + ';color:' + c.fg + '">' + c.badge + '</span>'; }
+        var detail = e ? '<div class="client-detail"' + (c.fg ? ' style="color:' + c.fg + ';font-weight:600"' : '') + '>' + (e.payeLe ? 'Adhésion Yapla le ' + rlkDate(e.payeLe) + ' · ' : '') + c.txt + '</div>' : '';
+        var dval = p.cotisation_date ? String(p.cotisation_date).slice(0, 10) : '';
+        var saisie = '<div style="margin-top:6px;display:flex;gap:6px;align-items:center;flex-wrap:wrap"><label style="margin:0;font-size:11px;text-transform:none;letter-spacing:0">Date d\'adhésion Yapla</label><input type="date" id="adh-d-' + p.id + '" value="' + dval + '" style="width:auto;margin:0"><button class="btn btn-primary btn-xs" type="button" onclick="rlkAdhDate(\'' + p.id + '\')">Enregistrer</button></div>';
+        return '<div class="client-row"' + (e && e.jours < 0 ? ' style="border-left:4px solid #B91C1C;padding-left:8px"' : (e && e.jours <= 30 ? ' style="border-left:4px solid #C2410C;padding-left:8px"' : '')) + '><div class="avatar">' + rlkEsc(ini) + '</div><div style="flex:1;min-width:0"><div class="client-name">' + rlkEsc((p.prenom || '') + ' ' + (p.nom || '')) + '</div>'
+          + '<div class="client-detail">' + rlkEsc(p.numero_adherent || '—') + ' · <span class="badge b-' + (p.role || 'jardinier') + '">' + (adm ? 'admin' : (p.role || 'membre')) + '</span> <span class="badge ' + (ok ? 'b-ok' : 'b-wait') + '">' + (ok ? 'À jour' : 'En attente') + '</span>' + bdg + '</div>' + detail + saisie
+          + '<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">' + (me ? '' : (adm ? '<button class="btn btn-ghost btn-xs" onclick="rlkSetRole(\'' + p.id + '\',\'jardinier\')">Retirer admin</button>' : '<button class="btn btn-outline btn-xs" onclick="rlkSetRole(\'' + p.id + '\',\'admin\')">Nommer administrateur</button>')) + '</div></div></div>';
+      }).join('') : '<div style="color:var(--text3);font-size:0.85rem;padding:12px">Aucun adhérent pour le moment.</div>';
+      list.innerHTML = (echues ? '<div class="rlk-warn" style="margin-bottom:10px;background:#FEE2E2;color:#B91C1C"><b>' + echues + ' adhésion' + (echues > 1 ? 's échues' : ' échue') + '.</b></div>' : '')
+        + (proches ? '<div class="rlk-warn" style="margin-bottom:10px;background:#FFEDD5;color:#C2410C"><b>' + proches + ' adhésion' + (proches > 1 ? 's' : '') + ' à renouveler dans les 30 jours.</b></div>' : '') + html;
+    }
+    var donSel = document.getElementById('don-adherent');
+    if (donSel) { donSel.innerHTML = '<option value="">— Sélectionner —</option>' + data.filter(function(p) { return p.cotisation_payee || p.est_fondateur; }).map(function(p) { return '<option value="' + p.id + '">' + rlkEsc((p.prenom || '') + ' ' + (p.nom || '')) + '</option>'; }).join(''); }
+  });
+};
+function rlkAdhDate(uid) {
+  var d = rlkVal('adh-d-' + uid); if (!d) { toast('Choisissez la date d\'adhésion'); return; }
+  sb.rpc('rlk_fixer_adhesion', {cible: uid, date_adhesion: d}).then(function(r) {
+    if (r.error) { toast(/function|exist|schema/i.test(r.error.message || '') ? 'Exécutez d\'abord phase9_v31_additif.sql dans Supabase' : rlkErr(r.error)); return; }
+    toast('✓ Date enregistrée : échéance un an plus tard'); if (typeof rlkLoadAdhConfirm === 'function') rlkLoadAdhConfirm(); loadAdherents();
+  });
+}
+
+// ── 4. Dispo : l'administrateur supprime vraiment un produit non fourni ──
+loadStockTable = function() {
+  var lundi = new Date(); lundi.setDate(lundi.getDate() - ((lundi.getDay() + 6) % 7)); lundi.setHours(0, 0, 0, 0);
+  sb.from('disponibilites').select('*, profiles(prenom,nom)').gte('created_at', lundi.toISOString()).order('created_at', {ascending: false}).limit(300).then(function(res) {
+    var wrap = document.getElementById('stock-table-wrap'); if (!wrap) return;
+    var data = (res.data || []).filter(function(d) { return d.statut !== 'epuise'; });
+    if (!data.length) { wrap.innerHTML = '<div class="rlk-note">Aucune disponibilité saisie cette semaine.</div>'; return; }
+    var isAdm = rlkIsAdmin();
+    wrap.innerHTML = '<div class="rlk-note" style="margin:0 0 8px">Produit non fourni au final ? « Supprimer » l\'enlève de la liste et du compteur de l\'adhérent.</div><div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Produit</th><th>Producteur</th><th>Qté</th><th></th></tr></thead><tbody>' + data.map(function(d) {
+      var own = currentUser && d.profile_id === currentUser.id, nm = ((d.profiles && d.profiles.prenom) || '') + ' ' + ((d.profiles && d.profiles.nom) || '');
+      return '<tr><td class="tbl-nm">' + rlkEsc(d.produit) + '</td><td>' + rlkEsc(nm.trim()) + '</td><td>' + rlkFmt(d.quantite, 2) + ' ' + rlkEsc(d.unite) + '</td><td style="white-space:nowrap">'
+        + (isAdm || own ? '<button class="btn btn-ghost btn-xs" type="button" onclick="modifierDispo(\'' + d.id + '\',\'' + String(d.produit || '').replace(/'/g, "\\'") + '\',' + d.quantite + ',\'' + d.unite + '\')">Modifier</button> <button class="btn btn-ghost btn-xs" style="color:var(--red)" type="button" onclick="supprimerDispo(\'' + d.id + '\')">Supprimer</button>' : '') + '</td></tr>';
+    }).join('') + '</tbody></table></div>';
+  });
+};
+supprimerDispo = function(id) {
+  if (!confirm('Supprimer ce produit de la liste ? (il n\'a pas été fourni)')) return;
+  sb.from('disponibilites').select('*').eq('id', id).maybeSingle().then(function(g) {
+    var d = g.data;
+    sb.from('disponibilites').delete().eq('id', id).select().then(function(r) {
+      if (r.error || !(r.data || []).length) { toast('Suppression refusée : exécutez phase9_v31_additif.sql dans Supabase'); return; }
+      var fin = function() { toast('✓ Produit supprimé'); loadStockTable(); if (typeof rlkLoadMesTrocs === 'function') rlkLoadMesTrocs(); setTimeout(function() { if (typeof rlkLoadCompteurs === 'function') rlkLoadCompteurs(); }, 400); };
+      if (!d) { fin(); return; }
+      var t0 = new Date(d.created_at).getTime();
+      sb.from('rlk_trok').select('*').eq('user_id', d.profile_id).gte('created_at', new Date(t0 - 6e5).toISOString()).lte('created_at', new Date(t0 + 6e5).toISOString()).then(function(tr) {
+        var c = (tr.data || []).filter(function(x) { return String(d.produit || '').indexOf(String(x.produit || '')) === 0; });
+        c.sort(function(a, b) { return Math.abs(new Date(a.created_at) - t0) - Math.abs(new Date(b.created_at) - t0); });
+        if (c[0]) sb.from('rlk_trok').delete().eq('id', c[0].id).then(fin); else fin();
+      });
+    });
+  });
+};
+modifierDispo = function(id, produit, q, u) {
+  var v = prompt('Nouvelle quantité pour « ' + produit + ' » (actuelle : ' + q + ' ' + u + ') :'); if (v === null) return;
+  var n = parseFloat(String(v).replace(',', '.')); if (isNaN(n) || n < 0) { toast('Quantité invalide'); return; }
+  sb.from('disponibilites').update({quantite: n}).eq('id', id).select().then(function(r) {
+    if (r.error || !(r.data || []).length) { toast('Modification refusée : exécutez phase9_v31_additif.sql dans Supabase'); return; }
+    toast('✓ Quantité mise à jour'); loadStockTable();
+  });
+};
 
 RLK_VERSION = '2.6';
 </script>
