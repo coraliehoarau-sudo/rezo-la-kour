@@ -1689,7 +1689,7 @@ details.rlk-bar{margin-top:10px}
       <div id="blog-admin-btns" style="display:none;gap:8px;flex-wrap:wrap">
         <button class="btn btn-primary btn-sm" type="button" onclick="rlkRecNew()">+ Fiche recette</button>
         <button class="btn btn-outline btn-sm" type="button" onclick="rlkPostEdit(null)">+ Article</button>
-        <button class="btn btn-outline btn-sm" type="button" onclick="rlkBlogCatsToggle()">Catégories</button>
+        
       </div>
     </div>
     <div id="blog-cats-admin" class="card" style="display:none;margin:14px 0"></div>
@@ -2227,7 +2227,7 @@ details.rlk-bar{margin-top:10px}
     <div class="modal-footer">
       <button class="btn btn-ghost" id="rec-del" style="display:none;color:#B3261E;margin-right:auto" onclick="rlkRecDel()">Supprimer</button>
       <button class="btn btn-ghost" onclick="closeModal('m-recette')">Annuler</button>
-      <button class="btn btn-primary" onclick="rlkRecSave()">Enregistrer</button>
+      <button class="btn btn-primary" id="rec-save" onclick="rlkRecSave()">Enregistrer</button>
     </div>
   </div>
 </div>
@@ -4531,7 +4531,7 @@ function rlkLoadEvents() {
       var fiches = (e.fiches || []).map(function(f) { return '<a href="' + rlkEsc(f.url) + '" target="_blank" rel="noopener" class="btn btn-ghost btn-xs">📎 ' + rlkEsc(f.titre) + '</a>'; }).join(' ');
       var act = e.moi_inscrit
         ? '<span class="badge b-ok">Vous êtes inscrit</span> <button class="btn btn-ghost btn-xs" onclick="rlkCancelRes(\'' + e.id + '\')">Annuler</button>'
-        : (reste !== null && reste <= 0 ? '<span class="badge b-err">Complet</span>' : '<select id="nb-' + e.id + '" style="width:auto"><option>1</option><option>2</option><option>3</option><option>4</option></select> personne(s) <button class="btn btn-primary btn-sm" onclick="rlkReserve(\'' + e.id + '\')">Réserver</button>');
+        : (reste !== null && reste <= 0 ? '<span class="badge b-err">Complet</span>' : '<select id="nb-' + e.id + '" style="width:auto"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select> personne(s) <button class="btn btn-primary btn-sm" onclick="rlkReserve(\'' + e.id + '\')">Réserver</button>');
       return '<div class="rlk-ev"><h3>' + rlkEsc(e.titre) + '</h3><div style="font-size:.82rem;color:var(--text2)">📅 ' + d.toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric', month: 'long'}) + ' à ' + d.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})
         + (e.quartier ? ' · 📍 ' + rlkEsc(e.quartier) : '') + (e.adresse ? '<br>🏡 <b>' + rlkEsc(e.adresse) + '</b>' : '') + (reste !== null ? ' · ' + Math.max(0, reste) + ' place(s) restante(s)' : '') + '</div>'
         + (e.objet ? '<div style="margin-top:8px"><b>Objet du jour :</b> ' + rlkEsc(e.objet) + '</div>' : '') + (e.description ? '<p style="margin-top:6px;font-size:.85rem;line-height:1.6;white-space:pre-line">' + rlkEsc(e.description) + '</p>' : '')
@@ -5923,7 +5923,7 @@ function rlkLoadEvents() {
       var fiches = (e.fiches || []).map(function(f) { return '<a href="' + rlkEsc(f.url) + '" target="_blank" rel="noopener" class="btn btn-ghost btn-xs">' + rlkEsc(f.titre) + '</a>'; }).join(' ');
       var act = e.moi_inscrit
         ? '<span class="badge b-ok">Vous êtes inscrit</span> <button class="btn btn-ghost btn-xs" onclick="rlkCancelRes(\'' + e.id + '\')">Annuler</button>'
-        : (reste !== null && reste <= 0 ? '<span class="badge b-err">Complet</span>' : '<select id="nb-' + e.id + '" style="width:auto"><option>1</option><option>2</option><option>3</option><option>4</option></select> personne(s) <button class="btn btn-primary btn-sm" onclick="rlkReserve(\'' + e.id + '\')">Réserver</button>');
+        : (reste !== null && reste <= 0 ? '<span class="badge b-err">Complet</span>' : '<select id="nb-' + e.id + '" style="width:auto"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select> personne(s) <button class="btn btn-primary btn-sm" onclick="rlkReserve(\'' + e.id + '\')">Réserver</button>');
       return '<div class="rlk-ev2"><div class="rlk-ev2-h">' + rlkEsc(e.titre) + '</div>'
         + (e.photo ? '<img class="rlk-evimg" src="' + e.photo + '" alt="">' : '')
         + '<div class="rlk-ev2-b"><div class="rlk-ev2-info">' + d.toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric', month: 'long'}) + ' à ' + d.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'})
@@ -5997,7 +5997,7 @@ function rlkPostOpen(id) {
       + '<div class="rlk-bmeta" style="margin-top:14px">' + rlkEsc(cat ? cat.nom : 'Sans catégorie') + ' · ' + rlkDate(p.created_at) + (p.publie ? '' : ' · <b style="color:#B3261E">Brouillon</b>') + '</div>'
       + '<h1 class="rlk-bh1">' + rlkEsc(p.titre) + '</h1>' + (p.chapeau ? '<p class="rlk-bchapo">' + rlkInline(p.chapeau) + '</p>' : '')
       + '<div>' + blocs.map(rlkBlocHtml).join('') + '</div>'
-      + (rlkIsAdmin() && !String(id).startsWith('old:') ? '<div style="margin-top:22px"><button class="btn btn-outline btn-sm" type="button" onclick="rlkPostEdit(\'' + id + '\')">Modifier cet article</button></div>' : '');
+      + (rlkIsAdmin() && !String(id).startsWith('old:') && !(blocs || []).some(function(b) { return b && b.t === 'recette'; }) ? '<div style="margin-top:22px"><button class="btn btn-outline btn-sm" type="button" onclick="rlkPostEdit(\'' + id + '\')">Modifier cet article</button></div>' : '');
     window.scrollTo(0, 0);
   };
   if (String(id).startsWith('old:') && meta && meta.legacy) { show(meta, String(meta.legacy.contenu || '').split(/\n{1,}/).filter(Boolean).map(function(x) { return {t: 'p', v: x}; }), meta.couverture); return; }
@@ -6438,7 +6438,7 @@ function rlkRecSave() {
     var q = rlkRec.id ? sb.from('rlk_blog_posts').update(row).eq('id', rlkRec.id) : sb.from('rlk_blog_posts').insert(Object.assign({auteur: currentUser.id}, row));
     q.then(function(r) {
       if (r.error) { toast(rlkErr(r.error)); return; }
-      toast(row.publie ? '✓ Fiche publiée dans Ladilafé' : '✓ Brouillon enregistré'); closeModal('m-recette'); rlkBlogLoad();
+      toast(row.publie ? '✓ Fiche publiée dans Ladilafé' : '✓ Brouillon enregistré'); closeModal('m-recette'); rlkRecPropDone(); rlkBlogLoad();
     });
   };
   var c = rlkVal('rec-cat');
@@ -7797,6 +7797,212 @@ function rlkRecPhotosUsed() {
   while (out.length && !out[out.length - 1]) out.pop();
   return out;
 }
+
+// ═══ MODULE 17 (v2.8d) : Trok remanié, autres échanges validés avec les fruits, encart Prévisionnel ═══
+function rlkCardToBar(c, open) {
+  if (!c || c.tagName === 'DETAILS') return;
+  var t = c.querySelector(':scope > .card-title'); if (!t) return;
+  var d = document.createElement('details'); d.className = 'rlk-bar'; if (c.id) { d.id = c.id; c.removeAttribute('id'); } if (open) d.open = true;
+  d.style.marginBottom = '14px';
+  var s = document.createElement('summary'); s.innerHTML = '<span class="rlk-ttl" style="margin:0"><span class="rlk-dot"></span>' + t.innerHTML + '</span>';
+  var b = document.createElement('div'); b.className = 'rlk-bar-body';
+  Array.prototype.slice.call(c.children).forEach(function(x) { if (x !== t) b.appendChild(x); });
+  d.appendChild(s); d.appendChild(b); c.parentNode.replaceChild(d, c);
+}
+function rlkTrokLayout() {
+  var pg = document.getElementById('page-don'); if (!pg || pg.dataset.lay17) return; pg.dataset.lay17 = '1';
+  var cards = Array.prototype.slice.call(pg.querySelectorAll(':scope > .card'));
+  var byTitle = function(re) { return cards.filter(function(c) { var t = c.querySelector(':scope > .card-title'); return t && re.test(t.textContent); })[0]; };
+  var cFr = byTitle(/Mes fruits à troquer/), cAu = byTitle(/Autres échanges/), cMes = byTitle(/Mes déclarations/), cRec = byTitle(/Ce que vous allez recevoir/), cSol = byTitle(/Solde réel/);
+  if (cFr && cAu) {
+    cFr.parentNode.insertBefore(cAu, cFr.nextSibling); cAu.style.margin = '0 0 14px';
+    var bt = cAu.querySelector('button[onclick*="rlkAutresDeclarer"]'); if (bt) bt.remove();
+    var tt = cAu.querySelector(':scope > .card-title'); if (tt) tt.textContent = 'Mes autres échanges : plants, bois, compost…';
+  }
+  var vb = pg.querySelector('button[onclick="validerDispos()"]'); if (vb) { vb.textContent = 'Valider mon troc'; vb.style.marginTop = '4px'; }
+  var note = vb && vb.nextElementSibling; if (note) note.textContent = 'Fruits et autres produits sont enregistrés ensemble. Pour valider, il vous sera demandé votre mot de passe.';
+  [cMes, cRec, cSol].forEach(function(c) { rlkCardToBar(c, false); });
+  // encart Prévisionnel à côté du solde
+  var sold = document.getElementById('fey-solde-don'), box = sold && sold.parentNode;
+  if (box && !document.getElementById('fey-prevu-don')) {
+    var wrap = document.createElement('div'); wrap.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap';
+    box.parentNode.insertBefore(wrap, box); wrap.appendChild(box);
+    var p = document.createElement('div'); p.style.cssText = 'background:#fff;color:var(--accent);border:2px solid var(--accent);border-radius:10px;padding:10px 18px;text-align:center;min-width:130px';
+    p.innerHTML = '<div style="font-size:1.6rem;font-weight:700" id="fey-prevu-don">—</div><div style="font-size:9px;font-family:\'DM Mono\',monospace;letter-spacing:.15em;opacity:.8">PRÉVISIONNEL</div><div id="fey-prevu-sub" style="font-size:10px;opacity:.75;margin-top:2px"></div>';
+    wrap.appendChild(p);
+  }
+  rlkPrevuUpdate();
+}
+function rlkFormFey() {
+  var fey = 0;
+  try {
+    rlkDonLignes().forEach(function(x) { if (x.f && x.kg != null) { var cl = rlkClasse(rlkEtatClasse(x.etat)); fey += Math.ceil(x.kg * cl.credit_par_kg - 1e-9); } });
+    var a = RLK_AUTRES[rlkVal('au-prod')], q = rlkNum('au-q', 0); if (a && q > 0) fey += Math.ceil(q * a.p - 1e-9);
+  } catch (e) {}
+  return fey;
+}
+function rlkPrevuUpdate() {
+  var e = document.getElementById('fey-prevu-don'), s = document.getElementById('fey-prevu-sub'); if (!e) return;
+  if (!currentUser) { e.textContent = '—'; if (s) s.textContent = ''; return; }
+  var reel = RLK.solde || 0, att = RLK.prevPending || 0, form = rlkFormFey();
+  e.textContent = (reel + att + form) + ' FEY';
+  if (s) s.textContent = (att || form) ? '+' + (att + form) + ' à venir' : 'rien en attente';
+}
+var rlkDonPreviewOrig17 = rlkDonPreview;
+rlkDonPreview = function() { rlkDonPreviewOrig17.apply(this, arguments); rlkPrevuUpdate(); };
+var rlkAutresPrevOrig17 = rlkAutresPrev;
+rlkAutresPrev = function() { rlkAutresPrevOrig17.apply(this, arguments); rlkPrevuUpdate(); };
+var rlkSoldeAfficheOrig17 = rlkSoldeAffiche;
+rlkSoldeAffiche = function(prev) { RLK.prevPending = prev.fey + (prev.autres || 0); prev = {fey: prev.fey + (prev.autres || 0), kg: prev.kg}; rlkSoldeAfficheOrig17(prev); rlkPrevuUpdate(); };
+var rlkLoadSoldeOrig17 = rlkLoadSolde;
+rlkLoadSolde = function() { rlkLoadSoldeOrig17.apply(this, arguments); setTimeout(rlkPrevuUpdate, 800); };
+// le prévisionnel compte aussi les autres échanges déjà déclarés
+rlkSoldePrev = function(histRows) {
+  var last = null;
+  (histRows || []).forEach(function(r) { if (/troc/i.test(r.motif || '') && (!last || r.created_at > last)) last = r.created_at; });
+  var since = last ? last.slice(0, 10) : new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10);
+  return rlkTrocRows(currentUser.id, since).then(function(rows) {
+    var fey = 0, kg = 0, au = 0;
+    rows.filter(function(t) { return !last || (t.created_at || '') > last; }).forEach(function(t) {
+      var m = /^(.*) \(autre troc\)$/.exec(String(t.produit || ''));
+      if (m) { var a = RLK_AUTRES.filter(function(x) { return x.n === m[1]; })[0]; if (a) au += Math.ceil(Number(t.quantite) * a.p - 1e-9); return; }
+      var k = t.kg != null ? Number(t.kg) : (t.unite === 'kg' ? Number(t.quantite) : 0); if (!(k > 0)) return;
+      kg += k; fey += k * rlkClasse(rlkClasseDepuisNom(t.produit)).transforme_par_kg * RLK.pHote;
+    });
+    return {fey: Math.ceil(fey - 1e-9), kg: kg, autres: au};
+  });
+};
+
+// Valider mon troc : fruits + autres produits en une fois
+validerDispos = function() {
+  if (!currentUser) { toast('Inscrivez-vous ou connectez-vous pour déclarer votre troc'); openModal('m-login'); return; }
+  var a = RLK_AUTRES[rlkVal('au-prod')], q = rlkNum('au-q', 0), hasAu = !!(a && q > 0);
+  if (!rlkDonLignes().length && !hasAu) { toast('Choisissez un fruit ou un autre produit avec une quantité'); return; }
+  rlkEngage('Valider mon troc', rlkDoTroc);
+};
+function rlkDoTroc() {
+  var a = RLK_AUTRES[rlkVal('au-prod')], q = rlkNum('au-q', 0), hasAu = !!(a && q > 0), hasFr = rlkDonLignes().length > 0;
+  var uid = (rlkIsAdmin() && rlkVal('dispo-prod')) ? rlkVal('dispo-prod') : currentUser.id;
+  var fin = function() { rlkLoadMesTrocs(); if (typeof rlkLoadHist === 'function') rlkLoadHist(); setTimeout(rlkLoadCompteurs, 600); rlkPrevuUpdate(); };
+  if (hasAu) {
+    var today = new Date().toISOString().split('T')[0], nom = a.n + ' (autre troc)';
+    sb.from('disponibilites').insert({profile_id: uid, produit: nom, quantite: q, unite: a.u, semaine: today}).then(function(r) {
+      if (r.error) { toast(rlkErr(r.error)); return; }
+      sb.from('rlk_trok').insert({user_id: uid, declare_par: currentUser.id, produit: a.n + ' (autre troc)', etat: 'a_classer', quantite: q, unite: a.u, kg: null, semaine: rlkISO(rlkLundi())}).then(function() { setTimeout(fin, 300); });
+      document.getElementById('au-q').value = ''; document.getElementById('au-prod').value = ''; rlkAutresPrev();
+      if (!hasFr) toast('✓ Troc déclaré, merci ! Les FEY seront crédités après validation de l\'équipe.');
+      loadStockTable();
+    });
+  }
+  if (hasFr) { rlkDoDispos(); setTimeout(fin, 1200); }
+}
+document.addEventListener('DOMContentLoaded', function() { setTimeout(rlkTrokLayout, 600); });
+var rlkInitDonOrig17 = rlkInitDon;
+rlkInitDon = function() { rlkInitDonOrig17.apply(this, arguments); rlkTrokLayout(); rlkPrevuUpdate(); };
+
+// ═══ MODULE 18 (v2.8d) : Ladilafé, propositions de recettes soumises à validation ═══
+function rlkRecModeProp(on) {
+  var m = document.getElementById('m-recette'); if (!m) return;
+  ['rec-cat', 'rec-publie'].forEach(function(id) { var e = document.getElementById(id), p = e && e.parentNode; if (p) p.style.display = on ? 'none' : ''; });
+  var n = m.querySelector('.modal-body > .rlk-note');
+  if (on) {
+    document.getElementById('rec-ttl').textContent = 'Proposer une recette';
+    document.getElementById('rec-del').style.display = 'none';
+    var b = document.getElementById('rec-save'); if (b) b.textContent = 'Soumettre à l\'équipe';
+    if (n) { n.dataset.old = n.dataset.old || n.innerHTML; n.innerHTML = 'Remplissez le modèle de recette. Votre proposition est envoyée à l\'équipe, qui la relit et valide le protocole sanitaire <b>avant toute publication</b>. Elle ne sera visible de personne d\'autre en attendant.'; }
+  } else {
+    var b2 = document.getElementById('rec-save'); if (b2) b2.textContent = 'Enregistrer';
+    if (n && n.dataset.old) n.innerHTML = n.dataset.old;
+  }
+}
+var rlkRecEditOrig18 = rlkRecEdit;
+rlkRecEdit = function(p) { rlkRecEditOrig18(p); rlkRec.prop = false; rlkRec.fromProp = null; rlkRecModeProp(false); };
+function rlkRecPropose() {
+  if (!currentUser) { toast('Connectez-vous pour proposer une recette'); openModal('m-login'); return; }
+  rlkRecEditOrig18(null); rlkRec.prop = true; rlkRec.fromProp = null; rlkRecModeProp(true);
+}
+function rlkRecCollect() {
+  var titre = rlkVal('rec-titre').trim(); if (!titre) { toast('Le titre est obligatoire'); return null; }
+  var ref = parseFloat(String(rlkVal('rec-ref')).replace(',', '.')); if (!(ref > 0)) { toast('Indiquez le poids de référence du fruit principal (en kg)'); return null; }
+  if (!rlkVal('rec-fruit').trim()) { toast('Indiquez le fruit ou légume principal'); return null; }
+  var ingr = rlkRec.ingr.filter(function(i) { return String(i.n || '').trim(); }).map(function(i) { return {n: String(i.n).trim(), q: (i.q === '' || i.q == null || isNaN(i.q)) ? '' : Number(i.q), u: i.u || '', m: i.m === 'fixe' ? 'fixe' : 'prop', note: String(i.note || '').trim()}; });
+  if (!ingr.length) { toast('Ajoutez au moins un ingrédient'); return null; }
+  var rn = parseFloat(String(rlkVal('rec-rend')).replace(',', '.'));
+  var d = {fruit: rlkVal('rec-fruit').trim(), ref_kg: ref, precision: rlkVal('rec-prec').trim(), rend_n: rn > 0 ? rn : null, rend_fmt: rlkVal('rec-rendfmt').trim(), duree: rlkVal('rec-duree').trim(),
+    allergenes: rlkVal('rec-allerg').trim(), conservation: rlkVal('rec-conserv').trim(), avertissement: rlkVal('rec-avert').trim(), ingr: ingr,
+    materiel: rlkVal('rec-materiel').trim(), etapes: rlkVal('rec-etapes').trim(), controles: rlkVal('rec-controles').trim(), lien: rlkVal('rec-lien').trim(), lien_txt: rlkVal('rec-lien-txt').trim(), photos: rlkRecPhotosUsed()};
+  return {titre: titre, d: d};
+}
+var rlkRecSaveOrig18 = rlkRecSave;
+rlkRecSave = function() {
+  if (!rlkRec.prop) { rlkRecSaveOrig18(); return; }
+  var c = rlkRecCollect(); if (!c) return;
+  var nom = ((profile && ((profile.prenom || '') + ' ' + (profile.nom || '')).trim()) || '') || (currentUser && currentUser.email) || '';
+  sb.from('rlk_recettes_prop').insert({auteur: currentUser.id, auteur_nom: nom, titre: c.titre, chapeau: rlkVal('rec-chapeau').trim() || null, couverture: rlkRec.cover || null, data: c.d}).then(function(r) {
+    if (r.error) { toast(/rlk_recettes_prop/.test(r.error.message || '') ? 'Fonction pas encore activée : prévenez l\'équipe (fichier phase7_v28_additif.sql)' : rlkErr(r.error)); return; }
+    toast('✓ Merci ! Votre recette est envoyée à l\'équipe pour validation.'); closeModal('m-recette'); rlkRec.prop = false; rlkRecModeProp(false); rlkPropMine();
+  });
+};
+function rlkRecPropDone() {
+  if (!rlkRec.fromProp) return;
+  var id = rlkRec.fromProp; rlkRec.fromProp = null;
+  sb.from('rlk_recettes_prop').update({statut: 'traitee'}).eq('id', id).then(function() { rlkRgProps(); });
+}
+// Liste côté adhérent
+function rlkPropMine() {
+  var box = document.getElementById('blog-props'); if (!box) return;
+  if (!currentUser || rlkIsAdmin()) { box.innerHTML = ''; return; }
+  sb.from('rlk_recettes_prop').select('id,titre,statut,created_at').eq('auteur', currentUser.id).order('created_at', {ascending: false}).limit(10).then(function(r) {
+    var l = (r.data || []).filter(function(x) { return x.statut === 'en_attente'; });
+    box.innerHTML = l.length ? '<div class="rlk-note" style="margin:10px 0 0">Vos recettes en attente de validation : ' + l.map(function(x) { return '<b>' + rlkEsc(x.titre) + '</b> (' + rlkDate(x.created_at) + ')'; }).join(', ') + '.</div>' : '';
+  });
+}
+var rlkBlogLoadOrig18 = rlkBlogLoad;
+rlkBlogLoad = function() {
+  var ls = document.getElementById('blog-list');
+  if (ls && !document.getElementById('blog-props')) {
+    var bp = document.createElement('div'); bp.id = 'blog-props'; var cats = document.getElementById('blog-cats-admin'); if (cats) cats.parentNode.insertBefore(bp, cats); else ls.appendChild(bp);
+    var b = document.createElement('button'); b.type = 'button'; b.id = 'blog-prop-btn'; b.className = 'btn btn-primary btn-sm'; b.textContent = 'Proposer une recette'; b.setAttribute('onclick', 'rlkRecPropose()');
+    var adm = document.getElementById('blog-admin-btns'); if (adm && adm.parentNode) adm.parentNode.appendChild(b);
+  }
+  var pb = document.getElementById('blog-prop-btn'); if (pb) pb.style.display = (currentUser && !rlkIsAdmin()) ? 'inline-flex' : 'none';
+  var rr = rlkBlogLoadOrig18.apply(this, arguments); rlkPropMine(); return rr;
+};
+// Côté équipe : Réglaj > Ladilafé
+function rlkRgProps() {
+  var host = document.getElementById('reglaj-ladilafe'); if (!host || !rlkIsAdmin()) return;
+  var c = document.getElementById('rg-props');
+  if (!c) { c = document.createElement('div'); c.id = 'rg-props'; c.className = 'card'; host.insertBefore(c, host.firstChild); }
+  sb.from('rlk_recettes_prop').select('id,auteur_nom,titre,created_at,statut').eq('statut', 'en_attente').order('created_at', {ascending: false}).then(function(r) {
+    var l = r.data || [], err = r.error;
+    c.innerHTML = '<div class="card-title">Recettes proposées par les adhérents' + (l.length ? ' (' + l.length + ')' : '') + '</div>'
+      + (err ? '<div class="rlk-dbwarn">Fonction pas encore activée (fichier phase7_v28_additif.sql à lancer dans Supabase).</div>'
+        : l.length ? l.map(function(x) {
+          return '<div style="padding:8px 0;border-bottom:1px solid var(--border)"><b>' + rlkEsc(x.titre) + '</b><div class="rlk-note" style="margin:2px 0">' + rlkEsc(x.auteur_nom || 'Adhérent') + ' · ' + rlkDate(x.created_at) + '</div>'
+            + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><button class="btn btn-primary btn-xs" type="button" onclick="rlkPropOpen(\'' + x.id + '\')">Relire et valider</button><button class="btn btn-ghost btn-xs" style="color:#B3261E" type="button" onclick="rlkPropRefuse(\'' + x.id + '\')">Refuser</button></div></div>';
+        }).join('') + '<div class="rlk-note">« Relire et valider » ouvre la fiche dans l\'éditeur : corrigez le protocole sanitaire, choisissez la catégorie, puis enregistrez (brouillon ou publié).</div>'
+        : '<div class="rlk-note">Aucune proposition en attente.</div>');
+    var tab = document.querySelector('#page-reglaj [data-s="ladilafe"]'); if (tab) tab.textContent = 'Ladilafé' + (l.length ? ' (' + l.length + ')' : '');
+  });
+}
+function rlkPropOpen(id) {
+  sb.from('rlk_recettes_prop').select('*').eq('id', id).maybeSingle().then(function(r) {
+    var x = r.data; if (!x) { toast('Proposition introuvable'); return; }
+    rlkRecEdit(null);
+    document.getElementById('rec-ttl').textContent = 'Relire la recette proposée par ' + (x.auteur_nom || 'un adhérent');
+    document.getElementById('rec-titre').value = x.titre || ''; document.getElementById('rec-chapeau').value = x.chapeau || '';
+    rlkRecFill(x.data || {ref_kg: 5, ingr: []}); rlkRec.cover = x.couverture || null; rlkRecCoverPrev();
+    document.getElementById('rec-publie').value = '0'; rlkRec.fromProp = id;
+  });
+}
+function rlkPropRefuse(id) {
+  if (!confirm('Refuser cette proposition ? Elle ne sera pas publiée.')) return;
+  sb.from('rlk_recettes_prop').update({statut: 'refusee'}).eq('id', id).then(function(r) { if (r.error) { toast(rlkErr(r.error)); return; } toast('Proposition refusée'); rlkRgProps(); });
+}
+var rlkRgBlogOrig18 = rlkRgBlog;
+rlkRgBlog = function() { rlkRgProps(); return rlkRgBlogOrig18.apply(this, arguments); };
+var rlkShowReglajOrig18 = showReglaj;
+showReglaj = function(section) { rlkShowReglajOrig18(section); if (rlkIsAdmin()) rlkRgProps(); };
 
 RLK_VERSION = '2.6';
 </script>
