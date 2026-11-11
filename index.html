@@ -727,7 +727,7 @@ details.rlk-bar{margin-top:10px}
     <summary><span class="rlk-ttl" style="margin:0"><span class="rlk-dot"></span>Dékouv nout Rézo</span></summary>
     <div class="rlk-bar-body rlk-dek">
 <details class="rlk-bar">
-    <summary><span class="rlk-ttl" style="margin:0"><span class="rlk-dot"></span>Dékouv Nout Rézo</span></summary>
+    <summary><span class="rlk-ttl" style="margin:0"><span class="rlk-dot"></span>Kossa nou fé ?</span></summary>
     <div class="rlk-bar-body rlk-prose">
       <p><b>Zéro gaspillage, zéro moustique.</b> En ramassant les fruits avant qu'ils ne tombent, nous réduisons les mouches des fruits, les rats et les moustiques vecteurs de dengue et de chikungunya.</p>
       <p><b>Transformer, conserver, partager.</b> Ce qui ne peut être vendu frais devient confiture, chutney, achard, lacto-fermenté, sirop, jus ou kombucha. Chaque kilo valorisé est une victoire pour la souveraineté alimentaire réunionnaise.</p>
@@ -1530,7 +1530,8 @@ details.rlk-bar{margin-top:10px}
         <div class="fr"><label>Description</label><textarea id="ev-desc" rows="4"></textarea></div>
         <div class="fr"><label>Photo (facultatif)</label><input type="file" id="ev-photo" accept="image/*" onchange="rlkEvPhoto(this)"><div id="ev-photo-prev"></div></div>
         <div class="fr"><label>Fiches protocole et recettes (un lien par ligne : Titre | https://…)</label><textarea id="ev-fiches" rows="3" placeholder="Fiche confiture | https://drive.google.com/…"></textarea></div>
-        <div class="fr"><label>Matériel recherché pour l'atelier (un objet par ligne : Objet | quantité)</label><textarea id="ev-materiel" rows="4" placeholder="Planche à découper | 4&#10;Couteau d'office | 6&#10;Grande marmite | 1"></textarea><div class="rlk-note">Les inscrits cochent ce qu'ils apportent et peuvent ajouter autre chose. Nécessite phase3_v24_additif.sql.</div></div>
+        <div class="fr"><label>Matériel de transformation (un objet par ligne : Objet | quantité). Les inscrits cochent ce qu'ils apportent.</label><textarea id="ev-materiel" rows="4" placeholder="Planche à découper | 4&#10;Couteau d'office | 6&#10;Grande marmite | 1"></textarea><div class="rlk-note">Nécessite phase3_v24_additif.sql.</div></div>
+        <div class="fr"><label>Effets personnels à prévoir (un par ligne, sans case à cocher)</label><textarea id="ev-perso" rows="3" placeholder="Tablier&#10;Crème solaire&#10;Chapeau&#10;Chaussures fermées"></textarea></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" id="ev-save-btn" onclick="rlkSaveEvent()">Publier l'événement</button><button class="btn btn-ghost btn-sm" id="ev-cancel-btn" style="display:none" onclick="rlkEvReset()">Annuler la modification</button></div>
       </div>
       <div class="card"><div class="card-title">Événements publiés</div><div id="ev-admin-list" class="rlk-note">Chargement…</div></div>
@@ -5669,7 +5670,7 @@ function rlkEvPhotoDel() { rlkEvPhotoData = null; var i = document.getElementByI
 function rlkLocalDT(s) { if (!s) return ''; var d = new Date(s), p = function(n) { return String(n).padStart(2, '0'); }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + 'T' + p(d.getHours()) + ':' + p(d.getMinutes()); }
 function rlkEvReset() {
   rlkEvEditId = null; rlkEvPhotoData = null;
-  ['ev-titre', 'ev-debut', 'ev-fin', 'ev-adr', 'ev-quartier', 'ev-places', 'ev-objet', 'ev-desc', 'ev-fiches', 'ev-materiel', 'ev-photo'].forEach(function(i) { var e = document.getElementById(i); if (e) e.value = ''; });
+  ['ev-titre', 'ev-debut', 'ev-fin', 'ev-adr', 'ev-quartier', 'ev-places', 'ev-objet', 'ev-desc', 'ev-fiches', 'ev-materiel', 'ev-perso', 'ev-photo'].forEach(function(i) { var e = document.getElementById(i); if (e) e.value = ''; });
   rlkEvMatHad = false; rlkEvPrev();
   var t = document.getElementById('ev-form-title'); if (t) t.textContent = 'Nouvel atelier ou événement';
   var b = document.getElementById('ev-save-btn'); if (b) b.textContent = 'Publier l\'événement';
@@ -5681,7 +5682,7 @@ function rlkEditEvent(id) {
     rlkEvEditId = id; rlkEvPhotoData = e.photo || null;
     var set = function(i, v) { var x = document.getElementById(i); if (x) x.value = v == null ? '' : v; };
     set('ev-titre', e.titre); set('ev-debut', rlkLocalDT(e.date_debut)); set('ev-fin', rlkLocalDT(e.date_fin)); set('ev-adr', e.adresse); set('ev-quartier', e.quartier);
-    set('ev-places', e.places); set('ev-objet', e.objet); set('ev-desc', e.description); set('ev-materiel', e.materiel_besoin); rlkEvMatHad = !!e.materiel_besoin;
+    set('ev-places', e.places); set('ev-objet', e.objet); set('ev-desc', e.description); set('ev-materiel', rlkMatParts(e.materiel_besoin).matTxt); set('ev-perso', rlkMatParts(e.materiel_besoin).persoTxt); rlkEvMatHad = !!e.materiel_besoin;
     set('ev-fiches', (e.fiches || []).map(function(f) { return f.titre + ' | ' + f.url; }).join('\n'));
     rlkEvPrev();
     document.getElementById('ev-form-title').textContent = 'Modifier l\'événement';
@@ -5695,7 +5696,7 @@ function rlkSaveEvent() {
   if (!titre || !debut) { toast('Titre et date obligatoires'); return; }
   var fiches = rlkVal('ev-fiches').split('\n').map(function(l) { var p = l.split('|'); return p.length > 1 ? {titre: p[0].trim(), url: p.slice(1).join('|').trim()} : (l.trim() ? {titre: 'Fiche', url: l.trim()} : null); }).filter(function(x) { return x && /^https?:\/\//.test(x.url); });
   var row = {titre: titre, date_debut: new Date(debut).toISOString(), date_fin: rlkVal('ev-fin') ? new Date(rlkVal('ev-fin')).toISOString() : null, adresse: rlkVal('ev-adr'), quartier: rlkVal('ev-quartier'), objet: rlkVal('ev-objet'), description: rlkVal('ev-desc'), places: parseInt(rlkVal('ev-places')) || null, fiches: fiches, photo: rlkEvPhotoData};
-  if (rlkVal('ev-materiel').trim() || rlkEvMatHad) row.materiel_besoin = rlkVal('ev-materiel').trim();
+  if (rlkVal('ev-materiel').trim() || rlkVal('ev-perso').trim() || rlkEvMatHad) row.materiel_besoin = rlkMatJoin(rlkVal('ev-materiel'), rlkVal('ev-perso'));
   var q = rlkEvEditId ? sb.from('rlk_evenements').update(row).eq('id', rlkEvEditId) : sb.from('rlk_evenements').insert(row);
   q.then(function(res) {
     if (res.error) { toast(/materiel/.test(res.error.message || '') ? 'Pour le matériel, lancez d\'abord phase3_v24_additif.sql dans Supabase' : (/photo/.test(res.error.message || '') ? 'Pour les photos, lancez d\'abord le SQL v2.2 (phase2_v22_additif.sql)' : rlkErr(res.error))); return; }
@@ -6526,7 +6527,7 @@ rlkLoadEventsAdmin = function() {
     var rows = res.data || [];
     el.innerHTML = rows.length ? rows.map(function(e) {
       return '<div style="padding:6px 0;border-bottom:1px solid var(--border)"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span style="flex:1;min-width:140px">' + rlkDate(e.date_debut) + ' · ' + rlkEsc(e.titre) + '</span>'
-        + '<button class="btn btn-ghost btn-xs" onclick="rlkEvMatAdmin(\'' + e.id + '\')">Matériel</button><button class="btn btn-outline btn-xs" onclick="rlkEditEvent(\'' + e.id + '\')">Modifier</button><button class="btn btn-ghost btn-xs" onclick="rlkDelEvent(\'' + e.id + '\')">Supprimer</button></div><div id="evm-' + e.id + '"></div></div>';
+        + '<button class="btn btn-primary btn-xs" onclick="rlkEvInscrits(\'' + e.id + '\')">Inscrits</button><button class="btn btn-ghost btn-xs" onclick="rlkEvMatAdmin(\'' + e.id + '\')">Matériel</button><button class="btn btn-outline btn-xs" onclick="rlkEditEvent(\'' + e.id + '\')">Modifier</button><button class="btn btn-ghost btn-xs" onclick="rlkDelEvent(\'' + e.id + '\')">Supprimer</button></div><div id="evm-' + e.id + '"></div></div>';
     }).join('') : 'Aucun événement.';
   });
 };
@@ -6956,7 +6957,7 @@ rlkLoadEventsAdmin = function() {
     var rows = res.data || [], now = Date.now() - 864e5;
     var row = function(e) {
       return '<div style="padding:6px 0;border-bottom:1px solid var(--border)"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span style="flex:1;min-width:140px">' + rlkDate(e.date_debut) + ' · ' + rlkEsc(e.titre) + '</span>'
-        + '<button class="btn btn-ghost btn-xs" onclick="rlkEvMatAdmin(\'' + e.id + '\')">Matériel</button><button class="btn btn-outline btn-xs" onclick="rlkEditEvent(\'' + e.id + '\')">Modifier</button>'
+        + '<button class="btn btn-primary btn-xs" onclick="rlkEvInscrits(\'' + e.id + '\')">Inscrits</button><button class="btn btn-ghost btn-xs" onclick="rlkEvMatAdmin(\'' + e.id + '\')">Matériel</button><button class="btn btn-outline btn-xs" onclick="rlkEditEvent(\'' + e.id + '\')">Modifier</button>'
         + '<button class="btn btn-outline btn-xs" onclick="rlkEvToZev(\'' + e.id + '\')">→ Nout Zévénman</button><button class="btn btn-ghost btn-xs" onclick="rlkDelEvent(\'' + e.id + '\')">Supprimer</button></div><div id="evm-' + e.id + '"></div></div>';
     };
     var a = rows.filter(function(e) { return new Date(e.date_debut).getTime() >= now; }), p = rows.filter(function(e) { return new Date(e.date_debut).getTime() < now; });
@@ -7477,6 +7478,86 @@ function rlkLotRegulApply() {
     });
   });
 }
+// v2.7 : deux listes pour les evenements (transformation cochable / effets personnels)
+var RLK_PERSO_MARK = '#PERSO#';
+function rlkMatParts(txt) {
+  var lines = String(txt || '').split('\n'), i = -1;
+  lines.forEach(function(l, k) { if (i < 0 && l.trim() === RLK_PERSO_MARK) i = k; });
+  var mat = (i < 0 ? lines : lines.slice(0, i)).map(function(l) { return l.trim(); }).filter(Boolean);
+  var perso = (i < 0 ? [] : lines.slice(i + 1)).map(function(l) { return l.trim(); }).filter(Boolean);
+  return {mat: mat, perso: perso, matTxt: mat.join('\n'), persoTxt: perso.join('\n')};
+}
+function rlkMatJoin(mat, perso) {
+  var m = String(mat || '').trim(), p = String(perso || '').split('\n').map(function(l) { return l.trim(); }).filter(Boolean).join('\n');
+  return p ? (m ? m + '\n' : '') + RLK_PERSO_MARK + '\n' + p : m;
+}
+rlkMatBesoin = function(txt) {
+  return rlkMatParts(txt).mat.map(function(l) { var p = l.split('|'); return {o: p[0].trim(), q: p.slice(1).join('|').trim()}; }).filter(function(x) { return x.o; });
+};
+var rlkMatRenderOrig12 = rlkMatRender;
+rlkMatRender = function() {
+  rlkMatRenderOrig12();
+  if (!RLK.matOK) return;
+  Object.keys(RLK.mat).forEach(function(id) {
+    var box = document.getElementById('evmat-' + id); if (!box) return;
+    var perso = rlkMatParts(RLK.mat[id].besoin).perso;
+    box.innerHTML = box.innerHTML.replace("Matériel pour l'atelier", 'Matériel de transformation').replace('Matériel pour l&#39;atelier', 'Matériel de transformation');
+    if (perso.length) box.innerHTML += '<div class="rlk-mat"><div class="rlk-mat-t">Effets personnels à prévoir</div><ul class="rlk-bp" style="margin:6px 0">' + perso.map(function(o) { return '<li>' + rlkEsc(o) + '</li>'; }).join('') + '</ul></div>';
+  });
+};
+// v2.7 : inscrits pour les admins, liens de partage avec apercu photo, partage des articles
+function rlkEvInscrits(id) {
+  var m = document.getElementById('evm-' + id); if (!m) return;
+  var box = document.getElementById('evi-' + id);
+  if (!box) { box = document.createElement('div'); box.id = 'evi-' + id; m.parentNode.insertBefore(box, m); }
+  if (box.innerHTML) { box.innerHTML = ''; return; }
+  box.innerHTML = '<div class="rlk-note">Chargement…</div>';
+  sb.rpc('rlk_inscrits_evenement', {ev: id}).then(function(r) {
+    if (r.error) { box.innerHTML = '<div class="rlk-dbwarn">' + (/function|exist/i.test(r.error.message || '') ? 'Exécutez d\'abord phase6_v27_additif.sql dans Supabase (SQL Editor).' : rlkEsc(rlkErr(r.error))) + '</div>'; return; }
+    var rows = r.data || [], tot = rows.reduce(function(a, x) { return a + (x.nb_personnes || 1); }, 0);
+    box.innerHTML = '<div class="rlk-note" style="margin:6px 0"><b>' + rows.length + ' inscrit' + (rows.length > 1 ? 's' : '') + ' (' + tot + ' personne' + (tot > 1 ? 's' : '') + ')</b></div>'
+      + (rows.length ? '<ul class="rlk-bp" style="margin:4px 0 8px">' + rows.map(function(x) {
+        var nom = rlkEsc(((x.prenom || '') + ' ' + (x.nom || '')).trim() || 'Adhérent'), tel = String(x.telephone || '').replace(/[^\d+]/g, '');
+        return '<li><b>' + nom + '</b>' + (x.nb_personnes > 1 ? ' (' + x.nb_personnes + ' pers.)' : '') + ' : ' + (tel ? '<a href="tel:' + tel + '">' + rlkEsc(x.telephone) + '</a>' : '<i>pas de téléphone</i>') + '</li>';
+      }).join('') + '</ul>' : '<div class="rlk-note">Personne n\'est inscrit pour le moment.</div>');
+  });
+}
+rlkShareUrl = function(id) { return location.origin + '/api/share?e=' + id; };
+rlkShare = (function(orig) {
+  return function(id, canal) {
+    var e = (RLK.evShare || {})[id]; if (!e) return;
+    var t = rlkEvText(e), u = rlkShareUrl(id), enc = encodeURIComponent;
+    if (canal === 'native') { if (navigator.share) { navigator.share({title: e.titre, text: t, url: u}).catch(function() {}); return; } canal = 'copy'; }
+    if (canal === 'wa') window.open('https://wa.me/?text=' + enc(t + ' ' + u), '_blank', 'noopener');
+    else if (canal === 'fb') window.open('https://www.facebook.com/sharer/sharer.php?u=' + enc(u), '_blank', 'noopener');
+    else if (canal === 'in') window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + enc(u), '_blank', 'noopener');
+    else if (canal === 'mail') location.href = 'mailto:?subject=' + enc(e.titre) + '&body=' + enc(t + '\n\n' + u);
+    else if (canal === 'copy') {
+      var txt = t + ' ' + u, ok = function() { toast('✓ Texte copié : collez-le dans Instagram, Messenger, un SMS…'); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, function() { prompt('Copiez ce texte :', txt); }); else prompt('Copiez ce texte :', txt);
+    }
+  };
+})(rlkShare);
+function rlkShareProd(id) {
+  var c = document.querySelector('.produit[data-id="' + id + '"]'), nom = c ? c.getAttribute('data-nom') : 'Article', u = location.origin + '/api/share?p=' + id, t = nom + ' · à la Boutik de Rézo la Kour';
+  if (navigator.share) { navigator.share({title: nom, text: t, url: u}).catch(function() {}); return; }
+  window.open('https://wa.me/?text=' + encodeURIComponent(t + ' ' + u), '_blank', 'noopener');
+}
+function rlkDecorateProduits() {
+  document.querySelectorAll('#produits-grid .produit[data-id]').forEach(function(c) {
+    if (c.querySelector('.rlk-prodshare')) return;
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn-ghost btn-xs rlk-prodshare'; b.style.marginTop = '8px'; b.textContent = 'Partager';
+    b.onclick = function() { rlkShareProd(c.getAttribute('data-id')); };
+    var body = c.querySelector('.produit-body') || c; body.appendChild(b);
+  });
+}
+(function() {
+  var g = document.getElementById('produits-grid'); if (!g || !window.MutationObserver) return;
+  var busy = false;
+  new MutationObserver(function() { if (busy) return; busy = true; setTimeout(function() { rlkDecorateProduits(); busy = false; }, 50); }).observe(g, {childList: true});
+  rlkDecorateProduits();
+})();
+if ((location.hash || '') === '#boutik') setTimeout(function() { navTo('boutik', document.querySelector('[onclick*="boutik"]')); }, 900);
 
 RLK_VERSION = '2.6';
 </script>
