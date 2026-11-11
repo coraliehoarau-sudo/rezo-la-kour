@@ -8638,6 +8638,71 @@ function rlkJnCorr(l) {
   return ' · kg corrigés : ' + c.map(function(x) { return String(x.date).slice(0, 10) + ' ' + x.avant + ' → ' + x.apres; }).join(' ; ');
 }
 
+// ═══ v3.6 : Zadéran : recherche, filtres, 2 lignes par adhérent ═══
+RLK.adh = [];
+function rlkAdhNorm(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+function rlkAdhEtat(p) {
+  var e = rlkEcheance(p), pay = !!(p.cotisation_payee || p.est_fondateur);
+  return {e: e, pay: pay, ok: pay && !(e && e.jours < 0), echu: !!(e && e.jours < 0), proche: !!(e && e.jours >= 0 && e.jours <= 30)};
+}
+function rlkAdhCtl() {
+  if (document.getElementById('adh-ctl')) return;
+  var l = document.getElementById('adherents-list'); if (!l) return;
+  l.insertAdjacentHTML('beforebegin', '<div id="adh-ctl" style="margin:0 0 10px"><input id="adh-q" type="search" placeholder="Rechercher un nom, un n° Yapla…" oninput="rlkAdhRender()" style="margin-bottom:6px">'
+    + '<div style="display:flex;gap:8px;align-items:center"><select id="adh-f" onchange="rlkAdhRender()" style="flex:1;margin:0"><option value="">Tous les adhérents</option><option value="echus">Adhésions échues</option><option value="proches">À renouveler (30 jours)</option><option value="sansnum">Sans n° Yapla</option><option value="attente">En attente de paiement</option></select>'
+    + '<span id="adh-count" class="rlk-note" style="margin:0;white-space:nowrap"></span></div></div>');
+}
+loadAdherents = function() {
+  sb.from('profiles').select('*').then(function(res) {
+    RLK.adh = (res.data || []).slice().sort(function(a, b) { return ((a.nom || '') + ' ' + (a.prenom || '')).localeCompare((b.nom || '') + ' ' + (b.prenom || ''), 'fr'); });
+    var donSel = document.getElementById('don-adherent');
+    if (donSel) { donSel.innerHTML = '<option value="">— Sélectionner —</option>' + RLK.adh.filter(function(p) { return p.cotisation_payee || p.est_fondateur; }).map(function(p) { return '<option value="' + p.id + '">' + rlkEsc((p.prenom || '') + ' ' + (p.nom || '')) + '</option>'; }).join(''); }
+    rlkAdhCtl(); rlkAdhRender();
+  });
+};
+function rlkAdhFiltre(f) { var q = document.getElementById('adh-f'); if (q) { q.value = f; rlkAdhRender(); } }
+function rlkAdhRender() {
+  var list = document.getElementById('adherents-list'); if (!list) return;
+  var all = RLK.adh || [], q = rlkAdhNorm(rlkVal('adh-q')).trim(), f = rlkVal('adh-f'), ech = 0, pro = 0;
+  all.forEach(function(p) { var s = rlkAdhEtat(p); if (s.echu) ech++; else if (s.proche) pro++; });
+  var rows = all.filter(function(p) {
+    var s = rlkAdhEtat(p);
+    if (f === 'echus' && !s.echu) return false; if (f === 'proches' && !s.proche) return false; if (f === 'sansnum' && p.numero_yapla) return false; if (f === 'attente' && s.pay) return false;
+    if (!q) return true;
+    return rlkAdhNorm([p.prenom, p.nom, p.numero_adherent, p.numero_yapla, p.email].join(' ')).indexOf(q) >= 0;
+  });
+  var cnt = document.getElementById('adh-count'); if (cnt) cnt.textContent = rows.length + ' sur ' + all.length;
+  var banners = (ech ? '<div class="rlk-warn" style="margin-bottom:8px;background:#FEE2E2;color:#B91C1C;cursor:pointer" onclick="rlkAdhFiltre(\'echus\')"><b>' + ech + ' adhésion' + (ech > 1 ? 's échues' : ' échue') + '.</b> Afficher</div>' : '')
+    + (pro ? '<div class="rlk-warn" style="margin-bottom:8px;background:#FFEDD5;color:#C2410C;cursor:pointer" onclick="rlkAdhFiltre(\'proches\')"><b>' + pro + ' adhésion' + (pro > 1 ? 's' : '') + ' à renouveler dans les 30 jours.</b> Afficher</div>' : '');
+  if (!rows.length) { list.innerHTML = banners + '<div class="rlk-note">Aucun adhérent ne correspond.</div>'; return; }
+  list.innerHTML = banners + rows.map(function(p) {
+    var s = rlkAdhEtat(p), e = s.e, c = rlkAdhCouleur(e), adm = p.role === 'admin', me = currentUser && p.id === currentUser.id;
+    var bord = s.echu ? 'border-left:4px solid #B91C1C;padding-left:8px;' : (s.proche ? 'border-left:4px solid #C2410C;padding-left:8px;' : '');
+    var bEch = e ? '<span class="badge" style="' + (s.echu ? 'background:#FEE2E2;color:#B91C1C' : (s.proche ? 'background:#FFEDD5;color:#C2410C' : 'background:#F3F4F6;color:#374151')) + '">' + (s.echu ? 'Échue le ' : 'Éch. ') + rlkDate(e.date) + '</span>' : '';
+    var dval = p.cotisation_date ? String(p.cotisation_date).slice(0, 10) : '';
+    var lab = 'display:block;margin:0 0 2px;font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--text3)';
+    return '<div style="padding:12px 0;border-bottom:2px solid var(--border);' + bord + '">'
+      + '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap"><div><span style="font-weight:700;font-size:1.15rem;color:#000">' + rlkEsc((p.prenom || '') + ' ' + (p.nom || '')) + '</span> '
+      + (adm ? '<span class="badge b-admin">admin</span> ' : '') + '<span class="badge ' + (s.ok ? 'b-ok' : 'b-wait') + '">' + (s.ok ? 'À jour' : 'En attente') + '</span> ' + bEch + '</div>'
+      + (me ? '' : '<button class="btn btn-ghost btn-xs" type="button" style="font-size:11px;padding:2px 6px" onclick="rlkSetRole(\'' + p.id + '\',\'' + (adm ? 'jardinier' : 'admin') + '\')">' + (adm ? 'Retirer admin' : 'Nommer admin') + '</button>') + '</div>'
+      + '<div style="display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr) auto;gap:8px;align-items:end;margin-top:8px">'
+      + '<div><label style="' + lab + '">Adhésion Yapla</label><input type="date" id="adh-d-' + p.id + '" value="' + dval + '" style="width:100%;min-width:0;margin:0;padding:8px 6px;font-size:14px"></div>'
+      + '<div><label style="' + lab + '">N° Yapla</label><input type="text" id="adh-n-' + p.id + '" value="' + rlkEsc(p.numero_yapla || '') + '" placeholder="à saisir" style="width:100%;min-width:0;margin:0;padding:8px 6px;font-size:14px"></div>'
+      + '<button class="btn btn-xs" type="button" style="background:#fff;color:#000;border:1px solid #000;font-weight:400;height:40px;padding:0 8px;font-size:13px" onclick="rlkAdhSaveRow(\'' + p.id + '\')">Enregistrer</button></div></div>';
+  }).join('');
+}
+function rlkAdhSaveRow(uid) {
+  var p = (RLK.adh || []).filter(function(x) { return x.id === uid; })[0] || {}, d = rlkVal('adh-d-' + uid), n = rlkVal('adh-n-' + uid).trim(), d0 = p.cotisation_date ? String(p.cotisation_date).slice(0, 10) : '', n0 = p.numero_yapla || '', jobs = [], dChg = !!(d && d !== d0);
+  if (dChg) jobs.push(sb.rpc('rlk_fixer_adhesion', {cible: uid, date_adhesion: d}));
+  if (n !== n0) jobs.push(sb.rpc('rlk_fixer_numero_yapla', {cible: uid, numero: n}));
+  if (!jobs.length) { toast('Rien à modifier'); return; }
+  Promise.all(jobs).then(function(rs) {
+    var er = rs.filter(function(r) { return r.error; })[0];
+    if (er) { toast(/function|exist|schema/i.test(er.error.message || '') ? 'Exécutez d\'abord phase9 et phase10 dans Supabase' : rlkErr(er.error)); return; }
+    toast('✓ Enregistré' + (dChg ? ' : échéance un an après la date d\'adhésion' : '')); if (typeof rlkLoadAdhConfirm === 'function') rlkLoadAdhConfirm(); loadAdherents();
+  });
+}
+
 RLK_VERSION = '2.6';
 </script>
 
