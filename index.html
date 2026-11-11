@@ -8131,7 +8131,7 @@ function rlkKourRender() {
   rows.forEach(function(r) {
     var j = r.jardins[0] || {}, et = rlkKourEtat(r), at = r.jardins.some(function(x) { return x.accueil_ateliers; }), ca = r.jardins.some(function(x) { return x.visible_carte; });
     var m2 = r.jardins.reduce(function(s, x) { return s + (+x.surface_m2 || 0); }, 0);
-    h += '<tr class="kr-r" style="cursor:pointer" onclick="rlkKourOpen(\'' + r.id + '\')"><td><b>' + rlkEsc(r.nom) + '</b></td><td>' + (j.quartier ? rlkEsc(j.quartier) + (j.commune ? ' (' + rlkEsc(j.commune) + ')' : '') : '—') + (r.jardins.length > 1 ? ' +' + (r.jardins.length - 1) : '') + '</td><td>' + (m2 || '—') + '</td><td>' + r.fruits.length + '</td><td>' + (at ? 'Oui' : '—') + '</td><td>' + (ca ? 'Oui' : '—') + '</td><td>' + (et ? '<span style="color:#b45309;font-weight:600">' + rlkEsc(et) + '</span>' : '<span style="color:#15803d">Complet</span>') + '</td></tr>';
+    h += '<tr class="kr-r" style="cursor:pointer" onclick="rlkKourOpen(\'' + r.id + '\')"><td><b style="text-decoration:underline dotted">' + rlkEsc(r.nom) + '</b></td><td>' + (j.quartier ? rlkEsc(j.quartier) + (j.commune ? ' (' + rlkEsc(j.commune) + ')' : '') : '—') + (r.jardins.length > 1 ? ' +' + (r.jardins.length - 1) : '') + '</td><td>' + (m2 || '—') + '</td><td>' + r.fruits.length + '</td><td>' + (at ? 'Oui' : '—') + '</td><td>' + (ca ? 'Oui' : '—') + '</td><td>' + (et ? '<span style="color:#b45309;font-weight:600">' + rlkEsc(et) + '</span>' : '<span style="color:#15803d">Complet</span>') + '</td></tr>';
     if (RLK_KOUR.open === r.id) h += '<tr><td colspan="7" style="text-align:left;background:var(--bg2,#f6f8f4)">' + rlkKourFiche(r) + '</td></tr>';
   });
   box.innerHTML = h + '</tbody></table></div>';
@@ -8346,6 +8346,63 @@ modifierDispo = function(id, produit, q, u) {
     toast('✓ Quantité mise à jour'); loadStockTable();
   });
 };
+
+// ═══ v3.2 : Réglaj > Kour : historique des FEY et des fruits donnés (comme « Kombien FEY mwin néna ») ═══
+function rlkSoldePrevPour(uid, histRows) {
+  var last = null;
+  (histRows || []).forEach(function(r) { if (/troc/i.test(r.motif || '') && (!last || r.created_at > last)) last = r.created_at; });
+  var since = last ? last.slice(0, 10) : new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10);
+  return rlkTrocRows(uid, since).then(function(rows) {
+    var fey = 0, kg = 0, au = 0;
+    rows.filter(function(t) { return !last || (t.created_at || '') > last; }).forEach(function(t) {
+      var m = /^(.*) \(autre troc\)$/.exec(String(t.produit || ''));
+      if (m) { var a = RLK_AUTRES.filter(function(x) { return x.n === m[1]; })[0]; if (a) au += Math.ceil(Number(t.quantite) * a.p - 1e-9); return; }
+      var k = t.kg != null ? Number(t.kg) : (t.unite === 'kg' ? Number(t.quantite) : 0); if (!(k > 0)) return;
+      kg += k; fey += k * rlkClasse(rlkClasseDepuisNom(t.produit)).transforme_par_kg * RLK.pHote;
+    });
+    return {fey: Math.ceil(fey - 1e-9) + au, kg: kg};
+  });
+}
+var rlkKourFicheOrig22 = rlkKourFiche;
+rlkKourFiche = function(r) {
+  var h = rlkKourFicheOrig22(r), k = '<button class="btn btn-primary btn-sm" style="margin-top:10px"';
+  return h.replace(k, '<div id="kr-h-' + r.id + '" class="rlk-note" style="margin:10px 0 0">Chargement de l\'historique…</div>' + k);
+};
+var rlkKourRenderOrig22 = rlkKourRender;
+rlkKourRender = function() { rlkKourRenderOrig22(); if (RLK_KOUR.open) rlkKourHist(RLK_KOUR.open); };
+function rlkKourHist(uid) {
+  var box = document.getElementById('kr-h-' + uid); if (!box) return;
+  Promise.all([sb.from('rlk_fey').select('*').eq('user_id', uid).order('created_at', {ascending: false}).limit(200), rlkTrocRows(uid, '2000-01-01')]).then(function(rs) {
+    box = document.getElementById('kr-h-' + uid); if (!box) return;
+    if (rs[0].error) { box.textContent = rlkErr(rs[0].error); return; }
+    var fey = rs[0].data || [], trok = rs[1] || [], ids = {};
+    fey.forEach(function(x) { if (x.lot_id) ids[x.lot_id] = 1; });
+    var lp = Object.keys(ids).length ? sb.from('rlk_lots').select('id,numero_lot,produit,qte_produite').in('id', Object.keys(ids)) : Promise.resolve({data: []});
+    lp.then(function(lr) {
+      box = document.getElementById('kr-h-' + uid); if (!box) return;
+      var lot = {}; (lr.data || []).forEach(function(l) { lot[l.id] = l; });
+      var reel = fey.reduce(function(s, x) { return s + (Number(x.delta) || 0); }, 0);
+      rlkSoldePrevPour(uid, fey).then(function(pv) {
+        box = document.getElementById('kr-h-' + uid); if (!box) return;
+        var h = '<div style="font-weight:700;margin:4px 0">Kombien FEY</div>'
+          + '<div class="rlk-note" style="margin:0 0 6px"><b>Solde réel : ' + rlkFmt(reel) + ' FEY</b> (déjà crédités)<br>Solde prévisionnel : <b>' + rlkFmt(reel + pv.fey) + ' FEY</b>' + (pv.fey ? ' (dont environ ' + pv.fey + ' FEY en attente, pour ' + rlkFmt(pv.kg, 1) + ' kg déclarés)' : '') + '</div>';
+        h += '<div style="font-weight:700;margin:10px 0 4px">Historique des FEY</div>';
+        h += fey.length ? '<div style="max-height:240px;overflow:auto"><table class="rlk-tbl">' + fey.map(function(x) {
+          var l = lot[x.lot_id], det = l ? '<br><span style="color:var(--text2);font-size:.82rem">Lot ' + rlkEsc(l.numero_lot) + (l.produit ? ' · ' + rlkEsc(l.produit) : '') + (l.qte_produite ? ' · ' + rlkFmt(l.qte_produite) + ' pots obtenus' : '') + '</span>' : '';
+          return '<tr><td>' + rlkDate(x.created_at) + ' · ' + rlkEsc(x.motif || '') + det + '</td><td style="white-space:nowrap"><b style="color:' + (x.delta < 0 ? 'var(--red)' : 'var(--accent2)') + '">' + (x.delta > 0 ? '+' : '') + x.delta + '</b></td></tr>';
+        }).join('') + '</table></div>' : '<div class="rlk-note" style="margin:0">Aucun mouvement pour le moment.</div>';
+        var tot = {}, kgT = 0;
+        trok.forEach(function(t) { var k = t.kg != null ? Number(t.kg) : (t.unite === 'kg' ? Number(t.quantite) : 0); kgT += k || 0; var o = tot[t.produit] = tot[t.produit] || {kg: 0, n: 0, u: t.unite}; o.kg += k || 0; o.n += Number(t.quantite) || 0; });
+        h += '<div style="font-weight:700;margin:12px 0 4px">Fruits et produits donnés : ' + rlkFmt(kgT, 1) + ' kg au total</div>';
+        if (trok.length) {
+          h += '<div style="margin-bottom:6px">' + Object.keys(tot).sort(function(a, b) { return tot[b].kg - tot[a].kg; }).map(function(n) { var o = tot[n]; return rlkEsc(n) + ' : ' + (o.kg ? rlkFmt(o.kg, 1) + ' kg' : rlkFmt(o.n, 2) + ' ' + rlkEsc(o.u)); }).join(' · ') + '</div>';
+          h += '<div style="max-height:240px;overflow:auto"><table class="rlk-tbl">' + trok.map(function(t) { return '<tr><td>' + rlkDate(t.created_at) + ' · ' + rlkEsc(t.produit) + '</td><td style="white-space:nowrap">' + rlkFmt(t.quantite, 2) + ' ' + rlkEsc(t.unite) + (t.unite !== 'kg' && t.kg != null ? ' (≈ ' + rlkFmt(t.kg, 1) + ' kg)' : '') + '</td></tr>'; }).join('') + '</table></div>';
+        } else h += '<div class="rlk-note" style="margin:0">Aucun fruit déclaré pour le moment.</div>';
+        box.className = ''; box.innerHTML = h;
+      });
+    });
+  });
+}
 
 RLK_VERSION = '2.6';
 </script>
