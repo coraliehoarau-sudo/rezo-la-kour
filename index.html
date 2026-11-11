@@ -1972,7 +1972,7 @@ details.rlk-bar{margin-top:10px}
     <div class="modal-hdr"><div class="modal-title" id="le-ttl">Modifier le lot</div><button class="modal-close" onclick="closeModal('m-lot-edit')">✕</button></div>
     <div class="modal-body">
       <div id="le-info" class="rlk-note" style="margin:0 0 12px"></div>
-      <div class="fr"><label>Pots produits (corriger si la saisie était fausse)</label><input type="number" id="le-prod" min="0"></div>
+      <div class="fr"><label>Pots produits (corriger si la saisie était fausse)</label><input type="number" id="le-prod" min="0"></div><div class="fr"><label>Kilos de fruits reçus et transformés (corriger si la saisie était fausse)</label><input type="number" id="le-kg" min="0" step="0.1"></div><div class="fr"><label>Motif de la correction des kilos</label><input type="text" id="le-kg-motif" placeholder="Pesée réelle, erreur de saisie"></div><div class="rlk-note">Ces kilos alimentent le compteur de l'accueil, le rapport d'activité et le journal. Chaque correction est tracée (ancienne valeur, nouvelle valeur, motif).</div>
       <div class="rlk-note">Les FEY déjà crédités ne bougent pas tant que vous ne les régularisez pas. Enregistrez d'abord les pots, puis rouvrez le lot.</div>
       <button type="button" class="btn btn-outline btn-sm" onclick="rlkLotRegul()">Régulariser les FEY selon la règle actuelle</button>
       <div id="le-regul" class="rlk-note" style="margin-top:8px"></div>
@@ -8457,7 +8457,7 @@ function rlkJnCollect(d1, d2) {
     rs[3].forEach(function(l) {
       var day = String(l.date_transfo || '').slice(0, 10);
       if (inP(day)) { lotKg += Number(l.kg_fruits) || 0; pots += Number(l.qte_produite) || 0;
-        L.push([day, 'Lot fabriqué', l.donateur_id ? rlkJnNum(l.donateur_id) : (l.donateur_libre ? 'Hors liste : ' + l.donateur_libre : ''), l.produit + (l.fruit ? ' (' + l.fruit + ')' : ''), Number(l.qte_produite) || 0, 'unités', rlkJnR2(l.kg_fruits), '', '', '', l.numero_lot, 'FEY répartis : donateur ' + (l.fey_donateur || 0) + ', équipe ' + (l.fey_equipe || 0) + ', boutique ' + (l.fey_boutik || 0)]); }
+        L.push([day, 'Lot fabriqué', l.donateur_id ? rlkJnNum(l.donateur_id) : (l.donateur_libre ? 'Hors liste : ' + l.donateur_libre : ''), l.produit + (l.fruit ? ' (' + l.fruit + ')' : ''), Number(l.qte_produite) || 0, 'unités', rlkJnR2(l.kg_fruits), '', '', '', l.numero_lot, 'FEY répartis : donateur ' + (l.fey_donateur || 0) + ', équipe ' + (l.fey_equipe || 0) + ', boutique ' + (l.fey_boutik || 0) + (typeof rlkJnCorr === 'function' ? rlkJnCorr(l) : '')]); }
       ((l.releve && l.releve.retraits) || []).forEach(function(r) { var rd = rlkJnDay(r.date); if (inP(rd)) { nbRet += Number(r.n) || 0; L.push([rd, 'Retrait de stock', '', l.produit, Number(r.n) || 0, 'unités', '', '', '', '', l.numero_lot, [r.canal, r.motif].filter(Boolean).join(' · ')]); } });
     });
     var cmds = rs[4].filter(function(c) { return inP(rlkJnDay(c.created_at)); }), cF = 0, cY = 0, cYp = 0, buyers = {}, nY = 0, nF = 0;
@@ -8599,6 +8599,44 @@ function rlkYaplaNum(uid) {
 }
 var rlkShowReglajJn = showReglaj;
 showReglaj = function(section) { rlkShowReglajJn(section); if (String(section) === 'jounal') rlkJnInit(); };
+
+// ═══ v3.4 : Atélié : corriger les kilos de fruits d'un lot déjà enregistré ═══
+var rlkLotEditOrig24 = rlkLotEdit;
+rlkLotEdit = function(id) {
+  rlkLotEditOrig24(id);
+  var l = (RLK.lots || []).filter(function(x) { return x.id === id; })[0]; if (!l) return;
+  var k = document.getElementById('le-kg'); if (k) k.value = l.kg_fruits == null ? '' : l.kg_fruits;
+  var m = document.getElementById('le-kg-motif'); if (m) m.value = '';
+  var cor = ((l.releve || {}).corrections_kg || []), h = document.getElementById('le-hist');
+  if (h && cor.length) h.innerHTML += (h.innerHTML ? '<br>' : '') + '<b>Kilos déjà corrigés :</b><br>' + cor.map(function(x) { return rlkDate(x.date) + ' : ' + rlkFmt(x.avant, 2) + ' → ' + rlkFmt(x.apres, 2) + ' kg' + (x.motif ? ' (' + rlkEsc(x.motif) + ')' : ''); }).join('<br>');
+};
+rlkLotEditSave = function() {
+  var E = RLK.lotEdit; if (!E) return;
+  var l = (RLK.lots || []).filter(function(x) { return x.id === E.id; })[0]; if (!l) return;
+  var retire = Math.max(0, parseInt(rlkVal('le-retire')) || 0), canal = rlkVal('le-canal'), app = parseInt(rlkVal('le-app')) || 0, yap = parseInt(rlkVal('le-yap')) || 0;
+  if (retire) { if (canal === 'yapla') yap = Math.max(0, yap - retire); else app = Math.max(0, app - retire); }
+  var pv = rlkVal('le-prod'), base = pv === '' ? l.qte_produite : Math.max(0, parseInt(pv) || 0), qte = Math.max(0, base - retire), r = JSON.parse(JSON.stringify(l.releve || {}));
+  if (retire) { r.retraits = (r.retraits || []).concat([{date: new Date().toISOString(), n: retire, canal: canal === 'yapla' ? 'boutique en ligne' : 'échanges', motif: rlkVal('le-motif').trim()}]); }
+  r.conservation = rlkVal('le-conserv'); r.observations = rlkVal('le-obs'); r.photos = E.photos;
+  var row = {produit: rlkVal('le-produit').trim() || l.produit, dlc: rlkVal('le-dlc') || null, ingredients: rlkVal('le-ingr'), allergenes: rlkVal('le-allerg'), qte_produite: qte, qte_app: app, qte_yapla: yap, ca_previsionnel: yap * RLK.fey, releve: r};
+  var kv = String(rlkVal('le-kg')).replace(',', '.').trim(), kgOld = Number(l.kg_fruits) || 0, kgChg = false;
+  if (kv !== '') {
+    var kn = parseFloat(kv); if (isNaN(kn) || kn < 0) { toast('Kilos invalides'); return; }
+    kn = Math.round(kn * 100) / 100;
+    if (kn !== Math.round(kgOld * 100) / 100) { kgChg = true; row.kg_fruits = kn; r.corrections_kg = (r.corrections_kg || []).concat([{date: new Date().toISOString(), avant: kgOld, apres: kn, motif: rlkVal('le-kg-motif').trim()}]); }
+  }
+  sb.from('rlk_lots').update(row).eq('id', E.id).select().then(function(res) {
+    if (res.error) { toast(rlkErr(res.error)); return; }
+    var nl = (res.data && res.data[0]) || Object.assign({}, l, row);
+    closeModal('m-lot-edit');
+    var done = function() { toast('✓ Lot modifié' + (kgChg ? ' : ' + rlkFmt(row.kg_fruits, 2) + ' kg (compteur mis à jour)' : '') + (retire ? ' : ' + retire + ' pot(s) retiré(s) du stock' : '')); rlkLoadLots(); if (typeof loadProduits === 'function') loadProduits(); if (typeof rlkLoadCompteurs === 'function') setTimeout(rlkLoadCompteurs, 400); };
+    if (document.getElementById('le-boutik').checked) rlkLotPush(nl).then(done); else done();
+  });
+};
+function rlkJnCorr(l) {
+  var c = (l.releve || {}).corrections_kg || []; if (!c.length) return '';
+  return ' · kg corrigés : ' + c.map(function(x) { return String(x.date).slice(0, 10) + ' ' + x.avant + ' → ' + x.apres; }).join(' ; ');
+}
 
 RLK_VERSION = '2.6';
 </script>
