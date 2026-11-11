@@ -2215,7 +2215,7 @@ details.rlk-bar{margin-top:10px}
       <div class="rlk-note">« Suit le poids du fruit » : la quantité est recalculée. « Quantité fixe » : elle ne change pas (ex. vinaigre ajouté selon le pH).</div>
       <div class="rlk-qt" style="margin-top:18px">Matériel, déroulé, contrôles</div>
       <div class="fr"><label>Matériel nécessaire (un par ligne)</label><textarea id="rec-materiel" rows="4"></textarea></div>
-      <div class="fr"><label>Déroulé (une étape par ligne ; une ligne commençant par ## est un titre de phase ; **gras** possible)</label><textarea id="rec-etapes" rows="10" placeholder="## Phase 1. Tri et lavage&#10;Trier les fruits…&#10;Laver à l'eau potable…"></textarea></div>
+      <div class="fr"><label>Déroulé (une étape par ligne ; une ligne commençant par ## est un titre de phase ; **gras** possible)</label><textarea id="rec-etapes" rows="10" placeholder="## Phase 1. Tri et lavage&#10;Trier les fruits…&#10;Laver à l'eau potable…"></textarea></div><div class="fr"><label>Photos et liens dans le déroulé</label><div class="rlk-note" style="margin:0 0 6px">Placez le curseur dans l'étape voulue, puis ajoutez une photo ou un lien : ils sont rattachés à cette ligne.</div><input type="file" accept="image/*" onchange="rlkRecPhotoAdd(this)"><div id="rec-photos-prev"></div><div class="fr2" style="margin-top:8px"><div><label>Lien (vidéo YouTube, recette en ligne)</label><input type="text" id="rec-steplink" placeholder="https://…"></div><div><label>Texte du lien</label><input type="text" id="rec-steplink-txt" placeholder="Voir la vidéo"></div></div><button type="button" class="btn btn-outline btn-sm" onclick="rlkRecLienAdd()">Ajouter ce lien à l'étape</button></div><div class="fr2"><div><label>Lien vers la recette complète en ligne (facultatif)</label><input type="text" id="rec-lien" placeholder="https://… (chaîne YouTube plus tard)"></div><div><label>Texte du bouton</label><input type="text" id="rec-lien-txt" placeholder="Voir la recette en vidéo"></div></div>
       <div class="fr"><label>Points de contrôle (un par ligne)</label><textarea id="rec-controles" rows="3" placeholder="pH avant mise en bocal : 3,5 maximum"></textarea></div>
       <div class="fr2">
         <div><label>Durée</label><input type="text" id="rec-duree" placeholder="Une demi-journée"></div>
@@ -5965,7 +5965,7 @@ function rlkBlogRender() {
   var l = B.posts.filter(function(p) { return (!B.cat || p.cat_id === B.cat) && (!q || (p.titre + ' ' + (p.chapeau || '')).toLowerCase().indexOf(q) >= 0); });
   grid.innerHTML = l.length ? l.map(function(p) {
     return '<div class="rlk-bcard" onclick="rlkPostOpen(\'' + p.id + '\')">' + (p.couverture ? '<img src="' + p.couverture + '" alt="">' : '<div class="rlk-bph"></div>')
-      + '<div class="rlk-bbody"><div class="rlk-bmeta">' + rlkEsc(nom[p.cat_id] || 'Sans catégorie') + ' · ' + rlkDate(p.created_at) + (p.publie ? '' : ' · <b style="color:#B3261E">Brouillon</b>') + '</div><div class="rlk-btitle">' + rlkEsc(p.titre) + '</div>' + (p.chapeau ? '<div class="rlk-bchap">' + rlkEsc(p.chapeau) + '</div>' : '') + '</div></div>';
+      + '<div class="rlk-bbody"><div class="rlk-bmeta">' + rlkEsc(nom[p.cat_id] || 'Sans catégorie') + ' · ' + rlkDate(p.created_at) + (p.publie ? '' : ' · <b style="color:#B3261E">Brouillon</b>') + '</div><div class="rlk-btitle">' + rlkEsc(p.titre) + '</div>' + (p.chapeau ? '<div class="rlk-bchap">' + rlkEsc(rlkPara1(p.chapeau)) + '</div>' : '') + '</div></div>';
   }).join('') : '<div class="rlk-note">Aucun article pour le moment.</div>';
 }
 function rlkInline(t) {
@@ -5995,7 +5995,7 @@ function rlkPostOpen(id) {
     rd.innerHTML = '<button class="btn btn-ghost btn-sm" type="button" onclick="rlkBlogLoad()">← Tous les articles</button>'
       + (cover ? '<img class="rlk-bcover" src="' + cover + '" alt="">' : '')
       + '<div class="rlk-bmeta" style="margin-top:14px">' + rlkEsc(cat ? cat.nom : 'Sans catégorie') + ' · ' + rlkDate(p.created_at) + (p.publie ? '' : ' · <b style="color:#B3261E">Brouillon</b>') + '</div>'
-      + '<h1 class="rlk-bh1">' + rlkEsc(p.titre) + '</h1>' + (p.chapeau ? '<p class="rlk-bchapo">' + rlkEsc(p.chapeau) + '</p>' : '')
+      + '<h1 class="rlk-bh1">' + rlkEsc(p.titre) + '</h1>' + (p.chapeau ? '<p class="rlk-bchapo">' + rlkInline(p.chapeau) + '</p>' : '')
       + '<div>' + blocs.map(rlkBlocHtml).join('') + '</div>'
       + (rlkIsAdmin() && !String(id).startsWith('old:') ? '<div style="margin-top:22px"><button class="btn btn-outline btn-sm" type="button" onclick="rlkPostEdit(\'' + id + '\')">Modifier cet article</button></div>' : '');
     window.scrollTo(0, 0);
@@ -6250,7 +6250,7 @@ function rlkRecHtml(d) {
   var ref = Number(d.ref_kg) || 1, sc = rlkRecScaled(d, ref), steps = rlkRecSteps(d.etapes);
   var h = '<div class="rlk-rec" id="rec-' + n + '">';
   if (d.avertissement) h += '<div class="rlk-rec-warn">' + rlkInline(d.avertissement) + '</div>';
-  h += '<div class="rlk-rec-top"><div class="rlk-rec-lbl">Poids de <b>' + rlkEsc(d.fruit || 'fruit principal') + '</b> disponible sur le site' + (d.precision ? ' <span>(' + rlkEsc(d.precision) + ')</span>' : '') + '</div>'
+  h += rlkRecLienHtml(d); h += '<div class="rlk-rec-top"><div class="rlk-rec-lbl">Poids de <b>' + rlkEsc(d.fruit || 'fruit principal') + '</b> disponible sur le site' + (d.precision ? ' <span>(' + rlkEsc(d.precision) + ')</span>' : '') + '</div>'
     + '<div class="rlk-rec-w"><button type="button" class="btn btn-outline btn-sm" onclick="rlkRecStep(' + n + ',-1)" aria-label="Moins">−</button>'
     + '<input type="number" inputmode="decimal" id="rw-' + n + '" min="0.1" step="0.1" value="' + ref + '" oninput="rlkRecScale(' + n + ')" aria-label="Poids en kg"><span>kg</span>'
     + '<button type="button" class="btn btn-outline btn-sm" onclick="rlkRecStep(' + n + ',1)" aria-label="Plus">+</button>'
@@ -6271,7 +6271,7 @@ function rlkRecHtml(d) {
   var mat = String(d.materiel || '').split('\n').map(function(x) { return x.trim(); }).filter(Boolean);
   if (mat.length) h += '<h3 class="rlk-bh3">Matériel</h3><ul class="rlk-bp">' + mat.map(function(x) { return '<li>' + rlkInline(x) + '</li>'; }).join('') + '</ul>';
   if (steps.length) h += '<h3 class="rlk-bh3">Déroulé</h3><div class="rlk-rec-steps">' + steps.map(function(s) {
-    return s.phase ? '<div class="rlk-rec-ph">' + rlkEsc(s.phase) + '</div>' : '<label class="rlk-rec-s"><input type="checkbox"><span class="no">' + s.n + '</span><span class="tx">' + rlkInline(s.t) + '</span></label>';
+    return s.phase ? '<div class="rlk-rec-ph">' + rlkEsc(s.phase) + '</div>' : '<label class="rlk-rec-s"><input type="checkbox"><span class="no">' + s.n + '</span><span class="tx">' + rlkRecStepHtml(s.t, d) + '</span></label>';
   }).join('') + '</div>';
   var ctl = String(d.controles || '').split('\n').map(function(x) { return x.trim(); }).filter(Boolean);
   if (ctl.length) h += '<h3 class="rlk-bh3">Points de contrôle</h3><div class="rlk-rec-ctl">' + ctl.map(function(x) { return '<label class="rlk-rec-s"><input type="checkbox"><span class="tx">' + rlkInline(x) + '</span></label>'; }).join('') + '</div>';
@@ -6311,7 +6311,7 @@ function rlkRecPrint(n) {
     + '<h2>Ingrédients</h2><table><tr><td><span class="c"></span>' + E(d.fruit || 'Fruit principal') + '</td><td>' + sc.main + '</td></tr>'
     + (d.ingr || []).map(function(i, k) { return '<tr><td><span class="c"></span>' + E(i.n) + (i.note ? ' <i>(' + E(i.note) + ')</i>' : '') + (i.m === 'fixe' ? ' <i>(quantité fixe)</i>' : '') + '</td><td>' + E(sc.ingr[k]) + '</td></tr>'; }).join('') + '</table>'
     + (d.materiel ? '<h2>Matériel</h2><div>' + E(String(d.materiel).split('\n').filter(function(x) { return x.trim(); }).join(' · ')) + '</div>' : '')
-    + '<h2>Déroulé</h2>' + steps.map(function(s) { return s.phase ? '<div class="p">' + E(s.phase) + '</div>' : '<div class="s"><b>' + s.n + '.</b><span><span class="c"></span>' + E(s.t.replace(/\*\*/g, '')) + '</span></div>'; }).join('')
+    + '<h2>Déroulé</h2>' + steps.map(function(s) { return s.phase ? '<div class="p">' + E(s.phase) + '</div>' : '<div class="s"><b>' + s.n + '.</b><span><span class="c"></span>' + rlkRecPrintStep(s.t, d) + '</span></div>'; }).join('')
     + (d.controles ? '<h2>Points de contrôle</h2>' + String(d.controles).split('\n').filter(function(x) { return x.trim(); }).map(function(x) { return '<div class="s"><span><span class="c"></span>' + E(x.replace(/\*\*/g, '')) + '</span></div>'; }).join('') : '')
     + '<p style="margin-top:20px">Rempli par : ____________________ Date : ___________ Visa : ___________</p></body></html>';
   var wn = window.open('', '_blank'); if (!wn) { toast('Autorisez les fenêtres pour imprimer'); return; }
@@ -6396,7 +6396,7 @@ function rlkRecCover(inp) { var f = inp.files && inp.files[0]; if (f) rlkResizeI
 function rlkRecFill(d) {
   var set = function(i, v) { var x = document.getElementById(i); if (x) x.value = v == null ? '' : v; };
   set('rec-fruit', d.fruit); set('rec-ref', d.ref_kg); set('rec-prec', d.precision); set('rec-rend', d.rend_n); set('rec-rendfmt', d.rend_fmt); set('rec-duree', d.duree);
-  set('rec-allerg', d.allergenes); set('rec-conserv', d.conservation); set('rec-avert', d.avertissement); set('rec-materiel', d.materiel); set('rec-etapes', d.etapes); set('rec-controles', d.controles);
+  set('rec-allerg', d.allergenes); set('rec-conserv', d.conservation); set('rec-avert', d.avertissement); set('rec-materiel', d.materiel); set('rec-etapes', d.etapes); set('rec-controles', d.controles); set('rec-lien', d.lien); set('rec-lien-txt', d.lien_txt); rlkRec.photos = (d.photos || []).slice(); rlkRecPhotosPrev();
   rlkRec.ingr = JSON.parse(JSON.stringify(d.ingr || [])); if (!rlkRec.ingr.length) rlkRec.ingr = [{n: '', q: '', u: 'g', m: 'prop', note: ''}];
   rlkRecIngrRender();
 }
@@ -6431,7 +6431,7 @@ function rlkRecSave() {
   var rn = parseFloat(String(rlkVal('rec-rend')).replace(',', '.'));
   var d = {fruit: rlkVal('rec-fruit').trim(), ref_kg: ref, precision: rlkVal('rec-prec').trim(), rend_n: rn > 0 ? rn : null, rend_fmt: rlkVal('rec-rendfmt').trim(), duree: rlkVal('rec-duree').trim(),
     allergenes: rlkVal('rec-allerg').trim(), conservation: rlkVal('rec-conserv').trim(), avertissement: rlkVal('rec-avert').trim(), ingr: ingr,
-    materiel: rlkVal('rec-materiel').trim(), etapes: rlkVal('rec-etapes').trim(), controles: rlkVal('rec-controles').trim()};
+    materiel: rlkVal('rec-materiel').trim(), etapes: rlkVal('rec-etapes').trim(), controles: rlkVal('rec-controles').trim(), lien: rlkVal('rec-lien').trim(), lien_txt: rlkVal('rec-lien-txt').trim(), photos: rlkRecPhotosUsed()};
   var go = function(catId) {
     var row = {titre: titre, cat_id: catId || null, chapeau: rlkVal('rec-chapeau').trim() || ('Fiche recette : ' + d.fruit + '. Les quantités s\'adaptent au poids disponible sur le site.'), couverture: rlkRec.cover,
       blocs: [{t: 'recette', d: d}].concat(rlkRec.autres), publie: rlkVal('rec-publie') === '1', updated_at: new Date().toISOString()};
@@ -7558,6 +7558,245 @@ function rlkDecorateProduits() {
   rlkDecorateProduits();
 })();
 if ((location.hash || '') === '#boutik') setTimeout(function() { navTo('boutik', document.querySelector('[onclick*="boutik"]')); }, 900);
+
+// ═══════════════════════════════════════════════════════════════
+// MODULE 14 (v2.8) : Protokol sanitaire adhérent (validation étape par étape, sans impression)
+// ═══════════════════════════════════════════════════════════════
+var RLK_PM = [
+  {id: 'L', t: '1. Le lieu', h: 'Une cuisine fermée reste préférable. Sous chapiteau, tout dépend du choix de l\'emplacement.', i: [
+    ['Emplacement à l\'écart des chemins, de la route, des toilettes et des poubelles, protégé du vent dominant, si possible à l\'ombre'],
+    ['Animaux domestiques éloignés ou enfermés pendant tout l\'atelier', 1],
+    ['Sol dégagé de feuilles et fruits tombés, poussière limitée (sol arrosé autour du chapiteau)'],
+    ['Tables lisses, lavables et stables, jamais de bois brut ; denrées et ustensiles jamais posés au sol', 1],
+    ['Trois zones distinctes : zone sale (trier, laver, éplucher), zone propre (préparer), zone cuisson'],
+    ['Foyer sur sol plat et stable, bouteilles de gaz à l\'extérieur, extincteur à portée, aucun passage devant le foyer', 1]]},
+  {id: 'E', t: '2. L\'eau', h: 'L\'eau de lavage, de cuisine et de rinçage doit être potable. Un tuyau d\'arrosage n\'est pas une source d\'eau potable.', i: [
+    ['Eau potable uniquement (réseau ou eau en bouteille), dans des contenants alimentaires propres', 1],
+    ['Aucun arrosoir, seau ménager ou tuyau d\'arrosage pour les aliments, les mains ou la vaisselle', 1],
+    ['Eau de lavage des fruits changée dès qu\'elle est trouble ; bassine réservée à cet usage'],
+    ['Une bassine pour laver, une autre pour rincer la vaisselle']]},
+  {id: 'P', t: '3. Les personnes', h: 'Les mains sont la première cause de contamination.', i: [
+    ['Aucune personne malade en préparation (diarrhée, vomissements, fièvre, plaie infectée)', 1],
+    ['Point de lavage des mains installé : eau potable, savon liquide, essuie-tout jetable', 1],
+    ['Mains lavées 20 secondes avant de commencer, à chaque changement de tâche et après les toilettes, un déchet ou un téléphone', 1],
+    ['Tablier propre, cheveux attachés (charlotte ou bandana), ongles courts, ni bague ni bracelet'],
+    ['Plaie à la main : pansement propre recouvert d\'un gant, changé à chaque tâche'],
+    ['Chaussures fermées ; on ne goûte qu\'avec une cuillère propre, jamais avec les doigts']]},
+  {id: 'M', t: '4. Les fruits et légumes', h: 'Ce qui entre dans l\'atelier conditionne la sécurité du pot.', i: [
+    ['Fruits triés : pourris, moisis, piqués ou fermentés écartés', 1],
+    ['Fruits lavés à l\'eau potable avant d\'être épluchés ou coupés, même si on les cuit', 1],
+    ['Aucune cueillette sauvage (bords de route, champs traités) sans certitude sur l\'origine'],
+    ['Origine notée : qui a donné les fruits, quelle quantité, quelle date'],
+    ['Œufs, lait, viande ou poisson : à éviter sans froid ; sinon glacière avec plaques de froid, hors du soleil']]},
+  {id: 'F', t: '5. La préparation et la cuisson', h: 'Éviter que le propre touche le sale, et cuire jusqu\'au bout.', i: [
+    ['Un couteau et une planche par tâche (ou lavés entre deux tâches), surtout après la terre ou le cru', 1],
+    ['Marche en avant : zone sale, puis zone propre, jamais l\'inverse ; mains lavées en changeant de zone'],
+    ['Cuisson complète, à ébullition franche, de la préparation entière'],
+    ['Aucune préparation cuite laissée plus de 2 heures à température ambiante', 1],
+    ['Gants anti-chaleur pour les marmites ; enfants tenus à distance du foyer']]},
+  {id: 'B', t: '6. Les bocaux et la conservation', h: 'Le botulisme ne se voit pas, ne se sent pas et peut être mortel. Seuls les produits acides sont stérilisables au bain-marie.', i: [
+    ['Bocaux et couvercles lavés puis stérilisés (eau bouillante), jamais fêlés ni ébréchés ; joints neufs si possible', 1],
+    ['Produit acide uniquement pour la mise en bocal à température ambiante : fruits, confitures, chutneys vinaigrés. Légumes, viande, poisson et sauces peu acides : froid (réfrigérateur ou congélateur) seulement', 1],
+    ['Remplissage à chaud, fermeture immédiate, bocaux retournés ou stérilisés selon la recette, puis refroidis', 1],
+    ['Bocal bombé, qui s\'ouvre tout seul, qui fuit ou à l\'odeur douteuse : on jette sans goûter', 1],
+    ['Table propre et dégagée avant la mise en bocaux ; bocaux secs et propres à l\'extérieur'],
+    ['Pots étiquetés : nom du produit, date de fabrication, numéro de lot, date limite, allergènes éventuels']]},
+  {id: 'N', t: '7. La fin de l\'atelier', h: 'Un atelier n\'est terminé que quand tout est propre et rangé.', i: [
+    ['Tables et plans de travail nettoyés puis désinfectés ; ustensiles lavés, rincés et séchés à l\'air', 1],
+    ['Bassines vidées, rincées et séchées ; matériel rangé bien sec (l\'humidité fait proliférer les microbes)'],
+    ['Déchets évacués, sacs fermés, à l\'écart de la cuisine et des animaux'],
+    ['Pots entreposés au sec, à l\'abri de la chaleur ; produits sensibles au froid'],
+    ['Lot enregistré dans l\'application avec les kilos de fruits et le nombre de pots']]}
+];
+var RLK_PM_KEY = 'rlk-protokol-membre';
+RLK.pm = {c: {}, open: ''};
+function rlkPmLoad() { try { var s = JSON.parse(localStorage.getItem(RLK_PM_KEY) || 'null'); if (s && s.c) RLK.pm = s; } catch (e) {} }
+function rlkPmSave() { try { localStorage.setItem(RLK_PM_KEY, JSON.stringify(RLK.pm)); } catch (e) {} }
+function rlkPmGroupDone(g) { return g.i.filter(function(it, k) { return RLK.pm.c[g.id + (k + 1)]; }).length; }
+function rlkPmTotals() {
+  var t = 0, c = 0, crit = [];
+  RLK_PM.forEach(function(g) { g.i.forEach(function(it, k) { t++; if (RLK.pm.c[g.id + (k + 1)]) c++; else if (it[1]) crit.push(it[0]); }); });
+  return {t: t, c: c, crit: crit};
+}
+function rlkPmCss() {
+  if (document.getElementById('rlk-pm-css')) return;
+  var st = document.createElement('style'); st.id = 'rlk-pm-css';
+  st.textContent = '.rlk-pm-bar{height:10px;background:#E4E4E0;border-radius:6px;overflow:hidden;margin:8px 0 4px}.rlk-pm-bar div{height:100%;width:0;background:var(--accent2);transition:width .25s}'
+    + '.rlk-pm-h{font-size:.82rem;color:var(--text2);margin:0 0 6px;line-height:1.5}.rlk-pm-warn{background:#FEF3C7;border:1px solid #E5C77A;border-radius:8px;padding:10px 12px;font-size:.85rem;line-height:1.5;margin:0 0 12px}'
+    + '.rlk-pm-g.done summary{color:var(--accent2)}.rlk-pm-nx{margin:8px 0 4px}';
+  document.head.appendChild(st);
+}
+function rlkPmRender() {
+  var box = document.getElementById('pm-groups'); if (!box) return;
+  var firstOpen = '';
+  RLK_PM.forEach(function(g) { if (!firstOpen && rlkPmGroupDone(g) < g.i.length) firstOpen = g.id; });
+  var op = RLK.pm.open || firstOpen;
+  box.innerHTML = RLK_PM.map(function(g, gi) {
+    var d = rlkPmGroupDone(g), full = d === g.i.length;
+    return '<details class="rlk-pr-g rlk-pm-g' + (full ? ' done' : '') + '" data-g="' + g.id + '"' + (op === g.id ? ' open' : '') + ' ontoggle="rlkPmToggle(this)"><summary>' + (full ? '✓ ' : '') + rlkEsc(g.t) + ' <span class="rlk-pr-n" id="pmn-' + g.id + '">' + d + '/' + g.i.length + '</span></summary>'
+      + '<p class="rlk-pm-h">' + rlkEsc(g.h) + '</p>'
+      + g.i.map(function(it, k) {
+        var key = g.id + (k + 1), on = RLK.pm.c[key];
+        return '<label class="rlk-pr-i' + (on ? ' ok' : '') + '"><input type="checkbox" data-k="' + key + '"' + (on ? ' checked' : '') + ' onchange="rlkPmTick(this)"><span>' + rlkEsc(it[0]) + (it[1] ? ' <b class="rlk-pr-crit">à ne jamais sauter</b>' : '') + '</span></label>';
+      }).join('')
+      + (gi < RLK_PM.length - 1 ? '<div class="rlk-pm-nx"><button type="button" class="btn btn-outline btn-sm" onclick="rlkPmNext(\'' + g.id + '\')">Étape suivante</button></div>' : '')
+      + '</details>';
+  }).join('');
+  rlkPmStatus();
+}
+function rlkPmToggle(el) { if (el.open) { RLK.pm.open = el.dataset.g; rlkPmSave(); } }
+function rlkPmNext(id) {
+  var i = RLK_PM.findIndex(function(g) { return g.id === id; }), n = RLK_PM[i + 1]; if (!n) return;
+  RLK.pm.open = n.id; rlkPmSave(); rlkPmRender();
+  var e = document.querySelector('.rlk-pm-g[data-g="' + n.id + '"]'); if (e && e.scrollIntoView) e.scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+function rlkPmTick(el) {
+  RLK.pm.c[el.dataset.k] = el.checked ? 1 : 0; el.parentNode.classList.toggle('ok', el.checked);
+  rlkPmSave(); rlkPmStatus();
+  var g = RLK_PM.find(function(x) { return x.id === el.dataset.k.charAt(0); }), det = el.closest('details');
+  if (g && det) { var full = rlkPmGroupDone(g) === g.i.length; det.classList.toggle('done', full); var s = det.querySelector('summary'); if (s) s.firstChild.nodeValue = (full ? '✓ ' : '') + g.t + ' '; }
+}
+function rlkPmStatus() {
+  var r = rlkPmTotals(), bar = document.getElementById('pm-bar'), v = document.getElementById('pm-verdict'), n = document.getElementById('pm-count'); if (!bar) return;
+  bar.style.width = Math.round(100 * r.c / r.t) + '%'; n.textContent = r.c + ' / ' + r.t + ' vérifications faites';
+  RLK_PM.forEach(function(g) { var e = document.getElementById('pmn-' + g.id); if (e) e.textContent = rlkPmGroupDone(g) + '/' + g.i.length; });
+  if (r.c === r.t) { v.className = 'rlk-pr-v ok'; v.innerHTML = '<b>Votre atelier respecte le protokol.</b> Toutes les vérifications sont faites. Bon atelier !'; }
+  else if (!r.c) { v.className = 'rlk-pr-v ko'; v.innerHTML = 'Commencez par l\'étape 1 et cochez chaque point une fois vérifié chez vous.'; }
+  else {
+    v.className = 'rlk-pr-v ko';
+    v.innerHTML = '<b>Il reste ' + (r.t - r.c) + ' vérification' + (r.t - r.c > 1 ? 's' : '') + '.</b>' + (r.crit.length ? '<br>Points à ne jamais sauter encore ouverts : ' + r.crit.length : '');
+  }
+}
+function rlkPmReset() {
+  if (!confirm('Tout décocher pour préparer un nouvel atelier ?')) return;
+  RLK.pm = {c: {}, open: 'L'}; rlkPmSave(); rlkPmRender();
+}
+function rlkPmMount() {
+  var root = document.getElementById('page-kont'); if (!root) return;
+  rlkPmCss(); rlkPmLoad();
+  if (!document.getElementById('bar-protokol')) {
+    var d = document.createElement('details'); d.className = 'rlk-bar'; d.id = 'bar-protokol';
+    d.innerHTML = '<summary><span class="rlk-ttl" style="margin:0"><span class="rlk-dot"></span>Protokol sanitaire de mon atelier</span></summary>'
+      + '<div class="rlk-bar-body">'
+      + '<div class="rlk-pm-warn"><b>Avant de commencer.</b> Ces mesures sont adaptées à la cuisine en plein air sous chapiteau. Il est bien entendu préférable de transformer dans une cuisine fermée, plus facile à garder propre. Cet outil sert à vérifier, étape par étape, que votre atelier est aux normes. Rien n\'est envoyé : vos cases cochées restent sur ce téléphone.</div>'
+      + '<div class="rlk-pm-bar"><div id="pm-bar"></div></div><div class="rlk-note" id="pm-count" style="margin:0"></div><div id="pm-verdict" class="rlk-pr-v ko"></div>'
+      + '<div id="pm-groups"></div>'
+      + '<div style="margin-top:10px"><button class="btn btn-ghost btn-sm" type="button" onclick="rlkPmReset()">Nouvel atelier (tout décocher)</button></div>'
+      + '<div class="rlk-note">Inspiré du livret sanitaire de l\'association et du guide de bonnes pratiques d\'hygiène de la restauration collective de plein air. Si vous vendez ou donnez vos produits à des personnes hors de l\'association, des obligations supplémentaires s\'appliquent : demandez à l\'équipe avant.</div>'
+      + '</div>';
+    var bars = root.querySelectorAll('details.rlk-bar'), last = bars[bars.length - 1];
+    if (last) last.parentNode.insertBefore(d, last.nextSibling); else root.appendChild(d);
+    d.addEventListener('toggle', function() { if (d.open) rlkPmRender(); });
+  }
+  rlkPmRender();
+}
+var rlkNavToOrig14 = navTo;
+navTo = function(p, b) {
+  rlkNavToOrig14(p, b);
+  if (p === 'kont' && currentUser) { setTimeout(rlkPmMount, 60); if ((location.hash || '') === '#protokol') setTimeout(function() { var d = document.getElementById('bar-protokol'); if (d) { d.open = true; d.scrollIntoView(); } }, 200); }
+};
+document.addEventListener('DOMContentLoaded', function() {
+  if ((location.hash || '') === '#protokol') setTimeout(function() { navTo('kont', document.querySelector('[onclick*="kont"]')); }, 1000);
+});
+
+// ═══ MODULE 15 (v2.8b) : Ladilafé, onglet « Tout » en bandes photo ═══
+var rlkBlogRenderOrig15 = rlkBlogRender;
+rlkBlogRender = function() {
+  rlkBlogRenderOrig15();
+  var grid = document.getElementById('blog-grid'); if (!grid) return;
+  var B = RLK.blog, q = rlkVal('blog-search').trim();
+  if (B.erreur) return;
+  if (B.cat || q) { grid.style.display = ''; return; }
+  var nom = {}; B.cats.forEach(function(c) { nom[c.id] = c.nom; });
+  if (!B.posts.length) return;
+  grid.style.display = 'block';
+  grid.innerHTML = B.posts.map(function(p) {
+    var bg = p.couverture ? 'linear-gradient(90deg,rgba(26,61,43,.88),rgba(26,61,43,.25)),url(\'' + String(p.couverture).replace(/'/g, '%27') + '\')' : 'linear-gradient(90deg,#1A3D2B,#2D6A4F)';
+    return '<a class="rlk-strip" style="background-image:' + bg + '" onclick="rlkPostOpen(\'' + p.id + '\')"><b>' + rlkEsc(p.titre) + '</b><span>' + rlkEsc(nom[p.cat_id] || 'Sans catégorie') + ' · ' + rlkDate(p.created_at) + (p.publie ? '' : ' · Brouillon') + '</span></a>';
+  }).join('');
+};
+
+// ═══ MODULE 16 (v2.8c) : résumé en paragraphes, impression sans quitter l'appli, photos et liens dans les étapes ═══
+function rlkPrintFrame(fn) {
+  var orig = window.open;
+  window.open = function() {
+    var f = document.createElement('iframe'); f.setAttribute('aria-hidden', 'true');
+    f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden';
+    document.body.appendChild(f);
+    var w = f.contentWindow;
+    w.addEventListener('afterprint', function() { setTimeout(function() { if (f.parentNode) f.parentNode.removeChild(f); }, 500); });
+    setTimeout(function() { if (f.parentNode) f.parentNode.removeChild(f); }, 180000);
+    return w;
+  };
+  try { fn(); } finally { window.open = orig; }
+}
+var rlkRecPrintOrig16 = rlkRecPrint;
+rlkRecPrint = function(n) { rlkPrintFrame(function() { rlkRecPrintOrig16(n); }); };
+var rlkProtoPrintOrig16 = rlkProtoPrint;
+rlkProtoPrint = function() { rlkPrintFrame(function() { rlkProtoPrintOrig16(); }); };
+
+function rlkPara1(t) { return String(t || '').split(/\n/).map(function(x) { return x.trim(); }).filter(Boolean)[0] || ''; }
+
+var RLK_PHOTO_RE = /\s*\[photo:(\d+)\]/g;
+function rlkRecStepHtml(t, d) {
+  var ph = (d && d.photos) || [], imgs = [];
+  var txt = String(t).replace(RLK_PHOTO_RE, function(m, k) { var src = ph[Number(k) - 1]; if (src) imgs.push(src); return ''; });
+  return rlkInline(txt) + imgs.map(function(s) { return '<img class="rlk-rec-img" src="' + s + '" alt="" loading="lazy">'; }).join('');
+}
+function rlkRecPrintStep(t, d) {
+  var ph = (d && d.photos) || [], imgs = [];
+  var txt = String(t).replace(RLK_PHOTO_RE, function(m, k) { var src = ph[Number(k) - 1]; if (src) imgs.push(src); return ''; })
+    .replace(/\*\*/g, '').replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '$1 ($2)');
+  return rlkEsc(txt) + imgs.map(function(s) { return '<br><img src="' + s + '" style="max-width:220px;max-height:160px;margin-top:4px" alt="">'; }).join('');
+}
+function rlkRecLienHtml(d) {
+  var u = String(d.lien || '').trim(); if (!/^https?:\/\//i.test(u)) return '';
+  return '<a class="btn btn-primary btn-sm" style="margin:0 0 12px;display:inline-flex" href="' + rlkEsc(u) + '" target="_blank" rel="noopener">' + rlkEsc(d.lien_txt || 'Voir la recette en ligne') + ' ↗</a>';
+}
+(function() {
+  var st = document.createElement('style');
+  st.textContent = '.rlk-rec-img{display:block;max-width:100%;max-height:260px;border-radius:8px;margin:8px 0 2px}.rlk-pho{display:inline-block;margin:6px 8px 0 0;text-align:center;font-size:.75rem}.rlk-pho img{display:block;width:72px;height:72px;object-fit:cover;border-radius:6px}';
+  document.head.appendChild(st);
+})();
+
+rlkRec.photos = [];
+function rlkRecPhotosPrev() {
+  var e = document.getElementById('rec-photos-prev'); if (!e) return;
+  e.innerHTML = (rlkRec.photos || []).map(function(s, k) {
+    return s ? '<span class="rlk-pho"><img src="' + s + '" alt=""><b>[photo:' + (k + 1) + ']</b><br><button type="button" class="btn btn-ghost btn-xs" onclick="rlkRecPhotoDel(' + k + ')">Retirer</button></span>' : '';
+  }).join('');
+}
+function rlkRecInsertAtLine(txt) {
+  var ta = document.getElementById('rec-etapes'); if (!ta) return;
+  var pos = ta.selectionStart == null ? ta.value.length : ta.selectionStart, end = ta.value.indexOf('\n', pos); if (end < 0) end = ta.value.length;
+  ta.value = ta.value.slice(0, end) + ' ' + txt + ta.value.slice(end);
+  ta.focus(); ta.selectionStart = ta.selectionEnd = end + txt.length + 1;
+}
+function rlkRecPhotoAdd(inp) {
+  var f = inp.files && inp.files[0]; if (!f) return;
+  rlkResizeImg(f, 900, function(d) {
+    rlkRec.photos = rlkRec.photos || []; rlkRec.photos.push(d);
+    rlkRecInsertAtLine('[photo:' + rlkRec.photos.length + ']'); rlkRecPhotosPrev(); inp.value = '';
+    toast('Photo ajoutée à la ligne où se trouvait votre curseur');
+  });
+}
+function rlkRecPhotoDel(k) {
+  rlkRec.photos[k] = null;
+  var ta = document.getElementById('rec-etapes'); if (ta) ta.value = ta.value.split('[photo:' + (k + 1) + ']').join('').replace(/[ \t]+\n/g, '\n');
+  rlkRecPhotosPrev();
+}
+function rlkRecLienAdd() {
+  var u = rlkVal('rec-steplink').trim(), t = rlkVal('rec-steplink-txt').trim() || 'Voir la vidéo';
+  if (!/^https?:\/\//i.test(u)) { toast('Le lien doit commencer par https://'); return; }
+  rlkRecInsertAtLine('[' + t.replace(/[\[\]]/g, '') + '](' + u + ')');
+  document.getElementById('rec-steplink').value = '';
+}
+function rlkRecPhotosUsed() {
+  var tx = rlkVal('rec-etapes'), out = [];
+  (rlkRec.photos || []).forEach(function(s, k) { out.push(s && tx.indexOf('[photo:' + (k + 1) + ']') >= 0 ? s : null); });
+  while (out.length && !out[out.length - 1]) out.pop();
+  return out;
+}
 
 RLK_VERSION = '2.6';
 </script>
