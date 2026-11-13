@@ -1378,6 +1378,7 @@ details.rlk-bar{margin-top:10px}
         <div class="fr"><label>Observations</label><input type="text" id="lot-obs"></div>
         <div class="fr"><label>Photos de l'atelier (jusqu'à 6)</label><div id="lot-photos-prev"></div><input type="file" accept="image/*" multiple onchange="rlkLotPhotosAdd(this)">
           <div class="rlk-note">Elles alimentent la photo de l'article en Boutik (elles défilent s'il y en a plusieurs) et peuvent servir à un article de Ladilafé.</div></div>
+        <div class="rlk-chk"><label><input type="checkbox" id="lot-dejapart" onchange="rlkLotPreview()"> <b>Parts déjà distribuées</b> (atelier fait avant l'application : tous les pots vont en boutique, aucun FEY crédité)</label></div>
         <div class="rlk-chk"><label><input type="checkbox" id="lot-boutik" checked> Remplir tout de suite l'article de la Boutik (stock, ingrédients, conservation, photos)</label></div>
         <div id="lot-preview" class="rlk-ok"></div>
         <button class="btn btn-primary btn-sm" onclick="rlkSaveLot()">Enregistrer le lot</button>
@@ -1971,7 +1972,7 @@ details.rlk-bar{margin-top:10px}
   <div class="modal" style="max-width:560px">
     <div class="modal-hdr"><div class="modal-title" id="le-ttl">Modifier le lot</div><button class="modal-close" onclick="closeModal('m-lot-edit')">✕</button></div>
     <div class="modal-body">
-      <div id="le-info" class="rlk-note" style="margin:0 0 12px"></div>
+      <div id="le-info" class="rlk-note" style="margin:0 0 12px"></div><div class="rlk-lecture" style="margin-bottom:12px"><b>Informations de l'atelier</b><div class="fr2" style="margin-top:10px"><div><label>Date de transformation</label><input type="date" id="le-date"></div><div><label>Fruit</label><input type="text" id="le-fruit" list="produits-list"></div></div><div class="fr2"><div><label>Hôte / donateur</label><select id="le-donateur"></select></div><div><label>ou donateur non inscrit</label><input type="text" id="le-donlibre"></div></div><div class="fr2"><div><label>Type d'unité</label><select id="le-type"></select></div><div><label>Mention de date</label><select id="le-dtype"></select></div></div><div class="fr2"><div><label>État à réception</label><select id="le-etat"></select></div><div><label>Décision</label><select id="le-decision"></select></div></div><div class="fr"><label>Personnes présentes</label><div class="rlk-chk" id="le-equipe" style="max-height:140px;overflow:auto"></div></div><div class="rlk-chk"><label><input type="checkbox" id="le-livre"> Fruits apportés par l'hôte</label><label><input type="checkbox" id="le-dejapart" onchange="rlkLotEditDp(this)"> <b>Parts déjà distribuées</b> (tout en boutique, aucun FEY)</label></div><div class="fr"><label>Relevé d'hygiène</label><div class="rlk-chk" id="le-hygiene"></div></div></div>
       <div class="fr"><label>Pots produits (corriger si la saisie était fausse)</label><input type="number" id="le-prod" min="0"></div><div class="fr"><label>Kilos de fruits reçus et transformés (corriger si la saisie était fausse)</label><input type="number" id="le-kg" min="0" step="0.1"></div><div class="fr"><label>Motif de la correction des kilos</label><input type="text" id="le-kg-motif" placeholder="Pesée réelle, erreur de saisie"></div><div class="rlk-note">Ces kilos alimentent le compteur de l'accueil, le rapport d'activité et le journal. Chaque correction est tracée (ancienne valeur, nouvelle valeur, motif).</div>
       <div class="rlk-note">Les FEY déjà crédités ne bougent pas tant que vous ne les régularisez pas. Enregistrez d'abord les pots, puis rouvrez le lot.</div>
       <button type="button" class="btn btn-outline btn-sm" onclick="rlkLotRegul()">Régulariser les FEY selon la règle actuelle</button>
@@ -1992,7 +1993,9 @@ details.rlk-bar{margin-top:10px}
         <div class="fr" style="margin-bottom:0"><label>Motif</label><input type="text" id="le-motif" placeholder="Bocaux ouverts, plus stériles"></div>
         <div id="le-hist" class="rlk-note"></div>
       </div>
-      <div class="fr2" style="margin-top:12px">
+      <div class="fr" style="margin-top:12px"><label>Total en stock (échanges + boutique en ligne)</label><input type="number" id="le-tot" min="0"></div>
+      <div class="rlk-note" style="margin-top:-4px">Les deux stocks sont liés : ce que vous ajoutez à l'un est retiré de l'autre.</div>
+      <div class="fr2">
         <div><label>Stock échanges (pots)</label><input type="number" id="le-app" min="0"></div>
         <div><label>Stock boutique en ligne (pots)</label><input type="number" id="le-yap" min="0"></div>
       </div>
@@ -2173,6 +2176,8 @@ details.rlk-bar{margin-top:10px}
         <div><label>Stock application (échanges)</label><input type="number" id="art-st-app" value="0" min="0"></div>
         <div><label>Stock boutique Yapla</label><input type="number" id="art-st-yap" value="0" min="0"></div>
       </div>
+      <div class="fr"><label>Total en stock (application + Yapla)</label><input type="number" id="art-st-tot" min="0"></div>
+      <div class="rlk-note" style="margin-top:-4px">Les deux stocks sont liés : ce que vous ajoutez à l'un est retiré de l'autre. Pour augmenter le stock global, ajoutez au total ou à un stock vide.</div>
       <div class="fr"><label>Photo</label>
         <input type="file" id="art-file" accept="image/*" onchange="rlkArtPhoto(this)">
         <div id="art-prev" style="margin-top:8px"></div>
@@ -6833,7 +6838,7 @@ rlkSaveLot = function() {
       ingredients: rlkVal('lot-ingr'), allergenes: rlkVal('lot-allerg'), dlc: rlkVal('lot-dlc') || null, qte_produite: q, fey_donateur: p.donateur, fey_equipe: equipeFey, fey_boutik: boutik,
       donateur_id: rlkVal('lot-donateur') || null, donateur_libre: rlkVal('lot-donlibre'), participants: equipe, qte_app: p.donateur + equipeFey, qte_yapla: boutik,
       ca_previsionnel: boutik * RLK.fey, created_by: currentUser.id,
-      releve: {dtype: rlkVal('lot-dtype') || 'DDM', reception: {etat: rlkVal('lot-etat'), decision: rlkVal('lot-decision')}, hygiene: hyg, observations: rlkVal('lot-obs'), protocole: rlkProtoSummary(), conservation: rlkVal('lot-conserv'), photos: RLK.lotPhotos.slice(), livre: !!(document.getElementById('lot-livre') || {}).checked, hote_participe: rlkHoteDansEquipe()}};
+      releve: {dtype: rlkVal('lot-dtype') || 'DDM', reception: {etat: rlkVal('lot-etat'), decision: rlkVal('lot-decision')}, hygiene: hyg, observations: rlkVal('lot-obs'), protocole: rlkProtoSummary(), conservation: rlkVal('lot-conserv'), photos: RLK.lotPhotos.slice(), livre: !!(document.getElementById('lot-livre') || {}).checked, hote_participe: rlkHoteDansEquipe(), deja_partage: !!(document.getElementById('lot-dejapart') || {}).checked}};
     sb.from('rlk_lots').insert(row).select().then(function(res) {
       if (res.error) { toast(rlkErr(res.error)); return; }
       var lot = res.data && res.data[0], ledger = [];
@@ -8702,6 +8707,136 @@ function rlkAdhSaveRow(uid) {
     toast('✓ Enregistré' + (dChg ? ' : échéance un an après la date d\'adhésion' : '')); if (typeof rlkLoadAdhConfirm === 'function') rlkLoadAdhConfirm(); loadAdherents();
   });
 }
+// ═══ v3.7 : Atélié : tout modifier, parts déjà distribuées, stocks en vases communicants ═══
+function rlk$(i) { return document.getElementById(i); }
+
+// ── Parts déjà distribuées : tout part en boutique, aucun FEY ──
+RLK._dp = false;
+var rlkPartsOrig26 = rlkParts;
+rlkParts = function(t) {
+  var p = rlkPartsOrig26(t);
+  return RLK._dp ? {total: p.total, donateur: 0, equipe: 0, boutik: p.total} : p;
+};
+var rlkLotPreviewOrig26 = rlkLotPreview;
+rlkLotPreview = function() {
+  var c = rlk$('lot-dejapart'); RLK._dp = !!(c && c.checked);
+  try { rlkLotPreviewOrig26(); } finally { RLK._dp = false; }
+  var el = rlk$('lot-preview');
+  if (c && c.checked && el) el.innerHTML = el.innerHTML.replace(/<br>Hôte : .*$/, '') + '<br><b>Parts déjà distribuées :</b> tous les pots vont en boutique, aucun FEY n\'est crédité.';
+};
+var rlkSaveLotOrig26 = rlkSaveLot;
+rlkSaveLot = function() {
+  var c = rlk$('lot-dejapart'), dp = !!(c && c.checked);
+  RLK._dp = dp;
+  try { rlkSaveLotOrig26(); } finally { RLK._dp = false; }
+  if (dp && rlkVal('lot-produit').trim() && rlkLotQte() > 0 && rlkVal('lot-dlc')) {
+    setTimeout(function() { if (c) c.checked = false; rlkLotPreview(); }, 2000);
+  }
+};
+var rlkRegulCalcOrig26 = rlkRegulCalc;
+rlkRegulCalc = function(l, rows) {
+  RLK._dp = !!(l && l.releve && l.releve.deja_partage);
+  try { return rlkRegulCalcOrig26(l, rows); } finally { RLK._dp = false; }
+};
+
+// ── Modification complète d'un lot ──
+var rlkLotEditOrig26 = rlkLotEdit;
+rlkLotEdit = function(id) {
+  rlkLotEditOrig26(id);
+  var l = (RLK.lots || []).filter(function(x) { return x.id === id; })[0]; if (!l) return;
+  var r = l.releve || {}, E = RLK.lotEdit; if (E) E.ready = false;
+  var cl = function(d, s) { var a = rlk$(d), b = rlk$(s); if (a && b) a.innerHTML = b.innerHTML; };
+  cl('le-type', 'lot-type'); cl('le-dtype', 'lot-dtype'); cl('le-etat', 'lot-etat'); cl('le-decision', 'lot-decision'); cl('le-hygiene', 'lot-hygiene');
+  var setSel = function(i, v, label) {
+    var e = rlk$(i); if (!e) return; v = v == null ? '' : v;
+    if (v !== '' && !Array.prototype.some.call(e.options, function(o) { return o.value === v; })) { var o = document.createElement('option'); o.value = v; o.textContent = label || v; e.appendChild(o); }
+    e.value = v;
+  };
+  rlk$('le-date').value = (l.date_transfo || '').slice(0, 10); rlk$('le-fruit').value = l.fruit || ''; rlk$('le-donlibre').value = l.donateur_libre || '';
+  setSel('le-type', l.type_unite ? l.type_unite + '|' + (l.poids_net || '') : '', (l.type_unite || '') + (l.poids_net ? ' (' + l.poids_net + ')' : ''));
+  setSel('le-dtype', r.dtype || 'DDM'); setSel('le-etat', (r.reception || {}).etat || 'Sain'); setSel('le-decision', (r.reception || {}).decision || 'Accepté');
+  var hy = r.hygiene || []; document.querySelectorAll('#le-hygiene input').forEach(function(i) { i.checked = hy.indexOf(i.value) >= 0; });
+  rlk$('le-livre').checked = !!r.livre; rlk$('le-dejapart').checked = !!r.deja_partage; if (E) E.dp0 = !!r.deja_partage;
+  RLK.profils = null;
+  rlkProfils().then(function(map) {
+    var ids = Object.keys(map).sort(function(a, b) { return String(map[a]).localeCompare(String(map[b])); });
+    var part = l.participants || [];
+    rlk$('le-donateur').innerHTML = '<option value="">— Non inscrit / autre —</option>' + ids.map(function(u) { return '<option value="' + u + '">' + rlkEsc(map[u]) + '</option>'; }).join('');
+    rlk$('le-donateur').value = l.donateur_id || '';
+    rlk$('le-equipe').innerHTML = ids.map(function(u) { return '<label><input type="checkbox" value="' + u + '"' + (part.indexOf(u) >= 0 ? ' checked' : '') + '> ' + rlkEsc(map[u]) + '</label>'; }).join('');
+    if (RLK.lotEdit && RLK.lotEdit.id === id) RLK.lotEdit.ready = true;
+  });
+};
+function rlkLotEditDp(chk) {
+  if (!chk.checked) return;
+  var a = parseInt(rlkVal('le-app')) || 0, y = parseInt(rlkVal('le-yap')) || 0;
+  rlk$('le-yap').value = a + y; rlk$('le-app').value = 0;
+  rlkVaseSync('le-app', 'le-yap', 'le-tot');
+}
+rlkLotEditSave = function() {
+  var E = RLK.lotEdit; if (!E) return;
+  var l = (RLK.lots || []).filter(function(x) { return x.id === E.id; })[0]; if (!l) return;
+  var retire = Math.max(0, parseInt(rlkVal('le-retire')) || 0), canal = rlkVal('le-canal'), app = parseInt(rlkVal('le-app')) || 0, yap = parseInt(rlkVal('le-yap')) || 0;
+  if (retire) { if (canal === 'yapla') yap = Math.max(0, yap - retire); else app = Math.max(0, app - retire); }
+  var pv = rlkVal('le-prod'), base = pv === '' ? l.qte_produite : Math.max(0, parseInt(pv) || 0), qte = Math.max(0, base - retire), r = JSON.parse(JSON.stringify(l.releve || {}));
+  if (retire) { r.retraits = (r.retraits || []).concat([{date: new Date().toISOString(), n: retire, canal: canal === 'yapla' ? 'boutique en ligne' : 'échanges', motif: rlkVal('le-motif').trim()}]); }
+  r.conservation = rlkVal('le-conserv'); r.observations = rlkVal('le-obs'); r.photos = E.photos;
+  var row = {produit: rlkVal('le-produit').trim() || l.produit, dlc: rlkVal('le-dlc') || null, ingredients: rlkVal('le-ingr'), allergenes: rlkVal('le-allerg'), qte_produite: qte, qte_app: app, qte_yapla: yap, ca_previsionnel: yap * RLK.fey, releve: r};
+  var kv = String(rlkVal('le-kg')).replace(',', '.').trim(), kgOld = Number(l.kg_fruits) || 0, kgChg = false;
+  if (kv !== '') {
+    var kn = parseFloat(kv); if (isNaN(kn) || kn < 0) { toast('Kilos invalides'); return; }
+    kn = Math.round(kn * 100) / 100;
+    if (kn !== Math.round(kgOld * 100) / 100) { kgChg = true; row.kg_fruits = kn; r.corrections_kg = (r.corrections_kg || []).concat([{date: new Date().toISOString(), avant: kgOld, apres: kn, motif: rlkVal('le-kg-motif').trim()}]); }
+  }
+  var feyChg = false;
+  if (E.ready) {
+    var don = rlkVal('le-donateur') || null, eq = []; document.querySelectorAll('#le-equipe input:checked').forEach(function(i) { eq.push(i.value); });
+    var typ = rlkVal('le-type').split('|'), dp = !!rlk$('le-dejapart').checked;
+    row.date_transfo = rlkVal('le-date') || l.date_transfo; row.fruit = rlkVal('le-fruit').trim(); row.donateur_id = don; row.donateur_libre = rlkVal('le-donlibre').trim();
+    row.participants = eq; if (typ[0]) { row.type_unite = typ[0]; row.poids_net = typ[1] || l.poids_net; }
+    r.dtype = rlkVal('le-dtype') || 'DDM'; r.reception = {etat: rlkVal('le-etat'), decision: rlkVal('le-decision')};
+    var hy = []; document.querySelectorAll('#le-hygiene input:checked').forEach(function(i) { hy.push(i.value); }); r.hygiene = hy;
+    r.livre = !!rlk$('le-livre').checked; r.hote_participe = !!(don && eq.indexOf(don) >= 0);
+    if (dp) r.deja_partage = true; else delete r.deja_partage;
+    var oldEq = (l.participants || []).slice().sort().join(','), samePers = (l.donateur_id || null) === don && oldEq === eq.slice().sort().join(',') && qte === l.qte_produite && dp === !!E.dp0;
+    feyChg = !samePers;
+    if (feyChg || dp !== !!E.dp0) {
+      var c = rlkRegulCalc(Object.assign({}, l, {qte_produite: qte, participants: eq, donateur_id: don, releve: r}), []);
+      row.fey_donateur = c.parts.donateur; row.fey_equipe = c.equipeFey; row.fey_boutik = c.boutik;
+    }
+  }
+  sb.from('rlk_lots').update(row).eq('id', E.id).select().then(function(res) {
+    if (res.error) { toast(rlkErr(res.error)); return; }
+    var nl = (res.data && res.data[0]) || Object.assign({}, l, row);
+    closeModal('m-lot-edit');
+    var done = function() {
+      toast('✓ Lot modifié' + (kgChg ? ' : ' + rlkFmt(row.kg_fruits, 2) + ' kg (compteur mis à jour)' : '') + (retire ? ' : ' + retire + ' pot(s) retiré(s) du stock' : '') + (feyChg ? '. Les FEY déjà crédités ne bougent pas : rouvrez le lot et utilisez « Régulariser les FEY »' : ''));
+      rlkLoadLots(); if (typeof loadProduits === 'function') loadProduits();
+    };
+    if (rlk$('le-boutik').checked) rlkLotPush(nl).then(done); else done();
+  });
+};
+
+// ── Stocks application / Yapla en vases communicants ──
+var rlkVaseState = {};
+function rlkVaseN(e) { return Math.max(0, parseInt(e.value) || 0); }
+function rlkVaseSync(a, y, t) {
+  var A = rlk$(a), Y = rlk$(y), T = rlk$(t); if (!A || !Y || !T) return;
+  var st = rlkVaseState[t] = rlkVaseState[t] || {};
+  if (!st.on) {
+    st.on = true;
+    A.addEventListener('input', function() { var d = rlkVaseN(A) - st.a; Y.value = Math.max(0, st.y - d); T.value = rlkVaseN(A) + rlkVaseN(Y); st.a = rlkVaseN(A); st.y = rlkVaseN(Y); });
+    Y.addEventListener('input', function() { var d = rlkVaseN(Y) - st.y; A.value = Math.max(0, st.a - d); T.value = rlkVaseN(A) + rlkVaseN(Y); st.a = rlkVaseN(A); st.y = rlkVaseN(Y); });
+    T.addEventListener('input', function() { var t2 = rlkVaseN(T), a2 = Math.min(st.a, t2); A.value = a2; Y.value = t2 - a2; st.a = a2; st.y = t2 - a2; });
+  }
+  st.a = rlkVaseN(A); st.y = rlkVaseN(Y); T.value = st.a + st.y;
+}
+var openModalOrig26 = openModal;
+openModal = function(id) {
+  openModalOrig26.apply(this, arguments);
+  if (id === 'm-article') rlkVaseSync('art-st-app', 'art-st-yap', 'art-st-tot');
+  if (id === 'm-lot-edit') rlkVaseSync('le-app', 'le-yap', 'le-tot');
+};
 
 RLK_VERSION = '2.6';
 </script>
