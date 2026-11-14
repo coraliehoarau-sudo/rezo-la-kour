@@ -627,6 +627,26 @@ details.rlk-bar{margin-top:10px}
 #page-kont details.rlk-bar{margin-top:10px}
 #page-kont details .card{box-shadow:none;border:0;padding:0}
 .rlk-ttl .rlk-dot{flex:none}
+
+/* ═══ v4.0 ═══ */
+#nav{position:relative}
+#nav-more{position:sticky;right:0;flex:0 0 40px;width:40px;align-items:center;justify-content:center;border:0;color:#fff;font-size:26px;line-height:1;cursor:pointer;background:linear-gradient(90deg,rgba(26,61,43,0),var(--accent) 55%);padding:0 6px 3px}
+#rlk-feybar{position:fixed;left:0;right:0;bottom:0;z-index:300;background:#2D6A4F;color:#fff;text-align:center;font-size:15px;padding:7px 12px;letter-spacing:.02em}
+body{padding-bottom:42px}
+.header-top{height:auto;min-height:54px;padding-top:4px;padding-bottom:4px}
+.header-right{flex-wrap:nowrap;gap:6px}
+.logo-name{white-space:nowrap;font-size:14px}
+.btn-hdr{min-height:44px;padding:0 12px;white-space:nowrap}
+.btn-hdr#btn-aplus{min-width:44px;padding:0 8px}
+@media(max-width:430px){.role-pill:not(.admin){display:none}.logo-name{font-size:13px}.header-top{padding:4px 12px}}
+#boutik-pay{background:none!important;padding:0!important}
+#produits-grid .produit-img{height:180px!important;aspect-ratio:auto!important}
+#produits-grid .produit-img img{height:180px}
+.page :where(label,p,li,td,th,h4,.rlk-note,.rlk-ok,.rlk-warn,.card-title,.rlk-pm-h,.produit-desc,.produit-nom,.rlk-eur,.rlk-qs,.rlk-pr-n,.rlk-cap-s,.btn,.btn-sm,.btn-xs,.rlk-eye,.rlk-ph,.rlk-pe,.rlk-pv){font-size:15px!important}
+.rlk-pr-crit,.stat-label{font-size:13px!important}
+.nav-tab{font-size:13px!important}
+html.rlk-grand body{zoom:1.18}
+html.rlk-grand #rlk-feybar{font-size:16px}
 </style>
 </head>
 <body>
@@ -664,6 +684,7 @@ details.rlk-bar{margin-top:10px}
         <span id="cart-hdr-count" style="position:absolute;top:-6px;right:-6px;background:#fff;color:var(--accent);width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">0</span>
         <span id="cart-hdr-total" style="font-size:12px;font-weight:500">0,00 €</span>
       </button>
+      <button class="btn-hdr" id="btn-aplus" type="button" onclick="rlkTexteBascule()" aria-label="Agrandir le texte" style="font-weight:700;padding:6px 10px">A+</button>
       <div class="role-pill" id="role-pill">Non konekté</div>
       <button class="btn-hdr" id="btn-auth" onclick="openModal('m-login')">Konekt a mwin</button>
     </div>
@@ -1049,7 +1070,7 @@ details.rlk-bar{margin-top:10px}
   </div>
   <div id="bk-dbwarn"></div>
   <div class="rlk-ok" id="boutik-solde" style="display:none"></div>
-  <div id="boutik-prev" class="rlk-note" style="margin-bottom:10px"></div>
+  <div id="boutik-prev" class="rlk-note" style="margin-bottom:10px">Les FEY ne sont crédités qu'après l'atelier ou le don de fruits, une fois validés par l'équipe. Le paiement en espèces est possible lors des événements.</div>
   <div class="rlk-warn" id="boutik-pay" style="margin-bottom:14px"></div>
   <div id="produits-grid" class="g3">
     <div class="loading"><div class="spinner"></div>Chargement…</div>
@@ -1871,7 +1892,7 @@ details.rlk-bar{margin-top:10px}
     <div class="rlk-note" style="margin:0 0 8px">L'équipe du Rézo voit vos réponses et les informations de votre kour pour organiser les échanges. Seules les kour cochées « visible sur la carte » apparaissent sur la carte.</div><button class="btn btn-primary btn-sm" onclick="rlkSaveQuest()">Enrejistr mé répons</button>
   </div>
 
-  <div style="margin-top:16px"><button class="btn btn-ghost btn-sm" type="button" onclick="doLogout()">Dékonekte</button></div>
+  <div style="margin-top:16px"><button class="btn btn-ghost btn-sm" type="button" onclick="doLogout()">Dékonek</button></div>
 </div>
 
 </main>
@@ -2004,7 +2025,7 @@ details.rlk-bar{margin-top:10px}
       <div class="rlk-chk"><label><input type="checkbox" id="le-boutik" checked> Mettre à jour l'article de la Boutik (stock, ingrédients, conservation, photos)</label></div>
       <div class="rlk-note">Les FEY déjà crédités aux adhérents ne sont pas modifiés par cette correction.</div>
     </div>
-    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('m-lot-edit')">Annuler</button><button class="btn btn-primary" onclick="rlkLotEditSave()">Enregistrer</button></div>
+    <div class="modal-footer"><button class="btn btn-ghost" style="margin-right:auto;color:var(--red)" onclick="rlkLotDelBtn()">Supprimer ce lot</button><button class="btn btn-ghost" onclick="closeModal('m-lot-edit')">Annuler</button><button class="btn btn-primary" onclick="rlkLotEditSave()">Enregistrer</button></div>
   </div>
 </div>
 
@@ -2457,7 +2478,7 @@ function updateUI() {
     var labels = { admin:'Admin', jardinier:'Jardinier', producteur:'Producteur' };
     pill.textContent = labels[profile.role] || 'Membre';
     pill.className = 'role-pill' + (isAdmin ? ' admin' : '');
-    btnAuth.textContent = 'Dékonekte';
+    btnAuth.textContent = 'Dékonek';
     btnAuth.onclick = doLogout;
   } else {
     pill.textContent = 'Non konekté';
@@ -7038,7 +7059,7 @@ function rlkSaisonRender() {
   var F = RLK.saison || {}, q = rlkVal('saison-q').trim().toLowerCase(), now = new Date().getMonth(), noms = Object.keys(F).sort(function(a, b) { return a.localeCompare(b, 'fr'); }).filter(function(n) { return !q || n.toLowerCase().indexOf(q) >= 0; });
   if (!Object.keys(F).length) { box.innerHTML = '<div class="rlk-note">Aucun fruit renseigné pour le moment : les adhérents les indiquent dans Mon Kour, rubrique « Mes fruits et légumes ».</div>'; return; }
   var cur = Object.keys(F).filter(function(n) { return F[n].mois[now] > 0; }).sort(function(a, b) { return F[b].mois[now] - F[a].mois[now]; });
-  var h = '<div class="rlk-res" style="margin-bottom:12px"><div class="k">Ce mois-ci (' + RLK_MOIS[now] + ')</div><div class="s" style="font-size:13px;opacity:1">' + (cur.length ? cur.map(function(n) { return rlkEsc(n) + ' (' + F[n].mois[now] + ' kour)'; }).join(' · ') : 'Aucun fruit déclaré pour ce mois.') + '</div></div>';
+  var h = '<div class="rlk-res" style="margin-bottom:12px"><div class="k">Ce mois-ci (' + RLK_MOIS[now] + ')</div><div class="s" style="font-size:13px;opacity:1">' + (cur.length ? cur.map(function(n) { var pr = {}; F[n].kour.forEach(function(k) { if (k.ms.indexOf(now) >= 0) pr[String(k.nom || '').trim().split(' ')[0] || 'Adhérent'] = 1; }); return '<b>' + rlkEsc(n) + '</b> : ' + rlkEsc(Object.keys(pr).sort(function(a, b) { return a.localeCompare(b, 'fr'); }).join(', ')); }).join('<br>') : 'Aucun fruit déclaré pour ce mois.') + '</div></div>';
   h += '<div class="rlk-saison"><table><thead><tr><th>Fruit</th>' + RLK_MOIS.map(function(m, i) { return '<th class="' + (i === now ? 'now' : '') + '">' + m.slice(0, 3) + '</th>'; }).join('') + '</tr></thead><tbody>';
   noms.forEach(function(n, idx) {
     h += '<tr class="sa-r" onclick="rlkSaisonOpen(' + idx + ')" data-n="' + rlkEsc(n) + '"><td class="sa-n">' + rlkEsc(n) + '</td>' + F[n].mois.map(function(c, i) { return '<td class="' + (c ? 'sa-on sa-' + Math.min(c, 4) : '') + (i === now ? ' now' : '') + '">' + (c || '') + '</td>'; }).join('') + '</tr><tr class="sa-d" style="display:none"><td colspan="13" id="sa-d-' + idx + '"></td></tr>';
@@ -8837,6 +8858,104 @@ openModal = function(id) {
   if (id === 'm-article') rlkVaseSync('art-st-app', 'art-st-yap', 'art-st-tot');
   if (id === 'm-lot-edit') rlkVaseSync('le-app', 'le-yap', 'le-tot');
 };
+// ═══ v3.8 : supprimer un lot saisi en double (annulation des FEY crédités) ═══
+function rlkLotDel(id) {
+  var l = (RLK.lots || []).filter(function(x) { return x.id === id; })[0]; if (!l) { toast('Lot introuvable, rechargez la liste'); return; }
+  if (!confirm('Supprimer définitivement le lot ' + l.numero_lot + ' (' + l.produit + ', ' + l.qte_produite + ' pots) ?\n\nLes FEY crédités à cause de ce lot seront annulés. L\'article de la Boutik n\'est pas touché.')) return;
+  sb.from('rlk_fey').select('user_id,delta').eq('lot_id', id).then(function(f) {
+    if (f.error) { toast(rlkErr(f.error)); return; }
+    var sum = {}; (f.data || []).forEach(function(r) { sum[r.user_id] = (sum[r.user_id] || 0) + Number(r.delta); });
+    sb.from('rlk_lots').delete().eq('id', id).select().then(function(d) {
+      if (d.error) { toast(rlkErr(d.error)); return; }
+      if (!d.data || !d.data.length) { toast('Suppression refusée : droits administrateur manquants'); return; }
+      var rows = Object.keys(sum).filter(function(u) { return sum[u] !== 0; }).map(function(u) { return {user_id: u, delta: -sum[u], motif: 'Annulation du lot ' + l.numero_lot + ' (saisi en double)'}; });
+      var fin = function(er) {
+        closeModal('m-lot-edit'); rlkLoadLots(); if (typeof loadProduits === 'function') loadProduits();
+        toast(er ? '✓ Lot supprimé, mais l\'annulation des FEY a échoué : ' + rlkErr(er) : '✓ Lot ' + l.numero_lot + ' supprimé' + (rows.length ? ', ' + rows.length + ' crédit(s) FEY annulé(s)' : '') + '. Vérifiez le stock de l\'article en Boutik.');
+      };
+      if (rows.length) sb.from('rlk_fey').insert(rows).then(function(r) { fin(r.error); }); else fin(null);
+    });
+  });
+}
+function rlkLotDelBtn() { if (RLK.lotEdit) rlkLotDel(RLK.lotEdit.id); }
+// ═══ v3.9 : partage d'article (WhatsApp, e-mail, copier le lien, autres) ═══
+function rlkShareSheetClose() { var e = document.getElementById('rlk-sheet'); if (e) e.remove(); }
+function rlkShareProd(id) {
+  var c = document.querySelector('.produit[data-id="' + id + '"]'), nom = c ? c.getAttribute('data-nom') : 'Article';
+  var d = c ? ((c.querySelector('.produit-desc') || {}).textContent || '').trim() : '';
+  var u = location.origin + '/api/share?p=' + id, t = nom + (d ? ' : ' + d.slice(0, 140) : '') + ' · à la Boutik de Rézo la Kour';
+  rlkShareSheetClose();
+  var s = document.createElement('div'); s.id = 'rlk-sheet';
+  s.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center';
+  s.onclick = function(e) { if (e.target === s) rlkShareSheetClose(); };
+  var bt = 'display:block;width:100%;text-align:left;padding:14px 16px;margin-bottom:8px;font-size:16px;border:1px solid var(--border);border-radius:12px;background:#fff;color:inherit;cursor:pointer';
+  s.innerHTML = '<div style="background:var(--cream,#fff);width:100%;max-width:480px;border-radius:16px 16px 0 0;padding:18px 16px 22px"><div style="font-weight:700;font-size:17px;margin-bottom:4px">Partager « ' + rlkEsc(nom) + ' »</div>'
+    + '<div class="rlk-note" style="margin:0 0 12px">Le lien affiche la photo et le nom de l\'article dans WhatsApp, Facebook ou une newsletter.</div>'
+    + '<button type="button" style="' + bt + '" data-c="wa">💬 WhatsApp</button>'
+    + '<button type="button" style="' + bt + '" data-c="mail">✉️ E-mail</button>'
+    + '<button type="button" style="' + bt + '" data-c="copy">🔗 Copier le lien (newsletter, SMS…)</button>'
+    + (navigator.share ? '<button type="button" style="' + bt + '" data-c="native">📤 Autres applications…</button>' : '')
+    + '<button type="button" class="btn btn-ghost" style="width:100%;margin-top:4px" data-c="x">Fermer</button></div>';
+  document.body.appendChild(s);
+  s.querySelectorAll('button[data-c]').forEach(function(b) {
+    b.onclick = function() {
+      var k = b.getAttribute('data-c');
+      if (k === 'wa') window.open('https://wa.me/?text=' + encodeURIComponent(t + ' ' + u), '_blank', 'noopener');
+      else if (k === 'mail') location.href = 'mailto:?subject=' + encodeURIComponent(nom + ' · Rézo la Kour') + '&body=' + encodeURIComponent(t + '\n\n' + u);
+      else if (k === 'native') navigator.share({title: nom, text: t, url: u}).catch(function() {});
+      else if (k === 'copy') {
+        var ok = function() { toast('✓ Lien copié : collez-le où vous voulez'); };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(ok, function() { prompt('Copiez ce lien :', u); }); else prompt('Copiez ce lien :', u);
+      }
+      rlkShareSheetClose();
+    };
+  });
+}
+// ═══ v4.0 : menu avec flèche, bandeau FEY, Boutik épurée, texte plus grand (A+) ═══
+function rlkNavMore() {
+  var n = rlk$('nav'); if (!n) return;
+  var b = rlk$('nav-more');
+  if (!b) { b = document.createElement('button'); b.id = 'nav-more'; b.type = 'button'; b.setAttribute('aria-label', 'Voir les autres onglets'); b.textContent = '›'; b.onclick = function() { n.scrollBy({left: 160, behavior: 'smooth'}); }; n.appendChild(b); n.addEventListener('scroll', rlkNavMore); }
+  var reste = n.scrollWidth - n.clientWidth - n.scrollLeft;
+  b.style.display = reste > 8 ? 'flex' : 'none';
+}
+window.addEventListener('resize', rlkNavMore);
+document.addEventListener('DOMContentLoaded', function() { setTimeout(rlkNavMore, 400); setTimeout(rlkNavMore, 1500); });
+var rlkUpdateUIOrig29 = updateUI;
+updateUI = function() { rlkUpdateUIOrig29.apply(this, arguments); setTimeout(rlkNavMore, 150); var a = rlk$('btn-auth'); if (a && /Dékonekte/.test(a.textContent)) a.textContent = 'Dékonek'; };
+
+// Bandeau fixe : valeur de la FEY (suit le réglage Pri & FEY)
+(function() {
+  if (rlk$('rlk-feybar')) return;
+  var d = document.createElement('div'); d.id = 'rlk-feybar'; d.innerHTML = '1 FEY = <b class="rlk-fey-eur">' + rlkFmt(RLK.fey, 2) + '</b> €';
+  document.body.appendChild(d);
+})();
+
+// Boutik : solde seul, une seule phrase, sans bandeau jaune
+var rlkSoldeAfficheOrig29 = rlkSoldeAffiche;
+function rlkBoutikTxt() {
+  var e = rlk$('boutik-prev'); if (e) e.innerHTML = 'Les FEY ne sont crédités qu\'après l\'atelier ou le don de fruits, une fois validés par l\'équipe. Le paiement en espèces est possible lors des événements.';
+}
+rlkSoldeAffiche = function(prev) { rlkSoldeAfficheOrig29(prev); rlkBoutikTxt(); };
+var rlkYaplaLoadOrig29 = rlkYaplaLoad;
+rlkYaplaLoad = function() {
+  return rlkYaplaLoadOrig29().then(function() {
+    var b = rlk$('boutik-pay'); if (b) b.innerHTML = RLK.yaplaPay ? '<button class="btn btn-outline btn-sm" type="button" onclick="openYapla(RLK.yaplaPay)">Payer en euros sur Yapla</button>' : '';
+    rlkBoutikTxt();
+  });
+};
+
+// Texte plus grand (A+)
+function rlkTexteApplique() {
+  var on = false; try { on = localStorage.getItem('rlk_grand') === '1'; } catch (e) {}
+  document.documentElement.classList.toggle('rlk-grand', on);
+  var b = rlk$('btn-aplus'); if (b) { b.textContent = on ? 'A−' : 'A+'; b.setAttribute('aria-label', on ? 'Texte normal' : 'Agrandir le texte'); }
+}
+function rlkTexteBascule() {
+  var on = false; try { on = localStorage.getItem('rlk_grand') === '1'; localStorage.setItem('rlk_grand', on ? '0' : '1'); } catch (e) { on = document.documentElement.classList.contains('rlk-grand'); document.documentElement.classList.toggle('rlk-grand', !on); var b = rlk$('btn-aplus'); if (b) b.textContent = on ? 'A+' : 'A−'; return; }
+  rlkTexteApplique(); setTimeout(rlkNavMore, 100);
+}
+document.addEventListener('DOMContentLoaded', rlkTexteApplique); rlkTexteApplique();
 
 RLK_VERSION = '2.6';
 </script>
