@@ -638,7 +638,7 @@ body{padding-bottom:42px}
 .logo-name{white-space:nowrap;font-size:14px}
 .btn-hdr{min-height:44px;padding:0 12px;white-space:nowrap}
 .btn-hdr#btn-aplus{min-width:44px;padding:0 8px}
-@media(max-width:430px){.role-pill:not(.admin){display:none}.logo-name{font-size:13px}.header-top{padding:4px 12px}}
+@media(max-width:430px){.logo-name{font-size:13px}.header-top{padding:4px 12px}}
 #boutik-pay{background:none!important;padding:0!important}
 #produits-grid .produit-img{height:180px!important;aspect-ratio:auto!important}
 #produits-grid .produit-img img{height:180px}
@@ -647,6 +647,14 @@ body{padding-bottom:42px}
 .nav-tab{font-size:13px!important}
 html.rlk-grand body{zoom:1.18}
 html.rlk-grand #rlk-feybar{font-size:16px}
+
+/* ═══ v4.1 ═══ */
+.btn-hdr{min-height:30px!important;height:30px;padding:0 10px!important;font-size:13px}
+.btn-hdr#btn-aplus{min-width:34px;padding:0 6px!important}
+.role-pill{display:inline-flex!important;align-items:center;height:30px;padding:0 10px}
+.rlk-acc{font-size:15px!important;font-style:italic;color:var(--accent);margin:2px 0 6px;line-height:1.4}
+.rlk-more{background:none;border:0;padding:4px 0;color:var(--accent2);font-size:14px;cursor:pointer;text-decoration:underline}
+.rlk-det{font-size:14px!important;color:var(--text2);margin-top:4px;line-height:1.5;white-space:pre-line}
 </style>
 </head>
 <body>
@@ -1383,6 +1391,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
         <div class="fr"><label>Date de DDM ou DLC * (figure sur l'étiquette)</label><input type="date" id="lot-dlc"></div>
         <div class="fr"><label>Ingrédients (allergènes à signaler)</label><input type="text" id="lot-ingr" placeholder="Pomelos, sucre de canne, citron"></div>
         <div class="fr"><label>Allergènes présents</label><input type="text" id="lot-allerg" placeholder="Aucun / gluten, lait..."></div>
+        <div class="fr"><button type="button" class="btn btn-ghost btn-sm" onclick="rlkReprendreEquipe()">↺ Reprendre l'hôte et l'équipe du dernier lot</button></div>
         <div class="fr"><label>Équipe présente (cueilleurs et cuisiniers)</label><div class="rlk-chk" id="lot-equipe" style="max-height:130px;overflow:auto"></div></div>
         <div class="rlk-note" id="lot-proto" style="margin:0 0 10px"></div>
         <div class="fr"><label>Relevé d'hygiène (cocher ce qui a été fait)</label>
@@ -1395,6 +1404,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
             <label><input type="checkbox" value="Pas de personne malade en préparation"> Aucun malade</label>
             <label><input type="checkbox" value="Déchets évacués, plans de travail nettoyés en fin d'atelier"> Fin d'atelier nettoyée</label>
           </div></div>
+        <div class="fr"><label>Phrase d'accroche (seule visible dans la Boutik, donne envie)</label><input type="text" id="lot-accroche" maxlength="140" placeholder="Pomelos du jardin de Marie, doux et parfumés"></div>
         <div class="fr"><label>Conservation (affichée dans la Boutik)</label><input type="text" id="lot-conserv" placeholder="À conserver au frais après ouverture, 3 semaines"></div>
         <div class="fr"><label>Observations</label><input type="text" id="lot-obs"></div>
         <div class="fr"><label>Photos de l'atelier (jusqu'à 6)</label><div id="lot-photos-prev"></div><input type="file" accept="image/*" multiple onchange="rlkLotPhotosAdd(this)">
@@ -1407,6 +1417,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
     </div>
     <div class="card">
       <div class="card-title">Lots enregistrés <span id="lots-ca" style="float:right;font-weight:500;color:var(--gold)"></span></div>
+      <div class="rlk-lecture" style="margin-bottom:12px"><b>FEY : partage par journée</b><div class="rlk-note" style="margin:6px 0">La part d'équipe de tous les lots d'une même journée est additionnée puis partagée entre les présents. Plus de 0 FEY sur les petits lots. Le calcul se fait tout seul à chaque lot.</div><div class="fr2"><div><input type="date" id="jr-date"></div><div><button type="button" class="btn btn-outline btn-sm" onclick="rlkJourPreview(rlkVal('jr-date'),'jr-box')">Vérifier cette journée</button></div></div><div id="jr-box"></div></div>
       <div id="lots-list" class="rlk-note">Chargement…</div>
     </div>
   </div>
@@ -1998,6 +2009,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
       <div class="rlk-note">Les FEY déjà crédités ne bougent pas tant que vous ne les régularisez pas. Enregistrez d'abord les pots, puis rouvrez le lot.</div>
       <button type="button" class="btn btn-outline btn-sm" onclick="rlkLotRegul()">Régulariser les FEY selon la règle actuelle</button>
       <div id="le-regul" class="rlk-note" style="margin-top:8px"></div>
+      <div class="fr"><label>Phrase d'accroche (Boutik)</label><input type="text" id="le-accroche" maxlength="140"></div>
       <div class="fr"><label>Produit</label><input type="text" id="le-produit"></div>
       <div class="fr2">
         <div><label>DDM ou DLC</label><input type="date" id="le-dlc"></div>
@@ -2187,7 +2199,8 @@ html.rlk-grand #rlk-feybar{font-size:16px}
     <div class="modal-body">
       <input type="hidden" id="art-id">
       <div class="fr"><label>Nom de l'article *</label><input type="text" id="art-nom" placeholder="Confiture de goyave"></div>
-      <div class="fr"><label>Descriptif</label><textarea id="art-desc" rows="3" placeholder="Ingrédients, contenance, producteur…"></textarea></div>
+      <div class="fr"><label>Phrase d'accroche (seule visible dans la Boutik)</label><input type="text" id="art-accroche" maxlength="140" placeholder="Doux, parfumé, fait par les voisins"></div>
+      <div class="fr"><label>Détail (ingrédients, conservation… visible au clic)</label><textarea id="art-desc" rows="3" placeholder="Ingrédients, contenance, producteur…"></textarea></div>
       <div class="fr2">
         <div><label>Prix en FEY</label><input type="number" id="art-fey" value="1" min="0" step="0.5"></div>
         <div><label>Emoji (si pas de photo)</label>
@@ -4754,7 +4767,7 @@ function rlkSaveLot() {
       if (lot && row.donateur_id && p.donateur) ledger.push({user_id: row.donateur_id, delta: p.donateur, motif: 'Troc de ' + (row.fruit || 'fruits') + ' (' + num + ')', lot_id: lot.id});
       if (lot && share) equipe.forEach(function(u) { ledger.push({user_id: u, delta: share, motif: 'Atelier ' + num, lot_id: lot.id}); });
       var done = function() { toast('✓ Lot ' + num + ' enregistré, FEY crédités'); rlkLoadLots(); rlkLotPreview(); };
-      if (ledger.length) sb.from('rlk_fey').insert(ledger).then(done); else done();
+      if (ledger.length) sb.from('rlk_fey').insert(ledger).then(function(rf) { if (rf && rf.error) toast('Lot enregistré mais FEY non crédités : ' + (rf.error.message || rlkErr(rf.error)) + '. Utilisez Vérifier cette journée.'); rlkJourAuto(row.date_transfo, done); }); else rlkJourAuto(row.date_transfo, done);
     });
   });
 }
@@ -6859,7 +6872,7 @@ rlkSaveLot = function() {
       ingredients: rlkVal('lot-ingr'), allergenes: rlkVal('lot-allerg'), dlc: rlkVal('lot-dlc') || null, qte_produite: q, fey_donateur: p.donateur, fey_equipe: equipeFey, fey_boutik: boutik,
       donateur_id: rlkVal('lot-donateur') || null, donateur_libre: rlkVal('lot-donlibre'), participants: equipe, qte_app: p.donateur + equipeFey, qte_yapla: boutik,
       ca_previsionnel: boutik * RLK.fey, created_by: currentUser.id,
-      releve: {dtype: rlkVal('lot-dtype') || 'DDM', reception: {etat: rlkVal('lot-etat'), decision: rlkVal('lot-decision')}, hygiene: hyg, observations: rlkVal('lot-obs'), protocole: rlkProtoSummary(), conservation: rlkVal('lot-conserv'), photos: RLK.lotPhotos.slice(), livre: !!(document.getElementById('lot-livre') || {}).checked, hote_participe: rlkHoteDansEquipe(), deja_partage: !!(document.getElementById('lot-dejapart') || {}).checked}};
+      releve: {dtype: rlkVal('lot-dtype') || 'DDM', reception: {etat: rlkVal('lot-etat'), decision: rlkVal('lot-decision')}, hygiene: hyg, observations: rlkVal('lot-obs'), protocole: rlkProtoSummary(), conservation: rlkVal('lot-conserv'), photos: RLK.lotPhotos.slice(), livre: !!(document.getElementById('lot-livre') || {}).checked, hote_participe: rlkHoteDansEquipe(), deja_partage: !!(document.getElementById('lot-dejapart') || {}).checked, accroche: rlkVal('lot-accroche').trim()}};
     sb.from('rlk_lots').insert(row).select().then(function(res) {
       if (res.error) { toast(rlkErr(res.error)); return; }
       var lot = res.data && res.data[0], ledger = [];
@@ -6870,7 +6883,7 @@ rlkSaveLot = function() {
         if (lot && pushBoutik) rlkLotPush(lot).then(function(r) { var er = r && (r.error || (r[0] && r[0].error) || (r[1] && r[1].error)); fin(er ? '✓ Lot ' + num + ' enregistré, mais la Boutik n\'a pas pu être mise à jour : ' + rlkErr(er) : '✓ Lot ' + num + ' enregistré, FEY crédités et article Boutik prêt'); });
         else fin('✓ Lot ' + num + ' enregistré, FEY crédités');
       };
-      if (ledger.length) sb.from('rlk_fey').insert(ledger).then(done); else done();
+      if (ledger.length) sb.from('rlk_fey').insert(ledger).then(function(rf) { if (rf && rf.error) toast('Lot enregistré mais FEY non crédités : ' + (rf.error.message || rlkErr(rf.error)) + '. Utilisez Vérifier cette journée.'); rlkJourAuto(row.date_transfo, done); }); else rlkJourAuto(row.date_transfo, done);
     });
   });
 };
@@ -7137,7 +7150,7 @@ rlkLoadLots = function() {
     el.innerHTML = rows.length ? '<table class="rlk-tbl"><tr><th>Lot</th><th>Produit</th><th>Pots</th><th>Stock</th><th></th></tr>' + rows.map(function(l) {
       var ret = ((l.releve || {}).retraits || []).reduce(function(t, x) { return t + (x.n || 0); }, 0);
       return '<tr><td>' + rlkEsc(l.numero_lot) + '<br><span style="color:var(--text3)">' + rlkDate(l.date_transfo) + '</span></td><td>' + rlkEsc(l.produit) + '</td><td>' + l.qte_produite + (ret ? '<br><span style="color:#B3261E">−' + ret + ' retirés</span>' : '') + '</td><td>' + l.qte_app + ' éch.<br>' + l.qte_yapla + ' en ligne</td>'
-        + '<td><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn btn-primary btn-xs" onclick="rlkLotEdit(\'' + l.id + '\')">Modifier</button><button class="btn btn-outline btn-xs" onclick="rlkLotPush(RLK.lots.filter(function(x){return x.id===\'' + l.id + '\'})[0]).then(function(){toast(\'✓ Boutik mise à jour\');loadProduits()})">→ Boutik</button><button class="btn btn-outline btn-xs" onclick="rlkLotToZev(\'' + l.id + '\')">→ Zévénman</button><button class="btn btn-ghost btn-xs" onclick="rlkLabelFor(\'' + l.id + '\')">Étiquette</button><button class="btn btn-ghost btn-xs" onclick="rlkPrintFiche(\'' + l.id + '\')">Fiche</button></div></td></tr>';
+        + '<td><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn btn-primary btn-xs" onclick="rlkLotEdit(\'' + l.id + '\')">Modifier</button><button class="btn btn-outline btn-xs" onclick="rlkLotPush(RLK.lots.filter(function(x){return x.id===\'' + l.id + '\'})[0]).then(function(){toast(\'✓ Boutik mise à jour\');loadProduits()})">→ Boutik</button><button class="btn btn-outline btn-xs" onclick="rlkLotToZev(\'' + l.id + '\')">→ Zévénman</button><button class="btn btn-ghost btn-xs" onclick="rlkLabelFor(\'' + l.id + '\')">Étiquette</button><button class="btn btn-ghost btn-xs" onclick="rlkPrintFiche(\'' + l.id + '\')">Fiche</button><button class="btn btn-ghost btn-xs" style="color:var(--red)" onclick="rlkLotDel(\'' + l.id + '\')">Supprimer</button></div></td></tr>';
     }).join('') + '</table>' : 'Aucun lot enregistré.';
   });
 };
@@ -8732,32 +8745,36 @@ function rlkAdhSaveRow(uid) {
 function rlk$(i) { return document.getElementById(i); }
 
 // ── Parts déjà distribuées : tout part en boutique, aucun FEY ──
-RLK._dp = false;
+RLK._dp = false; RLK._nh = false;
+function rlkSansHoteForm() { return !rlkVal('lot-donateur') && !String(rlkVal('lot-donlibre') || '').trim(); }
 var rlkPartsOrig26 = rlkParts;
 rlkParts = function(t) {
   var p = rlkPartsOrig26(t);
-  return RLK._dp ? {total: p.total, donateur: 0, equipe: 0, boutik: p.total} : p;
+  if (RLK._dp) return {total: p.total, donateur: 0, equipe: 0, boutik: p.total};
+  if (RLK._nh) return {total: p.total, donateur: 0, equipe: p.equipe + p.donateur, boutik: p.boutik};
+  return p;
 };
 var rlkLotPreviewOrig26 = rlkLotPreview;
 rlkLotPreview = function() {
-  var c = rlk$('lot-dejapart'); RLK._dp = !!(c && c.checked);
-  try { rlkLotPreviewOrig26(); } finally { RLK._dp = false; }
+  var c = rlk$('lot-dejapart'); RLK._dp = !!(c && c.checked); RLK._nh = rlkSansHoteForm();
+  try { rlkLotPreviewOrig26(); } finally { RLK._dp = false; RLK._nh = false; }
   var el = rlk$('lot-preview');
+  if (el && rlkSansHoteForm() && !(c && c.checked)) el.innerHTML += '<br><b>Pas d\'hôte :</b> sa part est partagée entre les présents.';
   if (c && c.checked && el) el.innerHTML = el.innerHTML.replace(/<br>Hôte : .*$/, '') + '<br><b>Parts déjà distribuées :</b> tous les pots vont en boutique, aucun FEY n\'est crédité.';
 };
 var rlkSaveLotOrig26 = rlkSaveLot;
 rlkSaveLot = function() {
   var c = rlk$('lot-dejapart'), dp = !!(c && c.checked);
-  RLK._dp = dp;
-  try { rlkSaveLotOrig26(); } finally { RLK._dp = false; }
+  RLK._dp = dp; RLK._nh = rlkSansHoteForm();
+  try { rlkSaveLotOrig26(); } finally { RLK._dp = false; RLK._nh = false; }
   if (dp && rlkVal('lot-produit').trim() && rlkLotQte() > 0 && rlkVal('lot-dlc')) {
     setTimeout(function() { if (c) c.checked = false; rlkLotPreview(); }, 2000);
   }
 };
 var rlkRegulCalcOrig26 = rlkRegulCalc;
 rlkRegulCalc = function(l, rows) {
-  RLK._dp = !!(l && l.releve && l.releve.deja_partage);
-  try { return rlkRegulCalcOrig26(l, rows); } finally { RLK._dp = false; }
+  RLK._dp = !!(l && l.releve && l.releve.deja_partage); RLK._nh = !!(l && !l.donateur_id && !String(l.donateur_libre || '').trim());
+  try { return rlkRegulCalcOrig26(l, rows); } finally { RLK._dp = false; RLK._nh = false; }
 };
 
 // ── Modification complète d'un lot ──
@@ -8777,6 +8794,7 @@ rlkLotEdit = function(id) {
   setSel('le-type', l.type_unite ? l.type_unite + '|' + (l.poids_net || '') : '', (l.type_unite || '') + (l.poids_net ? ' (' + l.poids_net + ')' : ''));
   setSel('le-dtype', r.dtype || 'DDM'); setSel('le-etat', (r.reception || {}).etat || 'Sain'); setSel('le-decision', (r.reception || {}).decision || 'Accepté');
   var hy = r.hygiene || []; document.querySelectorAll('#le-hygiene input').forEach(function(i) { i.checked = hy.indexOf(i.value) >= 0; });
+  if (rlk$('le-accroche')) rlk$('le-accroche').value = r.accroche || '';
   rlk$('le-livre').checked = !!r.livre; rlk$('le-dejapart').checked = !!r.deja_partage; if (E) E.dp0 = !!r.deja_partage;
   RLK.profils = null;
   rlkProfils().then(function(map) {
@@ -8801,7 +8819,7 @@ rlkLotEditSave = function() {
   if (retire) { if (canal === 'yapla') yap = Math.max(0, yap - retire); else app = Math.max(0, app - retire); }
   var pv = rlkVal('le-prod'), base = pv === '' ? l.qte_produite : Math.max(0, parseInt(pv) || 0), qte = Math.max(0, base - retire), r = JSON.parse(JSON.stringify(l.releve || {}));
   if (retire) { r.retraits = (r.retraits || []).concat([{date: new Date().toISOString(), n: retire, canal: canal === 'yapla' ? 'boutique en ligne' : 'échanges', motif: rlkVal('le-motif').trim()}]); }
-  r.conservation = rlkVal('le-conserv'); r.observations = rlkVal('le-obs'); r.photos = E.photos;
+  r.conservation = rlkVal('le-conserv'); r.observations = rlkVal('le-obs'); r.photos = E.photos; r.accroche = rlk$('le-accroche') ? rlk$('le-accroche').value.trim() : (r.accroche || '');
   var row = {produit: rlkVal('le-produit').trim() || l.produit, dlc: rlkVal('le-dlc') || null, ingredients: rlkVal('le-ingr'), allergenes: rlkVal('le-allerg'), qte_produite: qte, qte_app: app, qte_yapla: yap, ca_previsionnel: yap * RLK.fey, releve: r};
   var kv = String(rlkVal('le-kg')).replace(',', '.').trim(), kgOld = Number(l.kg_fruits) || 0, kgChg = false;
   if (kv !== '') {
@@ -8831,10 +8849,10 @@ rlkLotEditSave = function() {
     var nl = (res.data && res.data[0]) || Object.assign({}, l, row);
     closeModal('m-lot-edit');
     var done = function() {
-      toast('✓ Lot modifié' + (kgChg ? ' : ' + rlkFmt(row.kg_fruits, 2) + ' kg (compteur mis à jour)' : '') + (retire ? ' : ' + retire + ' pot(s) retiré(s) du stock' : '') + (feyChg ? '. Les FEY déjà crédités ne bougent pas : rouvrez le lot et utilisez « Régulariser les FEY »' : ''));
+      toast('✓ Lot modifié' + (kgChg ? ' : ' + rlkFmt(row.kg_fruits, 2) + ' kg (compteur mis à jour)' : '') + (retire ? ' : ' + retire + ' pot(s) retiré(s) du stock' : '') + (feyChg ? '' : ''));
       rlkLoadLots(); if (typeof loadProduits === 'function') loadProduits();
     };
-    if (rlk$('le-boutik').checked) rlkLotPush(nl).then(done); else done();
+    rlkJourAuto([l.date_transfo, nl.date_transfo], function() { if (rlk$('le-boutik').checked) rlkLotPush(nl).then(done); else done(); });
   });
 };
 
@@ -8863,13 +8881,14 @@ function rlkLotDel(id) {
   var l = (RLK.lots || []).filter(function(x) { return x.id === id; })[0]; if (!l) { toast('Lot introuvable, rechargez la liste'); return; }
   if (!confirm('Supprimer définitivement le lot ' + l.numero_lot + ' (' + l.produit + ', ' + l.qte_produite + ' pots) ?\n\nLes FEY crédités à cause de ce lot seront annulés. L\'article de la Boutik n\'est pas touché.')) return;
   sb.from('rlk_fey').select('user_id,delta').eq('lot_id', id).then(function(f) {
-    if (f.error) { toast(rlkErr(f.error)); return; }
+    if (f.error) { toast('Lecture des FEY impossible : ' + (f.error.message || rlkErr(f.error))); return; }
     var sum = {}; (f.data || []).forEach(function(r) { sum[r.user_id] = (sum[r.user_id] || 0) + Number(r.delta); });
     sb.from('rlk_lots').delete().eq('id', id).select().then(function(d) {
-      if (d.error) { toast(rlkErr(d.error)); return; }
-      if (!d.data || !d.data.length) { toast('Suppression refusée : droits administrateur manquants'); return; }
+      if (d.error) { toast('Suppression impossible : ' + (d.error.message || rlkErr(d.error))); return; }
+      if (!d.data || !d.data.length) { toast('Suppression refusée par la base : ce compte n\'est pas reconnu comme administrateur (rlk_est_admin)'); return; }
       var rows = Object.keys(sum).filter(function(u) { return sum[u] !== 0; }).map(function(u) { return {user_id: u, delta: -sum[u], motif: 'Annulation du lot ' + l.numero_lot + ' (saisi en double)'}; });
-      var fin = function(er) {
+      var fin = function(er) { rlkJourAuto(l.date_transfo, function() { fin0(er); }); };
+      var fin0 = function(er) {
         closeModal('m-lot-edit'); rlkLoadLots(); if (typeof loadProduits === 'function') loadProduits();
         toast(er ? '✓ Lot supprimé, mais l\'annulation des FEY a échoué : ' + rlkErr(er) : '✓ Lot ' + l.numero_lot + ' supprimé' + (rows.length ? ', ' + rows.length + ' crédit(s) FEY annulé(s)' : '') + '. Vérifiez le stock de l\'article en Boutik.');
       };
@@ -8956,6 +8975,174 @@ function rlkTexteBascule() {
   rlkTexteApplique(); setTimeout(rlkNavMore, 100);
 }
 document.addEventListener('DOMContentLoaded', rlkTexteApplique); rlkTexteApplique();
+// ═══ v4.1 : Boutik : phrase d'accroche seule visible, détail au clic, partage sur la ligne du stock ═══
+var rlkLotDescriptionOrig30 = rlkLotDescription;
+rlkLotDescription = function(l) {
+  var d = rlkLotDescriptionOrig30(l), a = String(((l && l.releve) || {}).accroche || '').trim();
+  return a ? a + '\n---\n' + d : d;
+};
+function rlkDescSplit(raw) {
+  raw = String(raw || ''); var m = raw.indexOf('\n---\n');
+  return m < 0 ? {acc: '', det: raw.trim()} : {acc: raw.slice(0, m).trim(), det: raw.slice(m + 5).trim()};
+}
+// Fiche article (Artik) : champ d'accroche séparé du détail
+var openModalOrig30 = openModal;
+openModal = function(id) {
+  openModalOrig30.apply(this, arguments);
+  if (id === 'm-article') { var d = rlk$('art-desc'), a = rlk$('art-accroche'); if (d && a) { var s = rlkDescSplit(d.value); a.value = s.acc; d.value = s.det; } }
+};
+var rlkSaveArticleOrig30 = rlkSaveArticle;
+rlkSaveArticle = function() {
+  var d = rlk$('art-desc'), a = rlk$('art-accroche');
+  if (d && a) { var s = rlkDescSplit(d.value), acc = a.value.trim() || s.acc; d.value = acc ? acc + '\n---\n' + s.det : s.det; }
+  rlkSaveArticleOrig30.apply(this, arguments);
+};
+// Cartes de la Boutik
+function rlkProdCartes() {
+  document.querySelectorAll('#produits-grid .produit[data-id]').forEach(function(c) {
+    var d = c.querySelector('.produit-desc');
+    if (d && !d.getAttribute('data-acc')) {
+      d.setAttribute('data-acc', '1');
+      var s = rlkDescSplit(d.textContent), h = '';
+      if (s.acc) h += '<div class="rlk-acc">' + rlkEsc(s.acc) + '</div>';
+      if (s.det) h += '<button type="button" class="rlk-more">Voir le détail ▾</button><div class="rlk-det" style="display:none">' + rlkEsc(s.det) + '</div>';
+      d.innerHTML = h;
+      var b = d.querySelector('.rlk-more');
+      if (b) b.onclick = function() { var x = d.querySelector('.rlk-det'), open = x.style.display === 'none'; x.style.display = open ? 'block' : 'none'; b.textContent = open ? 'Masquer le détail ▴' : 'Voir le détail ▾'; };
+    }
+    var sh = c.querySelector('.rlk-prodshare'), f = c.querySelector('.produit-footer');
+    if (sh && f && sh.parentNode !== f) { sh.style.marginTop = '0'; sh.style.marginLeft = 'auto'; f.style.flexWrap = 'nowrap'; f.appendChild(sh); }
+  });
+}
+var rlkDecorateProduitsOrig30 = rlkDecorateProduits;
+rlkDecorateProduits = function() { rlkDecorateProduitsOrig30(); rlkProdCartes(); };
+// ═══ v4.3 : FEY d'atelier mis en commun par journée, anti-doublon, reprise d'équipe ═══
+var RLK_JOUR_DEPUIS = '2026-11-15'; // les journées avant cette date ne sont jamais recalculées automatiquement
+
+function rlkJourCalc(lots, rows) {
+  var pH = RLK.pHote, pE = RLK.pEquipe, target = {}, ex = {}, tot = 0;
+  lots.forEach(function(l) {
+    if (l.releve && l.releve.deja_partage) return;
+    var q = Math.max(0, Math.floor(Number(l.qte_produite) || 0)), eq = l.participants || [], n = eq.length;
+    var sansHote = !l.donateur_id && !String(l.donateur_libre || '').trim();
+    var d = sansHote ? 0 : Math.ceil(q * pH - 1e-9);
+    if (l.donateur_id && d) target[l.donateur_id] = (target[l.donateur_id] || 0) + d;
+    // sans hôte : sa part (pH) s'ajoute à celle de l'équipe
+    var rate = sansHote ? pE + pH : pE;
+    if (n) eq.forEach(function(u) { var v = q * rate / n; ex[u] = (ex[u] || 0) + v; tot += v; });
+  });
+  var E = Math.floor(tot + 1e-9), ids = Object.keys(ex), base = {}, rem = [], used = 0;
+  ids.forEach(function(u) { var b = Math.floor(ex[u] + 1e-9); base[u] = b; used += b; rem.push({u: u, f: ex[u] - b}); });
+  rem.sort(function(a, b) { return b.f - a.f || (a.u < b.u ? -1 : 1); });
+  for (var i = 0; i < E - used && i < rem.length; i++) base[rem[i].u]++;
+  ids.forEach(function(u) { target[u] = (target[u] || 0) + base[u]; });
+  var cur = {}; (rows || []).forEach(function(r) { cur[r.user_id] = (cur[r.user_id] || 0) + Number(r.delta); });
+  var all = {}; Object.keys(target).forEach(function(k) { all[k] = 1; }); Object.keys(cur).forEach(function(k) { all[k] = 1; });
+  var deltas = Object.keys(all).map(function(u) { return {user_id: u, actuel: cur[u] || 0, cible: target[u] || 0, delta: (target[u] || 0) - (cur[u] || 0)}; }).filter(function(x) { return x.delta !== 0; });
+  var Q = 0; lots.forEach(function(l) { if (!(l.releve && l.releve.deja_partage) && (l.participants || []).length) Q += Math.max(0, Math.floor(Number(l.qte_produite) || 0)); });
+  return {pots: Q, equipe: E, personnes: ids.length, deltas: deltas};
+}
+function rlkJourFetch(date) {
+  return sb.from('rlk_lots').select('*').eq('date_transfo', date).order('created_at', {ascending: true}).then(function(a) {
+    if (a.error) return {error: a.error};
+    var lots = a.data || []; if (!lots.length) return {lots: [], rows: []};
+    return sb.from('rlk_fey').select('user_id,delta,lot_id').in('lot_id', lots.map(function(l) { return l.id; })).then(function(b) {
+      return b.error ? {error: b.error} : {lots: lots, rows: b.data || []};
+    });
+  });
+}
+function rlkJourInsert(date, lots, calc) {
+  var last = lots[lots.length - 1];
+  var rows = calc.deltas.map(function(x) { return {user_id: x.user_id, delta: x.delta, motif: 'Mise en commun des ateliers du ' + rlkDate(date), lot_id: last.id}; });
+  return sb.from('rlk_fey').insert(rows);
+}
+// Recalcul silencieux (après création, modification ou suppression d'un lot)
+function rlkJourAuto(dates, cb) {
+  var list = (Array.isArray(dates) ? dates : [dates]).filter(function(d, i, a) { return d && a.indexOf(d) === i && String(d).slice(0, 10) >= RLK_JOUR_DEPUIS; }).map(function(d) { return String(d).slice(0, 10); });
+  var k = 0, fini = false;
+  var fin = function() { if (!fini) { fini = true; if (cb) cb(); } };
+  var suite = function() {
+    if (k >= list.length) { fin(); return; }
+    var d = list[k++];
+    try {
+      rlkJourFetch(d).then(function(r) {
+        if (r.error) { toast('FEY non recalculés : ' + (r.error.message || rlkErr(r.error))); suite(); return; }
+        if (!r.lots.length) { suite(); return; }
+        var c = rlkJourCalc(r.lots, r.rows);
+        if (!c.deltas.length) { suite(); return; }
+        rlkJourInsert(d, r.lots, c).then(function(x) { if (x && x.error) toast('FEY non crédités : ' + (x.error.message || rlkErr(x.error)) + '. Utilisez « Vérifier cette journée ».'); suite(); });
+      }, function() { toast('Connexion trop faible : FEY non recalculés. Utilisez « Vérifier cette journée » plus tard.'); fin(); });
+    } catch (e) { fin(); }
+  };
+  suite();
+  setTimeout(fin, 20000);
+}
+// Aperçu manuel (carte « mise en commun » et bouton Régulariser d'un lot)
+function rlkJourPreview(date, boxId) {
+  var box = rlk$(boxId); if (!box) return;
+  if (!date) { box.innerHTML = 'Choisissez une date.'; return; }
+  date = String(date).slice(0, 10); box.innerHTML = 'Calcul en cours…';
+  Promise.all([rlkJourFetch(date), rlkProfils()]).then(function(a) {
+    var r = a[0], pm = a[1] || {};
+    if (r.error) { box.innerHTML = 'Lecture impossible : ' + rlkEsc(r.error.message || rlkErr(r.error)); return; }
+    if (!r.lots.length) { box.innerHTML = 'Aucun lot à cette date.'; return; }
+    var c = rlkJourCalc(r.lots, r.rows), old = date < RLK_JOUR_DEPUIS;
+    RLK.jour = {date: date, lots: r.lots, calc: c};
+    var h = '<b>Journée du ' + rlkEsc(rlkDate(date)) + ' :</b> ' + r.lots.length + ' lot(s), ' + c.pots + ' pots avec équipe, part d\'équipe mise en commun : <b>' + c.equipe + ' FEY</b> pour ' + c.personnes + ' personne(s).';
+    if (old) h += '<br><span style="color:var(--red)">Journée antérieure au ' + rlkEsc(rlkDate(RLK_JOUR_DEPUIS)) + ' : elle n\'est jamais recalculée automatiquement. Appliquez seulement si vous le décidez.</span>';
+    if (!c.deltas.length) { box.innerHTML = h + '<br>Rien à ajuster : les FEY crédités correspondent déjà au partage par journée.'; return; }
+    box.innerHTML = h + '<table class="rlk-tbl"><tr><th>Adhérent</th><th>Crédité</th><th>Nouveau</th><th>Ajustement</th></tr>' + c.deltas.map(function(x) { return '<tr><td>' + rlkEsc(pm[x.user_id] || 'Adhérent') + '</td><td>' + x.actuel + '</td><td>' + x.cible + '</td><td><b>' + (x.delta > 0 ? '+' : '') + x.delta + '</b></td></tr>'; }).join('')
+      + '</table><button type="button" class="btn btn-primary btn-sm" style="margin-top:8px" onclick="rlkJourApply(\'' + boxId + '\')">Appliquer ces ajustements</button>';
+  });
+}
+function rlkJourApply(boxId) {
+  var J = RLK.jour; if (!J || !J.calc.deltas.length) return;
+  rlkJourInsert(J.date, J.lots, J.calc).then(function(x) {
+    if (x && x.error) { toast('Échec : ' + (x.error.message || rlkErr(x.error))); return; }
+    RLK.jour = null; toast('✓ ' + J.calc.deltas.length + ' ajustement(s) enregistré(s)');
+    var b = rlk$(boxId); if (b) b.innerHTML = '<b>Partage par journée appliqué.</b>';
+  });
+}
+rlkLotRegul = function() {
+  var E = RLK.lotEdit; if (!E) return;
+  var l = (RLK.lots || []).filter(function(x) { return x.id === E.id; })[0]; if (!l) return;
+  rlkJourPreview(l.date_transfo, 'le-regul');
+};
+var rlkLoadLotsOrig31 = rlkLoadLots;
+rlkLoadLots = function() {
+  rlkLoadLotsOrig31.apply(this, arguments);
+  var d = rlk$('jr-date'); if (d && !d.value) { var n = new Date(Date.now() + 4 * 3600000); d.value = n.toISOString().slice(0, 10); }
+};
+
+// ── Anti-doublon et double clic (réseau lent) ──
+RLK._saving = false;
+var rlkSaveLotOrig31 = rlkSaveLot;
+rlkSaveLot = function() {
+  if (RLK._saving) { toast('Enregistrement en cours, patientez (réseau lent)…'); return; }
+  var prod = rlkVal('lot-produit').trim(), q = rlkLotQte(), dt = rlkVal('lot-date');
+  var go = function() {
+    RLK._saving = true; setTimeout(function() { RLK._saving = false; }, 8000);
+    try { var eq = []; document.querySelectorAll('#lot-equipe input:checked').forEach(function(i) { eq.push(i.value); }); localStorage.setItem('rlk_last_team', JSON.stringify({don: rlkVal('lot-donateur'), libre: rlkVal('lot-donlibre'), eq: eq})); } catch (e) {}
+    rlkSaveLotOrig31();
+  };
+  if (!prod || !(q > 0) || !dt) { rlkSaveLotOrig31(); return; }
+  var depuis = new Date(Date.now() - 20 * 60000).toISOString();
+  try {
+    sb.from('rlk_lots').select('numero_lot,created_at').eq('produit', prod).eq('date_transfo', dt).eq('qte_produite', q).gte('created_at', depuis).limit(1).then(function(r) {
+      var x = r && r.data && r.data[0];
+      if (x && !confirm('Un lot identique (' + x.numero_lot + ') vient d\'être enregistré. Avec une connexion lente, un premier clic peut avoir fonctionné sans que vous le voyiez.\n\nL\'enregistrer quand même ?')) { rlkLoadLots(); return; }
+      go();
+    }, function() { go(); });
+  } catch (e) { go(); }
+};
+function rlkReprendreEquipe() {
+  var d = null; try { d = JSON.parse(localStorage.getItem('rlk_last_team') || 'null'); } catch (e) {}
+  if (!d) { toast('Aucune équipe précédente sur cet appareil'); return; }
+  if (rlk$('lot-donateur')) rlk$('lot-donateur').value = d.don || '';
+  if (rlk$('lot-donlibre')) rlk$('lot-donlibre').value = d.libre || '';
+  document.querySelectorAll('#lot-equipe input').forEach(function(i) { i.checked = (d.eq || []).indexOf(i.value) >= 0; });
+  rlkLotPreview(); toast('✓ Hôte et équipe du dernier lot repris');
+}
 
 RLK_VERSION = '2.6';
 </script>
