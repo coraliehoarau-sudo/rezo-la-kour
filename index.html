@@ -5420,7 +5420,9 @@ function rlkConfirmAdh(uid) {
 var RLK_FRUITS_NOMS = ["Aloe vera", "Aloes amer", "Ambaville", "Ambrevades", "Ananas Victoria", "Aubergines (Bringelles)", "Avocats (Zavoka)", "Avocats grand collet", "Ayapana", "Bananes", "Bananes figues", "Barbadine", "Basilic", "Basilic thaï", "Bâton de mouroungue", "Betteraves", "Bibasses (Néflier)", "Bilimbi", "Brèdes chouchou", "Brèdes mafane", "Brèdes morel", "Brèdes mouroungue", "Brocoli", "Café bourbon long", "Café bourbon pointu", "Calebasse", "Caramboles (Karambol)", "Carottes", "Cerise de Cayenne", "Cerise du Brésil", "Chou", "Chou fleur", "Chou palmiste", "Chouchou (Christophine)", "Citronelle", "Citrons 4 saisons", "Citrouille", "Clémentines", "Coeurs de boeuf", "Combavas", "Concombres", "Coriandre", "Corossols", "Courgettes", "Cresson", "Curcuma péi (Safran péi)", "Faham", "Fruits à pain (Fryapin)", "Fruits de la passion (Grenadine)", "Galanga", "Gingembre", "Gingembre mangue", "Girimbelles", "Goyaves de France", "Goyaves roses", "Goyavier blanc", "Goyavier rouge", "Grenadelle", "Haricots rouges", "Haricots verts", "Jacques mûr", "Jamalacs", "Jamblon", "Letchis", "Longanes", "Mandarines", "Mangoustans", "Mangues américaine", "Mangues Auguste", "Mangues carotte", "Mangues Josée", "Mangues Léonard", "Mangues sauvages", "Manioc", "Margoze", "Menthe", "Menthe poivrée", "Mûres", "Neem", "Noix de coco d'eau", "Noix de coco sèche", "Oignons", "Oignons verts", "Pamplemousses", "Patate douce blanche", "Patate douce carotte", "Patate douce mauve", "Patole", "Pêches", "Persil", "Piment cabri", "Piment oiseau", "Pipangailles", "Pois carré", "Pois du Cap", "Poivre vert", "Prune malgache", "Raisin bord de mer", "Salade", "Sapote noire", "Sapotilles", "Songe grise", "Songe violette", "Tamarin", "Tangors", "Thym", "Thym brésilien", "Ti-Jacques (vert)", "Tomate arbuste", "Tulsi", "Vavangues", "Verveine citronelle", "Zattes", "Zévi (Pomme de Cythère)"];
 
 // ── Liste des fruits (catégorie, unité, poids d'une unité) ──
-var RLK_UNITES = ['kg', 'U', 'main', 'botte', 'bouquet'];
+var RLK_UNITES = ['kg', 'U', 'main', 'botte', 'bouquet', 'régime', 'tas', 'pot', 'barquette', 'sachet', 'filet', 'cagette', 'caisse', 'panier', 'plateau', 'tête', 'pied', 'grappe', 'douzaine', '500 g', '250 g', 'L', 'sac'];
+var RLK_UNITES_LIB = {U: 'Unité (pièce)'};
+function rlkUniteLib(u) { return RLK_UNITES_LIB[u] || u; }
 var RLK_KG_UNITE = {kg: 1, U: 0.5, main: 1.5, botte: 0.3, bouquet: 0.1};
 var RLK_KG_U = {ananas: 1.5, avocat: 0.4, 'chou': 1.2, calebasse: 1.5, citrouille: 3, brocoli: 0.5, 'fruits à pain': 1.2, corossol: 1.2, 'coeurs de boeuf': 0.6, salade: 0.3, 'noix de coco': 0.8, jacques: 3};
 function rlkGuessEtat(nom) {
@@ -5487,7 +5489,7 @@ function rlkAddLine() {
   d.innerHTML = '<select class="dl-prod" onchange="rlkDonSel(this)">' + rlkFruitOptions('') + '</select>'
     + '<input type="text" class="dl-autre" placeholder="Nom du produit" style="display:none" oninput="rlkDonPreview()">'
     + '<div class="tl-row"><input type="number" class="dl-q" min="0" step="0.5" inputmode="decimal" placeholder="Quantité" oninput="rlkDonPreview()">'
-    + '<select class="dl-u" onchange="rlkDonPreview()">' + RLK_UNITES.map(function(u) { return '<option>' + u + '</option>'; }).join('') + '</select>'
+    + '<select class="dl-u" onchange="rlkDonPreview()">' + RLK_UNITES.map(function(u) { return '<option value="' + u + '">' + rlkUniteLib(u) + '</option>'; }).join('') + '</select>'
     + '<button class="btn btn-ghost btn-sm" style="padding:8px" type="button" onclick="this.closest(\'.dispo-line\').remove();rlkDonPreview()" aria-label="Retirer">✕</button></div>';
   document.getElementById('dispo-lignes').appendChild(d);
 }
@@ -5560,7 +5562,8 @@ function rlkInitDon() {
 // ── Réglaj : liste des fruits ──
 function rlkFruitRow(f) {
   var et = RLK_ETATS.map(function(e) { return '<option value="' + e[0] + '"' + (f.etat === e[0] ? ' selected' : '') + '>' + rlkEsc(e[1]) + '</option>'; }).join('');
-  var un = RLK_UNITES.map(function(u) { return '<option' + (f.unite === u ? ' selected' : '') + '>' + u + '</option>'; }).join('');
+  var ul = RLK_UNITES.slice(); if (f.unite && ul.indexOf(f.unite) < 0) ul.push(f.unite);
+  var un = ul.map(function(u) { return '<option value="' + rlkEsc(u) + '"' + (f.unite === u ? ' selected' : '') + '>' + rlkEsc(rlkUniteLib(u)) + '</option>'; }).join('');
   return '<div class="fr-row" data-orig="' + rlkEsc(f.nom || '') + '"><div class="fr-top"><input type="text" class="fr-nom" value="' + rlkEsc(f.nom || '') + '" placeholder="Nom du produit"><button class="btn btn-ghost btn-xs" type="button" onclick="this.closest(\'.fr-row\').remove();rlkFruitCount()" aria-label="Retirer">✕</button></div>'
     + '<select class="fr-etat">' + et + '</select><select class="fr-unite">' + un + '</select>'
     + '<label>Quantité pour 1 FEY<input type="number" class="fr-qfey" step="0.1" min="0" value="' + (f.qte_pour_fey || '') + '"></label>'
@@ -6262,7 +6265,7 @@ function rlkRecQ(q, u) {
   if (u === 'pincée') { var n = Math.max(1, Math.round(q)); return n + ' pincée' + (n > 1 ? 's' : ''); }
   return String(Math.max(1, Math.round(q)));
 }
-var RLK_UNITES = ['g', 'kg', 'ml', 'cl', 'L', 'c. à soupe', 'c. à café', 'pincée', ''];
+var RLK_UNITES_REC = ['g', 'kg', 'ml', 'cl', 'L', 'c. à soupe', 'c. à café', 'pincée', ''];
 function rlkUniteNom(u) { return u === '' ? 'nombre' : u; }
 
 // ── Lecture d'une fiche recette (Ladilafé) ──
@@ -6423,7 +6426,7 @@ function rlkRecIngrRender() {
       + '<button type="button" class="btn btn-ghost btn-xs" onclick="rlkRecIngrMove(' + k + ',-1)" aria-label="Monter">↑</button><button type="button" class="btn btn-ghost btn-xs" onclick="rlkRecIngrMove(' + k + ',1)" aria-label="Descendre">↓</button>'
       + '<button type="button" class="btn btn-ghost btn-xs" style="color:#B3261E" onclick="rlkRecIngrDel(' + k + ')" aria-label="Supprimer">✕</button></div>'
       + '<div><label>Quantité (pour le poids de référence)</label><input type="number" step="any" min="0" value="' + (i.q === '' || i.q == null ? '' : i.q) + '" oninput="rlkRecIngrSet(' + k + ',\'q\',this.value)"></div>'
-      + '<div><label>Unité</label><select onchange="rlkRecIngrSet(' + k + ',\'u\',this.value)">' + RLK_UNITES.map(function(u) { return '<option value="' + u + '"' + (u === (i.u || '') ? ' selected' : '') + '>' + rlkEsc(rlkUniteNom(u)) + '</option>'; }).join('') + '</select></div>'
+      + '<div><label>Unité</label><select onchange="rlkRecIngrSet(' + k + ',\'u\',this.value)">' + RLK_UNITES_REC.map(function(u) { return '<option value="' + u + '"' + (u === (i.u || '') ? ' selected' : '') + '>' + rlkEsc(rlkUniteNom(u)) + '</option>'; }).join('') + '</select></div>'
       + '<div><label>Évolution</label><select onchange="rlkRecIngrSet(' + k + ',\'m\',this.value)"><option value="prop"' + (i.m !== 'fixe' ? ' selected' : '') + '>Suit le poids du fruit</option><option value="fixe"' + (i.m === 'fixe' ? ' selected' : '') + '>Quantité fixe</option></select></div>'
       + '<div><label>Précision (facultatif)</label><input type="text" placeholder="rases, non échaudés…" value="' + rlkEsc(i.note || '') + '" oninput="rlkRecIngrSet(' + k + ',\'note\',this.value)"></div></div>';
   }).join('');
