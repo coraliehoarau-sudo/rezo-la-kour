@@ -1214,7 +1214,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
       </div>
       <div class="rlk-lecture" style="margin-top:14px">
         <b>Saisir le troc d'un adhérent</b>
-        <div class="rlk-note" style="margin:4px 0 10px">Pour un adhérent qui n'utilise pas l'application. La saisie se fait dans l'onglet Trok, au nom de la personne choisie. <b>Plants, compost, bois : les FEY sont crédités tout de suite</b> et affichés dans la liste. Fruits : crédités après l'atelier.</div>
+        <div class="rlk-note" style="margin:4px 0 10px">Pour un adhérent qui n'utilise pas l'application. La saisie se fait dans l'onglet Trok, au nom de la personne choisie. <b>Plants, compost, bois : les FEY sont crédités tout de suite</b> et affichés dans la liste. Fruits : crédités aussi tout de suite (part du donateur).</div>
         <select id="dispo-prod" onchange="rlkLoadMesTrocs()"><option value="">— Choisir un adhérent —</option></select>
         <button class="btn btn-primary btn-sm" type="button" style="margin-top:10px" onclick="rlkTrokPour()">Saisir son troc</button>
       </div>
@@ -4241,7 +4241,7 @@ function rlkDonPreview() {
     if (u !== 'kg') { out.push('<div>' + rlkEsc(nom) + ' : ' + q + ' ' + u + ', converti en kg par l\'équipe.</div>'); return; }
     var cl = rlkClasse(rlkEtatClasse(etat)), quota = rlkQuotaKg(nom, etat), fey = Math.ceil(q * cl.credit_par_kg), tr = q * cl.transforme_par_kg;
     totFey += fey; totTr += tr;
-    out.push('<div class="' + (q >= quota ? 'rlk-ok' : 'rlk-warn') + '"><b>' + rlkEsc(nom) + '</b> : ' + q + ' kg → <b>' + fey + ' FEY</b> pour vous (environ ' + rlkFmt(tr, 1) + ' FEY de produits transformés). '
+    out.push('<div class="' + (q >= quota ? 'rlk-ok' : 'rlk-warn') + '"><b>' + rlkEsc(nom) + '</b> : ' + q + ' kg → <b>' + fey + ' FEY</b> pour vous' + (x.kg == null ? '. ' : ' (environ ' + rlkFmt(tr, 1) + ' FEY de produits transformés). ')
       + (q >= quota ? 'Quota atteint.' : 'Quota minimal ' + quota + ' kg : il manque ' + rlkFmt(quota - q, 1) + ' kg pour que nous nous déplacions (ou regroupez avec des voisins).') + '</div>');
   });
   document.getElementById('don-preview').innerHTML = nb ? out.join('') + (totFey ? '<div style="margin-top:8px;font-size:1rem"><b>Total estimé : ' + totFey + ' FEY</b> (' + totFey + ' pot' + (totFey > 1 ? 's' : '') + ' à choisir au stock). ' + (totTr >= RLK.seuil ? 'Seuil de ' + RLK.seuil + ' FEY transformés atteint.' : 'Seuil de déplacement : ' + RLK.seuil + ' FEY transformés.') + '</div>' : '') : 'Ajoutez un produit et une quantité.';
@@ -5516,10 +5516,10 @@ function rlkDonPreview() {
   rlkDonLignes().forEach(function(x) {
     nb++;
     if (!x.f) { out.push('<div class="rlk-warn"><b>' + rlkEsc(x.nom) + '</b> : ' + x.q + ' ' + x.u + '. Ce produit n\'est pas dans la liste : l\'équipe choisira sa catégorie et calculera vos FEY.</div>'); return; }
-    var cl = rlkClasse(rlkEtatClasse(x.etat)), quota = rlkQuotaKg(x.nom, x.etat), fey = Math.ceil(x.kg * cl.credit_par_kg - 1e-9), tr = x.kg * cl.transforme_par_kg;
+    var cl = rlkClasse(rlkEtatClasse(x.etat)), quota = rlkQuotaKg(x.nom, x.etat), fey = rlkFeyFruitLigne(x), tr = x.kg * cl.transforme_par_kg;
     totFey += fey; totTr += tr;
-    out.push('<div class="' + (x.kg >= quota ? 'rlk-ok' : 'rlk-warn') + '"><b>' + rlkEsc(x.nom) + '</b> : ' + x.q + ' ' + x.u + (x.u !== 'kg' ? ' (environ ' + rlkFmt(x.kg, 1) + ' kg)' : '') + ' → <b>' + fey + ' FEY</b> pour vous (environ ' + rlkFmt(tr, 1) + ' FEY de produits transformés). '
-      + (x.kg >= quota ? 'Quota atteint.' : 'Quota minimal ' + quota + ' kg : il manque ' + rlkFmt(quota - x.kg, 1) + ' kg pour que nous nous déplacions (ou regroupez avec des voisins).') + '</div>');
+    out.push('<div class="' + (x.kg == null || x.kg >= quota ? 'rlk-ok' : 'rlk-warn') + '"><b>' + rlkEsc(x.nom) + '</b> : ' + x.q + ' ' + x.u + (x.u !== 'kg' && x.kg != null ? ' (environ ' + rlkFmt(x.kg, 1) + ' kg)' : '') + ' → <b>' + fey + ' FEY</b> pour vous' + (x.kg == null ? '. ' : ' (environ ' + rlkFmt(tr, 1) + ' FEY de produits transformés). ')
+      + (x.kg == null ? '' : x.kg >= quota ? 'Quota atteint.' : 'Quota minimal ' + quota + ' kg : il manque ' + rlkFmt(quota - x.kg, 1) + ' kg pour que nous nous déplacions (ou regroupez avec des voisins).') + '</div>');
   });
   box.innerHTML = nb ? out.join('') + (totFey ? '<div style="margin-top:8px;font-size:1rem"><b>Total estimé : ' + totFey + ' FEY</b> (' + totFey + ' pot' + (totFey > 1 ? 's' : '') + ' à choisir au stock). ' + (totTr >= RLK.seuil ? 'Seuil de ' + RLK.seuil + ' FEY transformés atteint.' : 'Seuil de ' + RLK.seuil + ' FEY transformés non atteint : regroupez avec des voisins.') + '</div>' : '') : 'Ajoutez un produit et une quantité.';
 }
@@ -5567,7 +5567,7 @@ function rlkFruitRow(f) {
   return '<div class="fr-row" data-orig="' + rlkEsc(f.nom || '') + '"><div class="fr-top"><input type="text" class="fr-nom" value="' + rlkEsc(f.nom || '') + '" placeholder="Nom du produit"><button class="btn btn-ghost btn-xs" type="button" onclick="this.closest(\'.fr-row\').remove();rlkFruitCount()" aria-label="Retirer">✕</button></div>'
     + '<select class="fr-etat">' + et + '</select><select class="fr-unite">' + un + '</select>'
     + '<label>Quantité pour 1 FEY<input type="number" class="fr-qfey" step="0.1" min="0" value="' + (f.qte_pour_fey || '') + '"></label>'
-    + '<label>Kg par unité<input type="number" class="fr-kgu" step="0.05" min="0.01" value="' + (f.kg_par_unite || 1) + '"></label></div>';
+    + '<label>Poids indicatif par unité, en kg (facultatif : compté dans les kilos, jamais dans les FEY)<input type="number" class="fr-kgu" step="0.01" min="0" placeholder="vide" value="' + ((f.kg_par_unite && !(f.kg_par_unite === 1 && f.unite !== 'kg')) ? f.kg_par_unite : '') + '"></label></div>';
 }
 function rlkFruitCount() { var c = document.getElementById('fr-count'); if (c) c.textContent = document.querySelectorAll('#prix-tbody .fr-row').length + ' produits'; }
 function rlkLoadPrixAdmin() {
@@ -7880,7 +7880,7 @@ function rlkTrokLayout() {
 function rlkFormFey() {
   var fey = 0;
   try {
-    rlkDonLignes().forEach(function(x) { if (x.f && x.kg != null) { var cl = rlkClasse(rlkEtatClasse(x.etat)); fey += Math.ceil(x.kg * cl.credit_par_kg - 1e-9); } });
+    rlkDonLignes().forEach(function(x) { if (x.f) fey += rlkFeyFruitLigne(x); });
     var a = RLK_AUTRES[rlkVal('au-prod')], q = rlkNum('au-q', 0); if (a && q > 0) fey += Math.ceil(q * a.p - 1e-9);
   } catch (e) {}
   return fey;
@@ -9153,11 +9153,17 @@ RLK_VERSION = '2.6';
 function rlkFeyDeLigne(produit, q, unite) {
   var nom = String(produit || ''), m = /^(.*) \(autre troc\)$/.exec(nom);
   if (m) { var a = RLK_AUTRES.filter(function(x) { return x.n === m[1]; })[0]; if (a) return {fey: Math.ceil(Number(q) * a.p - 1e-9), immediat: true}; return null; }
-  if (unite !== 'kg') return null;
+  if (unite !== 'kg') {
+    var f0 = rlkFruit(nom.replace(/ \((vert|rare|cher|exception|tisane\/aromate|à classer)\)/g, ''));
+    if (f0 && f0.qte_pour_fey > 0 && f0.unite === unite) return {fey: Math.floor(Number(q) / f0.qte_pour_fey + 1e-9), immediat: true};
+    return null;
+  }
   var base = nom.replace(/ \((vert|rare|cher|exception|tisane\/aromate|à classer)\)/g, '').replace(/ \(\d[^)]*\)\s*$/, '');
   var k = Number(q); if (!(k > 0)) return null;
-  var f = k * rlkClasse(rlkClasseDepuisNom(base)).transforme_par_kg * RLK.pHote;
-  return {fey: Math.ceil(f - 1e-9), immediat: false};
+  var sm = /\((vert|rare|cher|exception|tisane\/aromate)\)/.exec(nom), fr = rlkFruit(base), et = sm ? sm[1].replace('tisane/aromate', 'tisane') : (fr ? fr.etat : 'mur');
+  var om = /\((\d+(?:[.,]\d+)?) ([^)]+)\)\s*$/.exec(nom);
+  if (fr && fr.qte_pour_fey > 0 && om && om[2] === fr.unite) return {fey: Math.floor(parseFloat(om[1].replace(',', '.')) / fr.qte_pour_fey + 1e-9), immediat: true};
+  return {fey: Math.floor(k * rlkClasse(rlkEtatClasse(et)).credit_par_kg + 1e-9), immediat: true};
 }
 function rlkDecoreStock() {
   var wrap = document.getElementById('stock-table-wrap'), t = wrap && wrap.querySelector('table.tbl'); if (!t || t.dataset.fey) return;
@@ -9189,6 +9195,81 @@ rlkDoTroc = function() {
       toast('✓ ' + fey + ' FEY crédités' + (nom ? ' à ' + nom : '')); loadStockTable(); if (typeof rlkLoadCompteurs === 'function') rlkLoadCompteurs();
     });
   }, 500);
+};
+
+var rlkDoDisposOrig46 = rlkDoDispos;
+rlkDoDispos = function() {
+  var uid = rlkVal('dispo-prod'), adm = rlkIsAdmin() && uid, tot = 0, det = [];
+  if (adm) rlkDonLignes().forEach(function(x) {
+    if (!x.f || x.kg == null) return;
+    var f = rlkFeyFruitLigne(x);
+    tot += f; det.push(x.q + ' ' + x.u + ' ' + x.nom);
+  });
+  rlkDoDisposOrig46.apply(this, arguments);
+  if (!adm || !(tot > 0)) return;
+  setTimeout(function() {
+    sb.from('rlk_fey').insert({user_id: uid, delta: tot, motif: 'Troc : ' + det.join(', ')}).then(function(r) {
+      if (r.error) { toast('Troc enregistré mais FEY non crédités : ' + rlkErr(r.error)); return; }
+      var sel = document.getElementById('dispo-prod'), nom = sel && sel.selectedIndex > 0 ? sel.options[sel.selectedIndex].text : '';
+      toast('✓ ' + tot + ' FEY crédités' + (nom ? ' à ' + nom : '')); loadStockTable(); if (typeof rlkLoadCompteurs === 'function') rlkLoadCompteurs();
+    });
+  }, 700);
+};
+
+// FEY d'une ligne de troc : « Quantité pour 1 FEY » du produit si elle est réglée, sinon FEY au kilo de la catégorie
+function rlkFeyFruitLigne(x) {
+  var f = x.f;
+  if (f && f.qte_pour_fey > 0 && x.u === f.unite) return Math.floor(x.q / f.qte_pour_fey + 1e-9);
+  return Math.floor((x.kg || 0) * rlkClasse(rlkEtatClasse(x.etat)).credit_par_kg + 1e-9);
+}
+var rlkDoDisposOrig47 = rlkDoDispos;
+rlkDoDispos = function() {
+  var self = this, args = arguments;
+  if (rlkIsAdmin()) {
+    var bad = rlkDonLignes().filter(function(x) { return x.f && x.u !== 'kg' && x.u === x.f.unite && x.f.kg_par_unite === 1; });
+    if (bad.length && !confirm('Le « kg par unité » de ' + bad.map(function(x) { return x.nom; }).join(', ') + ' est resté à 1 : ' + bad.map(function(x) { return x.q + ' ' + x.u; }).join(', ') + ' seraient comptés comme ' + bad.map(function(x) { return x.q + ' kg'; }).join(', ') + ' dans les kilos de l\'adhérent. Continuer quand même ? (Sinon réglez-le dans Réglaj > Pri & FEY.)')) return;
+  }
+  rlkDoDisposOrig47.apply(self, args);
+};
+
+// ═══ v4.9 : en unité, botte, etc., le poids n'entre dans aucun calcul (seule « Quantité pour 1 FEY » compte) ═══
+var rlkDonLignesOrig49 = rlkDonLignes;
+rlkDonLignes = function() {
+  var out = rlkDonLignesOrig49.apply(this, arguments);
+  // poids indicatif : compte dans les kilos, jamais dans les FEY ; vide (ou 1 par défaut) = poids non suivi
+  out.forEach(function(x) { if (x.f && x.u !== 'kg') { var w = Number(x.f.kg_par_unite); x.kg = (w > 0 && w !== 1 && x.u === x.f.unite) ? x.q * w : null; } });
+  return out;
+};
+rlkFeyFruitLigne = function(x) {
+  var f = x.f; if (!f) return 0;
+  if (x.u !== 'kg') return (f.qte_pour_fey > 0 && x.u === f.unite) ? Math.floor(x.q / f.qte_pour_fey + 1e-9) : 0;
+  return Math.floor((x.kg || 0) * rlkClasse(rlkEtatClasse(x.etat)).credit_par_kg + 1e-9);
+};
+rlkDoDispos = function() {
+  var adm = rlkIsAdmin() && rlkVal('dispo-prod'), prodId = adm ? rlkVal('dispo-prod') : currentUser.id;
+  var today = new Date().toISOString().split('T')[0], lundi = rlkISO(rlkLundi()), inserts = [], journal = [], tot = 0, det = [], sans = [];
+  rlkDonLignes().forEach(function(x) {
+    var suf = {vert: ' (vert)', rare: ' (rare)', cher: ' (cher)', exception: ' (exception)', tisane: ' (tisane/aromate)'}[x.etat] || '';
+    if (x.autre) inserts.push({profile_id: prodId, produit: x.nom + ' (à classer)', quantite: x.q, unite: x.u, semaine: today});
+    else if (x.kg != null) inserts.push({profile_id: prodId, produit: x.nom + suf + (x.u !== 'kg' ? ' (' + x.q + ' ' + x.u + ')' : ''), quantite: Math.round(x.kg * 100) / 100, unite: 'kg', semaine: today});
+    else inserts.push({profile_id: prodId, produit: x.nom + suf, quantite: x.q, unite: x.u, semaine: today});
+    journal.push({user_id: prodId, declare_par: currentUser.id, produit: x.nom, etat: x.autre ? 'a_classer' : x.etat, quantite: x.q, unite: x.u, kg: x.kg != null ? Math.round(x.kg * 100) / 100 : null, semaine: lundi});
+    if (adm && x.f) { var fy = rlkFeyFruitLigne(x); if (fy > 0) { tot += fy; det.push(x.q + ' ' + x.u + ' ' + x.nom); } else if (x.u !== 'kg') sans.push(x.nom); }
+  });
+  sb.from('disponibilites').insert(inserts).then(function(res) {
+    if (res.error) { toast(rlkErr(res.error)); return; }
+    sb.from('rlk_trok').insert(journal).then(function() { rlkLoadMesTrocs(); });
+    toast('✓ Troc déclaré, merci !' + (adm ? '' : ' Vos FEY seront crédités après l\'atelier.'));
+    document.getElementById('dispo-lignes').innerHTML = ''; rlkAddLine(); rlkDonPreview();
+    setTimeout(function() { loadStockTable(); rlkLoadCompteurs(); }, 600);
+    setTimeout(rlkLoadCompteurs, 2500);
+    if (adm && tot > 0) sb.from('rlk_fey').insert({user_id: prodId, delta: tot, motif: 'Troc : ' + det.join(', ')}).then(function(r) {
+      if (r.error) { toast('Troc enregistré mais FEY non crédités : ' + rlkErr(r.error)); return; }
+      var sel = document.getElementById('dispo-prod'), nom = sel && sel.selectedIndex > 0 ? sel.options[sel.selectedIndex].text : '';
+      toast('✓ ' + tot + ' FEY crédités' + (nom ? ' à ' + nom : '')); loadStockTable();
+    });
+    if (adm && sans.length) setTimeout(function() { toast('⚠ ' + sans.join(', ') + ' : « Quantité pour 1 FEY » non réglée (Réglaj > Pri & FEY), aucun FEY crédité'); }, 2500);
+  });
 };
 </script>
 
