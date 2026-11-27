@@ -1161,7 +1161,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
     <button class="btn btn-ghost btn-sm" data-s="agenda" onclick="showReglaj('agenda')">Biyetri</button>
     <button class="btn btn-ghost btn-sm" data-s="messagerie" onclick="showReglaj('messagerie')">Mesaj <span id="msg-badge" class="rlk-badge-n" style="display:none">0</span></button>
     <button class="btn btn-ghost btn-sm" data-s="ladilafe" onclick="showReglaj('ladilafe')">Ladilafé</button>
-    <button class="btn btn-ghost btn-sm" data-s="kour" onclick="showReglaj('kour')">Kour</button><button class="btn btn-ghost btn-sm" data-s="jounal" onclick="showReglaj('jounal')">Jounal</button><button class="btn btn-ghost btn-sm" data-s="stats" onclick="showReglaj('stats')">Stat</button>
+    <button class="btn btn-ghost btn-sm" data-s="kour" onclick="showReglaj('kour')">Kour</button><button class="btn btn-ghost btn-sm" data-s="echanj" onclick="showReglaj('echanj')">Échanj <span id="ech-badge" class="rlk-badge-n" style="display:none">0</span></button><button class="btn btn-ghost btn-sm" data-s="jounal" onclick="showReglaj('jounal')">Jounal</button><button class="btn btn-ghost btn-sm" data-s="stats" onclick="showReglaj('stats')">Stat</button>
   </div>
 
   <!-- ZADÉRAN -->
@@ -1600,6 +1600,25 @@ html.rlk-grand #rlk-feybar{font-size:16px}
 
   <!-- STATISTIQUES -->
   <div id="reglaj-kour" style="display:none"><div class="card"><div class="card-title">Kour des adhérents <button class="btn btn-ghost btn-xs" style="float:right" type="button" onclick="rlkKourCsv()">Exporter CSV</button></div><div class="rlk-note" style="margin-top:0">Une ligne par adhérent. Touchez une ligne pour voir sa fiche. « À relancer » = questionnaire, jardin ou fruits manquants.</div><input type="text" id="kour-q" placeholder="Rechercher un nom, un quartier, un fruit…" oninput="rlkKourRender()" style="margin-bottom:8px"><select id="kour-com" onchange="rlkKourRender()" style="margin-bottom:8px"></select><div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px;font-size:13px"><label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:13px;margin:0"><input type="checkbox" style="width:auto;margin:0" id="kour-at" onchange="rlkKourRender()"> Accueillent des ateliers</label><label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:13px;margin:0"><input type="checkbox" style="width:auto;margin:0" id="kour-re" onchange="rlkKourRender()"> À relancer</label></div><div class="rlk-note" id="kour-count" style="margin:0 0 8px"></div><div id="kour-body" class="rlk-note">Chargement…</div></div></div>
+  <div id="reglaj-echanj" style="display:none">
+    <div class="card" style="margin-bottom:14px"><div class="card-title">Échanj : déclarations à valider</div>
+      <div class="rlk-note" style="margin-top:0"><b>Panier / stock</b> : les FEY sont crédités tout de suite (montant prérempli, modifiable). <b>Atelier</b> : rien maintenant, la part de l'hôte arrive avec le lot. <b>Convivial</b> : sort de l'historique de l'adhérent (ni FEY, ni kilos) et passe dans le registre anonyme du bénévolat ci-dessous. <b>Refuser</b> : la ligne est retirée.</div>
+      <div id="ech-queue"><div class="rlk-note">Chargement…</div></div>
+      <button class="btn btn-ghost btn-xs" type="button" style="margin-top:8px" onclick="RLK.echOld=!RLK.echOld;rlkEchLoad()" id="ech-old-btn">Voir aussi les déclarations des 14 derniers jours non classées</button>
+    </div>
+    <div class="card" style="margin-bottom:14px"><div class="card-title">Bénévolat des réunions (anonyme)</div>
+      <div class="rlk-note" style="margin-top:0">Jus, tartes, cakes, apéros de réunion : saisis par l'administrateur, <b>sans nom, sans FEY, hors kilos</b>. Sert à valoriser le bénévolat dans vos bilans. Le traitement comptable est à confirmer avec votre comptable.</div>
+      <div class="fr2"><div><label>Date</label><input type="date" id="bv-date"></div><div><label>Nature</label><select id="bv-nat"><option>Jus</option><option>Tarte</option><option>Cake</option><option>Fruits partagés</option><option>Repas ou apéro</option><option>Autre</option></select></div></div>
+      <div class="fr2"><div><label>Quantité</label><input type="number" id="bv-q" min="0" step="any" placeholder="ex. 8"></div><div><label>Unité</label><select id="bv-u"><option>parts</option><option>L</option><option>kg</option><option>pièces</option></select></div></div>
+      <div class="fr2"><div><label>Valeur estimée en € (facultatif)</label><input type="number" id="bv-eur" min="0" step="0.5"></div><div><label>Note (facultatif)</label><input type="text" id="bv-note" placeholder="réunion du bureau"></div></div>
+      <button class="btn btn-primary btn-sm" type="button" onclick="rlkBvAjouter()">Enregistrer</button>
+      <div id="bv-liste" style="margin-top:12px"></div>
+    </div>
+    <div class="card"><div class="card-title">Historique d'un adhérent</div>
+      <select id="ech-adh" onchange="rlkEchHist()"><option value="">— Choisir un adhérent —</option></select>
+      <div id="ech-hist" style="margin-top:10px"></div>
+    </div>
+  </div>
   <div id="reglaj-jounal" style="display:none"><div class="card" style="margin-bottom:14px"><div class="card-title">Jounal d'activité</div><div class="rlk-note" style="margin-top:0">Journal de toutes les opérations (apports, FEY, lots, commandes, adhésions, ateliers) pour le rapport d'activité, le point mensuel du comptable ou un dossier de rescrit. Les adhérents sont désignés par leur n° Yapla.</div><div class="fr2"><div><label>Mois</label><input type="month" id="jn-mois" onchange="rlkJnMois()"></div><div></div></div><div class="fr2"><div><label>Du</label><input type="date" id="jn-d1"></div><div><label>Au</label><input type="date" id="jn-d2"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px"><button class="btn btn-primary btn-sm" type="button" onclick="rlkJnGenerer()">Générer</button><button class="btn btn-outline btn-sm" type="button" onclick="rlkJnExcel()">Excel</button><button class="btn btn-outline btn-sm" type="button" onclick="rlkJnPdf()">PDF</button><button class="btn btn-outline btn-sm" id="jn-clore" type="button" style="display:none" onclick="rlkJnCloturer()">Clôturer le mois</button></div><div id="jn-out" class="rlk-note">Choisissez un mois, ou une période libre pour un rapport, puis « Générer ». Seul un mois entier et terminé peut être clôturé.</div></div><div class="card"><div class="card-title">Mois clôturés</div><div class="rlk-note" style="margin-top:0">Un mois clôturé est figé avec une empreinte numérique : il ne peut plus être modifié ni supprimé.</div><div id="jn-clot" class="rlk-note">Chargement…</div></div></div>
   <div id="reglaj-stats" style="display:none">
     <div class="card" style="margin-bottom:14px"><div class="card-title">Rapport d'activité</div>
@@ -9271,6 +9290,187 @@ rlkDoDispos = function() {
     if (adm && sans.length) setTimeout(function() { toast('⚠ ' + sans.join(', ') + ' : « Quantité pour 1 FEY » non réglée (Réglaj > Pri & FEY), aucun FEY crédité'); }, 2500);
   });
 };
+
+// ═══ v5.0 : Réglaj > Échanj : file « à valider », crédit en un clic, historique et retrait par adhérent ═══
+RLK.echOld = false; RLK.echNoms = {}; RLK.echRows = []; RLK.echHist = {};
+function rlkFeyTrok(t) {
+  var nom = String(t.produit || ''), m = /^(.*) \(autre troc\)$/.exec(nom);
+  if (m) { var a = RLK_AUTRES.filter(function(x) { return x.n === m[1]; })[0]; return a ? Math.ceil(Number(t.quantite) * a.p - 1e-9) : 0; }
+  var f = rlkFruit(nom);
+  if (!f) return 0;
+  if (t.unite !== 'kg') return (f.qte_pour_fey > 0 && t.unite === f.unite) ? Math.floor(Number(t.quantite) / f.qte_pour_fey + 1e-9) : 0;
+  var et = (t.etat && t.etat !== 'a_classer') ? t.etat : f.etat, k = t.kg != null ? Number(t.kg) : Number(t.quantite);
+  return Math.floor((k || 0) * rlkClasse(rlkEtatClasse(et)).credit_par_kg + 1e-9);
+}
+function rlkEchNom(id) { return RLK.echNoms[id] || 'Adhérent'; }
+function rlkEchProfils() {
+  return sb.from('profiles').select('id,prenom,nom').order('prenom').then(function(r) {
+    (r.data || []).forEach(function(p) { RLK.echNoms[p.id] = ((p.prenom || '') + ' ' + (p.nom || '')).trim() || 'Adhérent'; });
+    var s = document.getElementById('ech-adh');
+    if (s && s.options.length < 2) { var cur = s.value; s.innerHTML = '<option value="">— Choisir un adhérent —</option>' + (r.data || []).map(function(p) { return '<option value="' + p.id + '">' + rlkEsc(RLK.echNoms[p.id]) + '</option>'; }).join(''); s.value = cur; }
+  });
+}
+function rlkEchQte(t) { return rlkFmt(t.quantite, 2) + ' ' + rlkEsc(t.unite) + (t.unite !== 'kg' && t.kg != null ? ' (≈ ' + rlkFmt(t.kg, 1) + ' kg)' : ''); }
+function rlkEchLoad() {
+  if (!rlkIsAdmin()) return;
+  var box = document.getElementById('ech-queue'); if (!box) return;
+  var ob = document.getElementById('ech-old-btn'); if (ob) ob.textContent = RLK.echOld ? 'Masquer les anciennes déclarations non classées' : 'Voir aussi les déclarations des 14 derniers jours non classées';
+  var q1 = sb.from('rlk_trok').select('*').eq('statut', 'a_valider').order('created_at', {ascending: false}).limit(200);
+  var q2 = RLK.echOld ? sb.from('rlk_trok').select('*').is('statut', null).gte('created_at', new Date(Date.now() - 14 * 864e5).toISOString()).order('created_at', {ascending: false}).limit(200) : Promise.resolve({data: []});
+  Promise.all([rlkEchProfils(), q1, q2]).then(function(rs) {
+    if (rs[1].error) { box.innerHTML = '<div class="rlk-warn">Fonction pas encore activée : exécutez <b>phase12_echanges.sql</b> dans Supabase (SQL Editor), puis rouvrez cet onglet.</div>'; return; }
+    var rows = (rs[1].data || []).concat(rs[2].data || []); RLK.echRows = rows;
+    var b = document.getElementById('ech-badge'); if (b) { var n = (rs[1].data || []).length; b.textContent = n; b.style.display = n ? '' : 'none'; }
+    if (!rows.length) { box.innerHTML = '<div class="rlk-ok">Rien à valider pour le moment.</div>'; return; }
+    box.innerHTML = rows.map(function(t) {
+      var fey = rlkFeyTrok(t), old = !t.statut;
+      return '<div style="padding:10px 0;border-bottom:1px solid var(--border)"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span><b>' + rlkEsc(rlkEchNom(t.user_id)) + '</b> · ' + rlkEsc(t.produit) + '</span><span style="white-space:nowrap">' + rlkEchQte(t) + '</span></div>'
+        + '<div class="rlk-note" style="margin:2px 0 6px">' + rlkDate(t.created_at) + (old ? ' · ancienne déclaration' : '') + '</div>'
+        + '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><input type="number" id="ech-n-' + t.id + '" min="0" step="1" value="' + fey + '" style="width:80px;margin:0"> <span>FEY</span>'
+        + '<button class="btn btn-primary btn-xs" type="button" onclick="rlkEchValider(\'' + t.id + '\',\'stock\')">Panier / stock</button>'
+        + '<button class="btn btn-ghost btn-xs" type="button" onclick="rlkEchValider(\'' + t.id + '\',\'atelier\')">Atelier</button>'
+        + '<button class="btn btn-ghost btn-xs" type="button" onclick="rlkEchValider(\'' + t.id + '\',\'convivial\')">Convivial</button>'
+        + '<button class="btn btn-ghost btn-xs" style="color:var(--red)" type="button" onclick="rlkEchValider(\'' + t.id + '\',\'refus\')">Refuser</button></div></div>';
+    }).join('');
+  });
+}
+function rlkEchRetireLigne(t) {
+  return sb.from('rlk_trok').delete().eq('id', t.id).select().then(function(r) {
+    if (r.error || !(r.data || []).length) { toast('Retrait refusé : exécutez phase9_v31_additif.sql dans Supabase'); return false; }
+    return rlkTrocMatch(t, t.user_id).then(function(d) { return d ? sb.from('disponibilites').delete().eq('id', d.id).then(function() { return true; }) : true; });
+  });
+}
+function rlkEchApres() { rlkEchLoad(); var s = document.getElementById('ech-adh'); if (s && s.value) rlkEchHist(); if (typeof loadStockTable === 'function') loadStockTable(); if (typeof rlkLoadCompteurs === 'function') setTimeout(rlkLoadCompteurs, 500); }
+function rlkEchValider(id, mode) {
+  var t = RLK.echRows.filter(function(x) { return String(x.id) === String(id); })[0]; if (!t) return;
+  if (mode === 'refus') { if (!confirm('Refuser et retirer « ' + t.produit + ' » de ' + rlkEchNom(t.user_id) + ' ?')) return; rlkEchRetireLigne(t).then(function(ok) { if (ok) { toast('✓ Ligne retirée'); rlkEchApres(); } }); return; }
+  var n = mode === 'stock' ? Math.max(0, Math.round(rlkNum('ech-n-' + id, 0))) : 0;
+  sb.from('rlk_trok').update({statut: mode, fey_credit: n || null}).eq('id', t.id).select().then(function(r) {
+    if (r.error || !(r.data || []).length) { toast('Validation refusée : exécutez phase12_echanges.sql dans Supabase'); return; }
+    if (!(n > 0)) { toast('✓ ' + (mode === 'atelier' ? 'Noté pour l\'atelier, FEY crédités avec le lot' : mode === 'convivial' ? 'Don convivial enregistré, 0 FEY' : 'Validé, 0 FEY')); rlkEchApres(); return; }
+    sb.from('rlk_fey').insert({user_id: t.user_id, delta: n, motif: 'Troc : ' + rlkFmt(t.quantite, 2) + ' ' + t.unite + ' ' + String(t.produit || '').replace(/ \(autre troc\)$/, '')}).then(function(r2) {
+      if (r2.error) { sb.from('rlk_trok').update({statut: 'a_valider', fey_credit: null}).eq('id', t.id).then(function() { toast('FEY non crédités : ' + rlkErr(r2.error)); rlkEchApres(); }); return; }
+      toast('✓ ' + n + ' FEY crédités à ' + rlkEchNom(t.user_id)); rlkEchApres();
+    });
+  });
+}
+var RLK_ECH_ST = {a_valider: 'À valider', stock: 'Panier / stock', atelier: 'Atelier', convivial: 'Convivial'};
+function rlkEchHist() {
+  var uid = rlkVal('ech-adh'), box = document.getElementById('ech-hist'); if (!box) return;
+  if (!uid) { box.innerHTML = ''; return; }
+  Promise.all([sb.from('rlk_fey').select('*').eq('user_id', uid).order('created_at', {ascending: false}).limit(200), sb.from('rlk_trok').select('*').eq('user_id', uid).order('created_at', {ascending: false}).limit(100)]).then(function(rs) {
+    var fey = rs[0].data || [], tr = rs[1].data || [], solde = fey.reduce(function(a, x) { return a + (Number(x.delta) || 0); }, 0), kg = 0;
+    RLK.echHist = {}; tr.forEach(function(t) { RLK.echHist[t.id] = t; kg += t.kg != null ? Number(t.kg) : (t.unite === 'kg' ? Number(t.quantite) : 0); });
+    box.innerHTML = '<div class="rlk-ok"><b>Solde : ' + rlkFmt(solde) + ' FEY</b> · ' + rlkFmt(kg, 1) + ' kg donnés au total</div>'
+      + '<div style="font-weight:700;margin:12px 0 4px">Dons et trocs</div>'
+      + (tr.length ? '<div style="max-height:320px;overflow:auto">' + tr.map(function(t) {
+        return '<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:.85rem"><div style="display:flex;justify-content:space-between;gap:8px"><span>' + rlkDate(t.created_at) + ' · ' + rlkEsc(t.produit) + '</span><span style="white-space:nowrap">' + rlkEchQte(t) + '</span></div>'
+          + '<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:2px"><span class="rlk-note" style="margin:0">' + (RLK_ECH_ST[t.statut] || 'Non classé') + (t.fey_credit ? ' · ' + t.fey_credit + ' FEY' : '') + '</span>'
+          + '<button class="btn btn-ghost btn-xs" style="color:var(--red)" type="button" onclick="rlkEchRetirer(\'' + t.id + '\')">Retirer</button></div></div>';
+      }).join('') + '</div>' : '<div class="rlk-note">Aucun don enregistré.</div>')
+      + '<div style="font-weight:700;margin:12px 0 4px">Mouvements de FEY</div>'
+      + (fey.length ? '<div style="max-height:260px;overflow:auto"><table class="rlk-tbl">' + fey.map(function(x) { return '<tr><td>' + rlkDate(x.created_at) + ' · ' + rlkEsc(x.motif || '') + '</td><td style="white-space:nowrap"><b style="color:' + (x.delta < 0 ? 'var(--red)' : 'var(--accent2)') + '">' + (x.delta > 0 ? '+' : '') + x.delta + '</b></td></tr>'; }).join('') + '</table></div>' : '<div class="rlk-note">Aucun mouvement.</div>')
+      + '<button class="btn btn-ghost btn-sm" style="margin-top:12px" type="button" onclick="document.getElementById(\'dispo-prod\').value=\'' + uid + '\';rlkTrokPour()">Saisir un troc pour cette personne</button>';
+    var sel = document.getElementById('dispo-prod'); if (sel) sel.value = uid;
+  });
+}
+function rlkEchRetirer(id) {
+  var t = RLK.echHist[id]; if (!t) return;
+  var cr = t.statut === 'stock' && t.fey_credit > 0 ? t.fey_credit : 0;
+  if (!confirm('Retirer « ' + t.produit + ' » (' + rlkEchQte(t).replace(/<[^>]*>/g, '') + ')' + (cr ? ' et reprendre ' + cr + ' FEY déjà crédités' : '') + ' ?')) return;
+  rlkEchRetireLigne(t).then(function(ok) {
+    if (!ok) return;
+    if (!cr) { toast('✓ Ligne retirée'); rlkEchApres(); return; }
+    sb.from('rlk_fey').insert({user_id: t.user_id, delta: -cr, motif: 'Annulation troc : ' + t.produit}).then(function(r) { toast(r.error ? 'Ligne retirée, mais FEY non repris : ' + rlkErr(r.error) : '✓ Ligne retirée, ' + cr + ' FEY repris'); rlkEchApres(); });
+  });
+}
+var rlkShowReglajEch = showReglaj;
+showReglaj = function(section) { rlkShowReglajEch(section); if (String(section) === 'echanj') rlkEchLoad(); };
+setInterval(function() { if (!document.hidden && rlkIsAdmin() && currentUser) { var b = document.getElementById('ech-badge'); if (b) sb.from('rlk_trok').select('id').eq('statut', 'a_valider').limit(99).then(function(r) { if (r.error) return; var n = (r.data || []).length; b.textContent = n; b.style.display = n ? '' : 'none'; }); } }, 90000);
+// troc saisi par l'admin : déjà crédité, donc classé « Panier / stock » (jamais dans la file)
+var rlkDoDisposOrig50 = rlkDoDispos;
+rlkDoDispos = function() {
+  var adm = rlkIsAdmin() && rlkVal('dispo-prod'), uid = rlkVal('dispo-prod'), t0 = new Date().toISOString(), lignes = adm ? rlkDonLignes().filter(function(x) { return x.f && rlkFeyFruitLigne(x) > 0; }).map(function(x) { return {nom: x.nom, fey: rlkFeyFruitLigne(x)}; }) : [];
+  rlkDoDisposOrig50.apply(this, arguments);
+  if (!lignes.length) return;
+  setTimeout(function() { lignes.forEach(function(l) { sb.from('rlk_trok').select('id').eq('user_id', uid).eq('produit', l.nom).eq('statut', 'a_valider').gte('created_at', t0).order('created_at', {ascending: false}).limit(1).then(function(r) { var x = (r.data || [])[0]; if (x) sb.from('rlk_trok').update({statut: 'stock', fey_credit: l.fey}).eq('id', x.id).then(function() {}); }); }); }, 1800);
+};
+var rlkDoTrocOrig50 = rlkDoTroc;
+rlkDoTroc = function() {
+  var a = RLK_AUTRES[rlkVal('au-prod')], q = rlkNum('au-q', 0), uid = rlkVal('dispo-prod'), adm = rlkIsAdmin() && uid && a && q > 0, t0 = new Date().toISOString(), fey = adm ? Math.ceil(q * a.p - 1e-9) : 0;
+  rlkDoTrocOrig50();
+  if (adm) setTimeout(function() { sb.from('rlk_trok').select('id').eq('user_id', uid).eq('produit', a.n + ' (autre troc)').eq('statut', 'a_valider').gte('created_at', t0).order('created_at', {ascending: false}).limit(1).then(function(r) { var x = (r.data || [])[0]; if (x) sb.from('rlk_trok').update({statut: 'stock', fey_credit: fey}).eq('id', x.id).then(function() {}); }); }, 2200);
+};
+
+// le « à venir » ignore les dons conviviaux (0 FEY) et les trocs déjà crédités
+['rlkSoldePrev', 'rlkSoldePrevPour'].forEach(function(nm) {
+  var o = window[nm]; if (typeof o !== 'function') return;
+  window[nm] = function() {
+    var tr = rlkTrocRows; rlkTrocRows = function(u, d) { return tr(u, d).then(function(rows) { return (rows || []).filter(function(t) { return t.statut !== 'convivial' && t.statut !== 'stock'; }); }); };
+    try { return o.apply(this, arguments); } finally { rlkTrocRows = tr; }
+  };
+});
+
+// ═══ v5.1 : bénévolat anonyme des réunions + cadeau fidélité (1 FEY offert tous les 20 FEY gagnés) ═══
+function rlkBvLoad() {
+  var box = document.getElementById('bv-liste'); if (!box) return;
+  var d = document.getElementById('bv-date'); if (d && !d.value) d.value = new Date().toISOString().slice(0, 10);
+  sb.from('rlk_benevolat').select('*').order('date', {ascending: false}).limit(200).then(function(r) {
+    if (r.error) { box.innerHTML = '<div class="rlk-warn">Registre pas encore activé : exécutez <b>phase13_benevolat_cadeau.sql</b> dans Supabase.</div>'; return; }
+    var rows = r.data || []; RLK.bvRows = rows;
+    if (!rows.length) { box.innerHTML = '<div class="rlk-note">Aucune entrée pour le moment.</div>'; return; }
+    var par = {}; rows.forEach(function(x) { var m = String(x.date || '').slice(0, 7); var o = par[m] = par[m] || {n: 0, eur: 0}; o.n++; o.eur += Number(x.valeur_eur) || 0; });
+    box.innerHTML = '<div style="font-weight:700;margin-bottom:4px">Par mois</div>' + Object.keys(par).sort().reverse().map(function(m) { return '<div class="rlk-note" style="margin:0">' + m + ' : ' + par[m].n + ' don' + (par[m].n > 1 ? 's' : '') + (par[m].eur ? ', environ ' + rlkFmt(par[m].eur, 0) + ' €' : '') + '</div>'; }).join('')
+      + '<div style="max-height:260px;overflow:auto;margin-top:8px">' + rows.map(function(x) { return '<div style="display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:.85rem"><span>' + rlkDate(x.date) + ' · ' + rlkEsc(x.nature) + (x.quantite ? ' · ' + rlkFmt(x.quantite, 2) + ' ' + rlkEsc(x.unite || '') : '') + (x.valeur_eur ? ' · ' + rlkFmt(x.valeur_eur, 0) + ' €' : '') + (x.note ? ' · ' + rlkEsc(x.note) : '') + '</span><button class="btn btn-ghost btn-xs" style="color:var(--red)" type="button" onclick="rlkBvSuppr(\'' + x.id + '\')">Retirer</button></div>'; }).join('') + '</div>'
+      + '<button class="btn btn-ghost btn-xs" style="margin-top:8px" type="button" onclick="rlkBvCsv()">Exporter CSV</button>';
+  });
+}
+function rlkBvAjouter() {
+  var q = rlkNum('bv-q', 0), row = {date: rlkVal('bv-date') || new Date().toISOString().slice(0, 10), nature: rlkVal('bv-nat'), quantite: q > 0 ? q : null, unite: rlkVal('bv-u'), valeur_eur: rlkNum('bv-eur', 0) > 0 ? rlkNum('bv-eur', 0) : null, note: rlkVal('bv-note').trim() || null, created_by: currentUser && currentUser.id};
+  sb.from('rlk_benevolat').insert(row).then(function(r) {
+    if (r.error) { toast(/rlk_benevolat/.test(r.error.message || '') ? 'Registre pas encore activé : exécutez phase13_benevolat_cadeau.sql' : rlkErr(r.error)); return; }
+    toast('✓ Bénévolat enregistré'); ['bv-q', 'bv-eur', 'bv-note'].forEach(function(i) { document.getElementById(i).value = ''; }); rlkBvLoad();
+  });
+}
+function rlkBvSuppr(id) { if (!confirm('Retirer cette entrée du registre ?')) return; sb.from('rlk_benevolat').delete().eq('id', id).then(function() { rlkBvLoad(); }); }
+function rlkBvCsv() {
+  var rows = RLK.bvRows || []; if (!rows.length) return;
+  var esc = function(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; };
+  var L = [['Date', 'Nature', 'Quantité', 'Unité', 'Valeur €', 'Note'].map(esc).join(';')].concat(rows.map(function(x) { return [x.date, x.nature, x.quantite, x.unite, x.valeur_eur, x.note].map(esc).join(';'); }));
+  var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + L.join('\n')], {type: 'text/csv'})); a.download = 'benevolat-reunions.csv'; a.click();
+}
+var rlkEchLoadOrig51 = rlkEchLoad;
+rlkEchLoad = function() { rlkEchLoadOrig51.apply(this, arguments); rlkBvLoad(); };
+// « Convivial » : la ligne quitte l'adhérent (ni FEY, ni kilos) et entre dans le registre anonyme
+var rlkEchValiderOrig51 = rlkEchValider;
+rlkEchValider = function(id, mode) {
+  if (mode !== 'convivial') { rlkEchValiderOrig51(id, mode); return; }
+  var t = RLK.echRows.filter(function(x) { return String(x.id) === String(id); })[0]; if (!t) return;
+  if (!confirm('Passer « ' + t.produit + ' » en bénévolat anonyme ? Il disparaît de l\'historique de ' + rlkEchNom(t.user_id) + ' (ni FEY, ni kilos).')) return;
+  sb.from('rlk_benevolat').insert({date: new Date().toISOString().slice(0, 10), nature: String(t.produit || '').replace(/ \(autre troc\)$/, ''), quantite: t.quantite, unite: t.unite, note: 'déclaré en don convivial', created_by: currentUser.id}).then(function(r) {
+    if (r.error) { toast('Registre pas encore activé : exécutez phase13_benevolat_cadeau.sql'); return; }
+    rlkEchRetireLigne(t).then(function(ok) { if (ok) { toast('✓ Passé en bénévolat anonyme'); rlkEchApres(); } });
+  });
+};
+RLK_ECH_ST.convivial = 'Convivial';
+// ── Cadeau fidélité : message de remerciement affiché à l'adhérent ──
+function rlkCadeauCheck() {
+  if (!currentUser) return;
+  sb.from('rlk_fey').select('id').eq('user_id', currentUser.id).like('motif', 'Cadeau fidélité%').then(function(r) {
+    if (r.error) return;
+    var n = (r.data || []).length, key = 'rlk_cadeau_vu_' + currentUser.id, vu = 0;
+    try { vu = parseInt(localStorage.getItem(key) || '0', 10) || 0; } catch (e) {}
+    if (n <= vu) return;
+    var d = document.createElement('div'); d.id = 'rlk-cadeau';
+    d.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+    d.innerHTML = '<div style="background:var(--surface,#fff);color:var(--text,#222);border-radius:14px;max-width:360px;padding:22px;text-align:center"><div style="font-size:2.2rem">🎁</div><div style="font-weight:700;font-size:1.1rem;margin:6px 0">Merci pour votre engagement !</div><div style="margin-bottom:14px">Pour votre fidélité au Rézo la Kour, <b>' + (n - vu) + ' FEY</b> ' + (n - vu > 1 ? 'vous sont offerts' : 'vous est offert') + ' en cadeau, déjà ajouté à votre solde.</div><button class="btn btn-primary" type="button" id="rlk-cadeau-ok">Merci !</button></div>';
+    document.body.appendChild(d);
+    document.getElementById('rlk-cadeau-ok').onclick = function() { try { localStorage.setItem(key, String(n)); } catch (e) {} d.remove(); if (typeof rlkLoadSolde === 'function') rlkLoadSolde(); };
+  });
+}
+var rlkLoadSoldeOrig51 = rlkLoadSolde;
+rlkLoadSolde = function() { rlkLoadSoldeOrig51.apply(this, arguments); setTimeout(function() { if (!document.getElementById('rlk-cadeau')) rlkCadeauCheck(); }, 1200); };
+document.addEventListener('DOMContentLoaded', function() { setTimeout(function() { if (!document.getElementById('rlk-cadeau')) rlkCadeauCheck(); }, 4000); });
 </script>
 
 
