@@ -1083,7 +1083,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
   <div id="produits-grid" class="g3">
     <div class="loading"><div class="spinner"></div>Chargement…</div>
   </div>
-  <div class="rlk-note">Payer en FEY : votre solde est débité. Payer en euros : vous êtes dirigé vers notre boutique Yapla au moment de régler.</div>
+  <div class="rlk-note">Payer en FEY : votre solde est débité. Payer en euros : paiement en espèces ou par chèque au retrait de la commande.</div>
 
   <div class="rlk-note" id="pan-ferme-note" style="display:none;margin:0 0 16px"><b>Panyé de la semaine :</b> pas encore ouvert. Il sera mis en ligne dès que la composition est prête et que les fruits et légumes sont disponibles.</div>
   <div class="rlk-pan" id="panye-bloc">
@@ -1522,6 +1522,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
 
   <!-- COMMANDES -->
   <div id="reglaj-commandes" style="display:none">
+    <div class="card" style="margin-bottom:14px"><div class="card-title">Stock boutique en direct</div><div class="rlk-note" style="margin-top:0">Le stock est réservé dès que l'adhérent commande (après phase17), et rendu si vous cliquez sur « Annuler ». « À préparer » = commandes en attente à préparer pour le prochain retrait.</div><div id="cmd-stock" class="rlk-note">Chargement…</div></div>
     <div class="card"><div class="card-title">Commandes de la Boutik</div><div id="cmd-list" class="rlk-note">Chargement…</div></div>
   </div>
 
@@ -1530,7 +1531,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
     <div class="card" style="margin-bottom:16px">
       <div class="card-title">Stock par lot : échanges (application) et boutique Yapla</div>
       <div id="stock-lots" class="rlk-note">Chargement…</div>
-      <div class="rlk-note">Le stock « application » sert aux échanges en FEY. Le stock « Yapla » est réservé à la boutique en ligne. Les deux sont gérés séparément.</div>
+      <div class="rlk-note">Ces nombres sont ceux du lot à sa création : le stock en direct de la boutique est dans Boutik > Commandes. Attention, « → Boutik » remet le stock boutique à ces nombres. Le stock « application » sert aux échanges en FEY. Le stock « Yapla » est réservé à la boutique en ligne. Les deux sont gérés séparément.</div>
     </div>
   </div>
 
@@ -2212,7 +2213,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
       <div class="fr" style="margin-top:14px"><label>Mode de paiement</label>
         <select id="cart-mode" onchange="rlkCartMode()">
           <option value="fey">Avec mes FEY</option>
-          <option value="yapla">En euros (je serai dirigé vers Yapla)</option>
+          <option value="yapla">En euros (espèces ou chèque au retrait)</option>
         </select>
         <div class="rlk-note" id="cart-mode-note"></div>
       </div>
@@ -4588,7 +4589,7 @@ function updateCartUI() {
 }
 function rlkCartMode() {
   var m = rlkVal('cart-mode'), n = cart.reduce(function(s, i) { return s + i.qty; }, 0), note = document.getElementById('cart-mode-note'); if (!note) return;
-  note.textContent = m === 'fey' ? 'Votre solde : ' + RLK.solde + ' FEY' + (RLK.solde < n ? ' (insuffisant pour cette commande)' : '') : 'Après confirmation, vous serez dirigé vers Yapla pour payer ' + rlkFmt(n * RLK.fey, 2) + ' €.';
+  note.textContent = m === 'fey' ? 'Votre solde : ' + RLK.solde + ' FEY' + (RLK.solde < n ? ' (insuffisant pour cette commande)' : '') : 'Paiement en espèces ou par chèque au retrait : ' + rlkFmt(n * RLK.fey, 2) + ' €.';
 }
 function rlkConfirmOrder() {
   if (window._currentPanyeId) { confirmerCommande(); return; }
@@ -4602,7 +4603,6 @@ function rlkConfirmOrder() {
       var done = function() {
         cart = []; updateCartUI(); closeModal('m-commande'); rlkLoadSolde();
         toast('Komannd konfirmé ! Vyin trapé samdi matin.');
-        if (mode === 'yapla') openYapla(YAPLA_SHOP_URL);
       };
       if (mode === 'fey') sb.from('rlk_fey').insert({user_id: currentUser.id, delta: -n, motif: 'Commande Boutik'}).then(done); else done();
     });
@@ -4930,7 +4930,7 @@ function rlkCalcCuisinier() {
 }
 
 // ═══ COMMANDES BOUTIK ═══
-var RLK_STAT_CMD = {en_attente: 'En attente', prete: 'Prête', payee: 'Payée sur Yapla', retiree: 'Retirée', annulee: 'Annulée'};
+var RLK_STAT_CMD = {en_attente: 'En attente', prete: 'Prête', payee: 'Payée', retiree: 'Retirée', annulee: 'Annulée'};
 function rlkLoadCommandes() {
   Promise.all([sb.from('rlk_commandes').select('*').order('created_at', {ascending: false}).limit(60), rlkProfils()]).then(function(rs) {
     var el = document.getElementById('cmd-list'); if (!el) return;
@@ -4940,10 +4940,11 @@ function rlkLoadCommandes() {
       var lignes = (c.lignes || []).map(function(l) { return l.qty + ' × ' + rlkEsc(l.nom); }).join(', ');
       var acts = '';
       if (c.statut === 'en_attente') acts += '<button class="btn btn-primary btn-xs" onclick="rlkCmdStatut(\'' + c.id + '\',\'prete\')">Marquer prête</button> ';
-      if (c.mode_paiement === 'yapla' && !c.payee_yapla) acts += '<button class="btn btn-outline btn-xs" onclick="rlkCmdStatut(\'' + c.id + '\',\'payee\')">Payée sur Yapla</button> ';
-      if (c.statut === 'prete' || c.statut === 'payee') acts += '<button class="btn btn-ghost btn-xs" onclick="rlkCmdStatut(\'' + c.id + '\',\'retiree\')">Retirée</button>';
+      if (c.mode_paiement === 'yapla' && !c.payee_yapla) acts += '<button class="btn btn-outline btn-xs" onclick="rlkCmdStatut(\'' + c.id + '\',\'payee\')">Marquer payée (espèces/chèque)</button> ';
+      if (c.statut === 'prete' || c.statut === 'payee') acts += '<button class="btn btn-ghost btn-xs" onclick="rlkCmdStatut(\'' + c.id + '\',\'retiree\')">Retirée</button> ';
+      if (c.statut !== 'retiree' && c.statut !== 'annulee') acts += '<button class="btn btn-ghost btn-xs" style="color:#B3261E" onclick="rlkCmdAnnuler(\'' + c.id + '\')">Annuler</button>';
       return '<div class="card" style="margin-bottom:10px;padding:12px"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>' + rlkEsc(rs[1][c.user_id] || 'Adhérent') + '</b><span class="badge ' + (c.statut === 'en_attente' ? 'b-wait' : 'b-ok') + '">' + RLK_STAT_CMD[c.statut] + (c.payee_yapla && c.statut !== 'payee' ? ' · payée' : '') + '</span></div>'
-        + '<div class="rlk-note" style="margin:4px 0">' + rlkDate(c.created_at) + ' · ' + lignes + '</div><div style="font-size:.85rem">' + c.total_fey + ' FEY · ' + (c.mode_paiement === 'yapla' ? rlkFmt(c.total_eur, 2) + ' € via Yapla' : 'payé en FEY') + ' · ' + rlkEsc(c.point_retrait || '') + '</div><div style="margin-top:8px">' + acts + '</div></div>';
+        + '<div class="rlk-note" style="margin:4px 0">' + rlkDate(c.created_at) + ' · ' + lignes + '</div><div style="font-size:.85rem">' + c.total_fey + ' FEY · ' + (c.mode_paiement === 'yapla' ? rlkFmt(c.total_eur, 2) + ' € à régler en espèces ou chèque' : 'payé en FEY') + ' · ' + rlkEsc(c.point_retrait || '') + '</div><div style="margin-top:8px">' + acts + '</div></div>';
     }).join('') : 'Aucune commande.';
   });
 }
@@ -5160,7 +5161,7 @@ function updateCartUI() {
 }
 function rlkCartMode() {
   var m = rlkVal('cart-mode'), n = rlkCartN(), note = document.getElementById('cart-mode-note'); if (!note) return;
-  note.textContent = m === 'fey' ? 'Votre solde : ' + RLK.solde + ' FEY' + (RLK.solde < n ? ' (insuffisant pour cette commande)' : '') : 'Après confirmation, vous serez dirigé vers Yapla pour payer ' + rlkFmt(n * RLK.fey, 2) + ' €.';
+  note.textContent = m === 'fey' ? 'Votre solde : ' + RLK.solde + ' FEY' + (RLK.solde < n ? ' (insuffisant pour cette commande)' : '') : 'Paiement en espèces ou par chèque au retrait : ' + rlkFmt(n * RLK.fey, 2) + ' €.';
 }
 function rlkConfirmOrder() {
   if (!cart.length) { toast('Panier vide'); return; }
@@ -5175,7 +5176,6 @@ function rlkConfirmOrder() {
         abos.forEach(function(a) { sb.from('rlk_abonnements').insert({user_id: currentUser.id, formule: a.extra.formule, nb_panyes: a.extra.nb, total_fey: Math.ceil(a.fey)}); });
         cart = []; updateCartUI(); closeModal('m-commande'); rlkLoadSolde(); rlkLoadMonAbo();
         toast('Komannd konfirmé ! Vyin trapé samdi matin.');
-        if (mode === 'yapla') openYapla(YAPLA_SHOP_URL);
       };
       if (mode === 'fey') sb.from('rlk_fey').insert({user_id: currentUser.id, delta: -Math.ceil(n), motif: 'Commande Boutik'}).then(done); else done();
     });
@@ -5921,7 +5921,7 @@ function rlkKontLoad() {
     if (r.error) { el.textContent = rlkErr(r.error); return; }
     el.innerHTML = (r.data || []).length ? r.data.map(function(c) {
       return '<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:.85rem"><div style="display:flex;justify-content:space-between;gap:8px"><b>' + rlkDate(c.created_at) + '</b><span class="badge ' + (c.statut === 'en_attente' ? 'b-wait' : 'b-ok') + '">' + (RLK_STAT_CMD[c.statut] || c.statut) + '</span></div>'
-        + '<div class="rlk-note" style="margin:2px 0">' + (c.lignes || []).map(function(l) { return l.qty + ' × ' + rlkEsc(l.nom); }).join(', ') + '</div>' + c.total_fey + ' FEY · ' + (c.mode_paiement === 'yapla' ? rlkFmt(c.total_eur, 2) + ' € via Yapla' : 'payé en FEY') + '</div>';
+        + '<div class="rlk-note" style="margin:2px 0">' + (c.lignes || []).map(function(l) { return l.qty + ' × ' + rlkEsc(l.nom); }).join(', ') + '</div>' + c.total_fey + ' FEY · ' + (c.mode_paiement === 'yapla' ? rlkFmt(c.total_eur, 2) + ' € à régler en espèces ou chèque' : 'payé en FEY') + '</div>';
     }).join('') : 'Aucune commande.';
   });
   sb.from('rlk_abonnements').select('*').eq('user_id', currentUser.id).order('created_at', {ascending: false}).then(function(r) {
@@ -7394,8 +7394,8 @@ function rlkYaplaLoad() {
   return sb.from('rlk_config').select('valeur').eq('cle', 'yapla_boutique_url').maybeSingle().then(function(r) {
     RLK.yaplaPay = (r.data && r.data.valeur) || ''; var i = document.getElementById('yp-url'); if (i) i.value = RLK.yaplaPay;
     var b = document.getElementById('boutik-pay'); if (!b) return;
-    b.innerHTML = '<b>Troc d\'abord.</b> Les pots s\'obtiennent en FEY. Le paiement en euros est possible ' + (RLK.yaplaPay ? 'sur Yapla ou ' : '') + 'en main propre lors des événements.'
-      + (RLK.yaplaPay ? '<div style="margin-top:8px"><button class="btn btn-outline btn-sm" type="button" onclick="openYapla(RLK.yaplaPay)">Payer en euros sur Yapla</button></div>' : '');
+    b.innerHTML = '<b>Troc d\'abord.</b> Les pots s\'obtiennent en FEY. Le paiement en euros est possible ' + 'en espèces ou par chèque, au retrait de la commande ou lors des événements.'
+;
   });
 }
 function rlkYaplaSave() {
@@ -9011,7 +9011,7 @@ rlkSoldeAffiche = function(prev) { rlkSoldeAfficheOrig29(prev); rlkBoutikTxt(); 
 var rlkYaplaLoadOrig29 = rlkYaplaLoad;
 rlkYaplaLoad = function() {
   return rlkYaplaLoadOrig29().then(function() {
-    var b = rlk$('boutik-pay'); if (b) b.innerHTML = RLK.yaplaPay ? '<button class="btn btn-outline btn-sm" type="button" onclick="openYapla(RLK.yaplaPay)">Payer en euros sur Yapla</button>' : '';
+    var b = rlk$('boutik-pay'); if (b) b.innerHTML = '';
     rlkBoutikTxt();
   });
 };
@@ -9797,6 +9797,103 @@ function rlkBenevCsv() {
 }
 var rlkShowReglaj54 = showReglaj;
 showReglaj = function(section) { rlkShowReglaj54(section); if (String(section) === 'benevolat') { rlkBvLoad(); rlkBenevRapport(); } };
+
+// ═══ v5.5 : le stock baisse quand la commande est prête, avec contrôle visible ═══
+function rlkStockDeduire(lignes) {
+  var res = [];
+  var jobs = (lignes || []).filter(function(l) { return l && l.id && l.kind !== 'abo'; }).map(function(l) {
+    return sb.from('rlk_stock').select('quantite').eq('produit_id', l.id).eq('canal', 'app').maybeSingle().then(function(r) {
+      var q = Number(l.qty) || 0;
+      if (r.data) {
+        var nv = Math.max(0, Number(r.data.quantite) - q);
+        return sb.from('rlk_stock').update({quantite: nv}).eq('produit_id', l.id).eq('canal', 'app').select().then(function(u) {
+          if (u.error || !(u.data || []).length) { res.push({nom: l.nom, err: true}); return; }
+          sb.from('produits').update({stock: nv}).eq('id', l.id).then(function() {});
+          res.push({nom: l.nom, de: r.data.quantite, a: nv});
+        });
+      }
+      return sb.from('produits').select('stock').eq('id', l.id).maybeSingle().then(function(p) {
+        if (!p.data) { res.push({nom: l.nom, non: true}); return; }
+        var nv = Math.max(0, Number(p.data.stock || 0) - q);
+        return sb.from('produits').update({stock: nv}).eq('id', l.id).select().then(function(u) {
+          if (u.error || !(u.data || []).length) { res.push({nom: l.nom, err: true}); return; }
+          sb.from('rlk_stock').upsert([{produit_id: l.id, canal: 'app', quantite: nv}], {onConflict: 'produit_id,canal'}).then(function() {});
+          res.push({nom: l.nom, de: p.data.stock, a: nv});
+        });
+      });
+    });
+  });
+  return Promise.all(jobs).then(function() { return res; });
+}
+rlkCmdStatut = function(id, statut) {
+  var c = (RLK.cmds || []).filter(function(x) { return x.id === id; })[0]; if (!c) return;
+  var prev = c.statut, upd = {statut: statut}; if (statut === 'payee') upd.payee_yapla = true;
+  sb.from('rlk_commandes').update(upd).eq('id', id).then(function(res) {
+    if (res.error) { toast(rlkErr(res.error)); return; }
+    if (statut === 'prete') sb.from('rlk_messages').insert({fil_user_id: c.user_id, de_admin: true, contenu: 'Votre commande est prête : vien trap samedy matin (' + (c.point_retrait || 'point de retrait') + ').'});
+    if (statut === 'prete' && prev === 'en_attente') {
+      if (c.stock_deduit) { toast('Commande prête (stock déjà déduit)'); rlkLoadCommandes(); return; }
+      sb.from('rlk_commandes').update({stock_deduit: true}).eq('id', id).then(function() {});
+      rlkStockDeduire(c.lignes).then(function(r) {
+        var ok = r.filter(function(x) { return !x.err && !x.non; }), bad = r.filter(function(x) { return x.err; });
+        toast(bad.length ? '⚠ Commande prête, mais stock NON mis à jour pour : ' + bad.map(function(x) { return x.nom; }).join(', ') + ' (modifiez-le dans Artik)' : (ok.length ? '✓ Prête. Stock : ' + ok.map(function(x) { return x.nom + ' ' + x.de + ' → ' + x.a; }).join(', ') : '✓ Commande prête (aucun produit à déduire)'));
+        rlkLoadCommandes(); rlkLoadProduitsSafe();
+      });
+      return;
+    }
+    toast('Commande mise à jour'); rlkLoadCommandes();
+  });
+};
+function rlkLoadProduitsSafe() { try { if (typeof loadProduits === 'function') loadProduits(); } catch (e) {} }
+function rlkStockLive() {
+  var box = document.getElementById('cmd-stock'); if (!box) return;
+  Promise.all([sb.from('produits').select('id,nom,stock,actif').eq('actif', true).order('nom'), sb.from('rlk_stock').select('*').eq('canal', 'app'), sb.from('rlk_commandes').select('lignes,statut,stock_deduit').eq('statut', 'en_attente').limit(500)]).then(function(rs) {
+    if (rs[0].error) { box.textContent = rlkErr(rs[0].error); return; }
+    var st = {}, att = {}; (rs[1].data || []).forEach(function(x) { st[x.produit_id] = Number(x.quantite); });
+    var nr = {}; (rs[2].data || []).forEach(function(c) { (c.lignes || []).forEach(function(l) { if (l.id && l.kind !== 'abo') { var q = Number(l.qty) || 0; att[l.id] = (att[l.id] || 0) + q; if (!c.stock_deduit) nr[l.id] = (nr[l.id] || 0) + q; } }); });
+    var rows = rs[0].data || [];
+    box.innerHTML = rows.length ? '<table class="rlk-tbl"><tr><th>Produit</th><th style="text-align:right">En stock</th><th style="text-align:right">À préparer</th><th style="text-align:right">Reste</th><th></th></tr>' + rows.map(function(p) {
+      var s = st[p.id] != null ? st[p.id] : Number(p.stock || 0), a = att[p.id] || 0, r = s - (nr[p.id] || 0);
+      return '<tr><td>' + rlkEsc(p.nom) + '</td><td style="text-align:right"><b>' + s + '</b></td><td style="text-align:right">' + (a || '·') + '</td><td style="text-align:right;color:' + (r < 0 ? '#B3261E' : r <= 3 ? '#b45309' : 'inherit') + '"><b>' + r + '</b></td><td style="text-align:right">' + (s > 0 ? '<button class="btn btn-outline btn-xs" onclick="rlkStockEpuise(\'' + p.id + '\')">Épuisé</button>' : '<span class="badge b-err">Épuisé</span>') + '</td></tr>';
+    }).join('') + '</table>' : 'Aucun produit actif.';
+  });
+}
+var rlkLoadCommandesOrig55 = rlkLoadCommandes;
+rlkLoadCommandes = function() { rlkLoadCommandesOrig55.apply(this, arguments); rlkStockLive(); };
+
+// ═══ v5.6 : marquer épuisé + plafond du panier au stock affiché ═══
+function rlkStockEpuise(pid) {
+  if (!confirm('Marquer ce produit comme épuisé ? Il ne pourra plus être commandé. Pour le remettre en vente, saisissez un nouveau stock dans Artik.')) return;
+  Promise.all([sb.from('rlk_stock').update({quantite: 0}).eq('produit_id', pid).eq('canal', 'app'), sb.from('produits').update({stock: 0}).eq('id', pid)]).then(function(rs) {
+    if (rs[1].error) { toast(rlkErr(rs[1].error)); return; }
+    sb.from('rlk_stock').upsert([{produit_id: pid, canal: 'app', quantite: 0}], {onConflict: 'produit_id,canal'}).then(function() {
+      toast('Produit marqué épuisé'); rlkStockLive(); rlkLoadProduitsSafe();
+    });
+  });
+}
+var rlkAddToCartOrig56 = addToCart;
+addToCart = function(nom, pf, emoji, id, kind, extra) {
+  if (id && (!kind || kind === 'article')) {
+    var el = document.querySelector('.produit[data-id="' + id + '"]'), st = el ? Number(el.getAttribute('data-stock')) : NaN;
+    if (!isNaN(st)) {
+      var dej = 0; cart.forEach(function(i) { if (i.id === id && (i.kind || 'article') === 'article') dej += i.qty; });
+      if (dej + 1 > st) { toast(st <= 0 ? 'Produit épuisé' : 'Stock limité à ' + st + ' (déjà dans votre panier)'); return; }
+    }
+  }
+  return rlkAddToCartOrig56.apply(this, arguments);
+};
+
+// ═══ v5.7 : annulation d'une commande (stock rendu, FEY remboursés par la base) ═══
+function rlkCmdAnnuler(id) {
+  var c = (RLK.cmds || []).filter(function(x) { return x.id === id; })[0]; if (!c) return;
+  if (!confirm('Annuler cette commande ? Le stock sera remis en vente' + (c.mode_paiement === 'fey' ? ' et les ' + c.total_fey + ' FEY seront remboursés.' : '.'))) return;
+  sb.from('rlk_commandes').update({statut: 'annulee'}).eq('id', id).select().then(function(res) {
+    if (res.error || !(res.data || []).length) { toast(res.error ? rlkErr(res.error) : 'Annulation impossible'); return; }
+    var r = res.data[0];
+    toast(r.stock_deduit === false && c.stock_deduit ? 'Commande annulée : stock remis' + (c.mode_paiement === 'fey' ? ', FEY remboursés' : '') : 'Commande annulée (exécutez phase17 pour rendre stock et FEY automatiquement)');
+    rlkLoadCommandes(); rlkLoadProduitsSafe(); if (typeof rlkLoadSolde === 'function') rlkLoadSolde();
+  });
+}
 </script>
 
 
