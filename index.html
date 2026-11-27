@@ -1214,7 +1214,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
       </div>
       <div class="rlk-lecture" style="margin-top:14px">
         <b>Saisir le troc d'un adhérent</b>
-        <div class="rlk-note" style="margin:4px 0 10px">Pour un adhérent qui n'utilise pas l'application. La saisie se fait dans l'onglet Trok, au nom de la personne choisie.</div>
+        <div class="rlk-note" style="margin:4px 0 10px">Pour un adhérent qui n'utilise pas l'application. La saisie se fait dans l'onglet Trok, au nom de la personne choisie. <b>Plants, compost, bois : les FEY sont crédités tout de suite</b> et affichés dans la liste. Fruits : crédités après l'atelier.</div>
         <select id="dispo-prod" onchange="rlkLoadMesTrocs()"><option value="">— Choisir un adhérent —</option></select>
         <button class="btn btn-primary btn-sm" type="button" style="margin-top:10px" onclick="rlkTrokPour()">Saisir son troc</button>
       </div>
@@ -9148,6 +9148,48 @@ function rlkReprendreEquipe() {
 }
 
 RLK_VERSION = '2.6';
+
+// ═══ v4.6 : troc saisi par l'admin = FEY calculés et crédités tout de suite, valeur visible dans la liste Dispo ═══
+function rlkFeyDeLigne(produit, q, unite) {
+  var nom = String(produit || ''), m = /^(.*) \(autre troc\)$/.exec(nom);
+  if (m) { var a = RLK_AUTRES.filter(function(x) { return x.n === m[1]; })[0]; if (a) return {fey: Math.ceil(Number(q) * a.p - 1e-9), immediat: true}; return null; }
+  if (unite !== 'kg') return null;
+  var base = nom.replace(/ \((vert|rare|cher|exception|tisane\/aromate|à classer)\)/g, '').replace(/ \(\d[^)]*\)\s*$/, '');
+  var k = Number(q); if (!(k > 0)) return null;
+  var f = k * rlkClasse(rlkClasseDepuisNom(base)).transforme_par_kg * RLK.pHote;
+  return {fey: Math.ceil(f - 1e-9), immediat: false};
+}
+function rlkDecoreStock() {
+  var wrap = document.getElementById('stock-table-wrap'), t = wrap && wrap.querySelector('table.tbl'); if (!t || t.dataset.fey) return;
+  t.dataset.fey = '1';
+  var hr = t.querySelector('thead tr'); if (hr) { var th = document.createElement('th'); th.textContent = 'FEY'; hr.insertBefore(th, hr.children[3] || null); }
+  t.querySelectorAll('tbody tr').forEach(function(tr) {
+    var c = tr.children; if (c.length < 3) return;
+    var qm = /^([\d.,\s]+)\s*(.*)$/.exec((c[2].textContent || '').trim()), q = qm ? parseFloat(qm[1].replace(/\s/g, '').replace(',', '.')) : 0, u = qm ? qm[2].trim() : '';
+    var r = rlkFeyDeLigne(c[0].textContent, q, u), td = document.createElement('td'); td.style.whiteSpace = 'nowrap';
+    td.innerHTML = r ? (r.immediat ? '<b>' + r.fey + ' FEY</b>' : '<span title="Estimation, crédité après l\'atelier">≈ ' + r.fey + ' FEY</span>') : '<span class="rlk-note">—</span>';
+    tr.insertBefore(td, c[3] || null);
+  });
+}
+(function() {
+  function arm() { var w = document.getElementById('stock-table-wrap'); if (!w || w.dataset.obs) return; w.dataset.obs = '1'; new MutationObserver(function() { rlkDecoreStock(); }).observe(w, {childList: true}); rlkDecoreStock(); }
+  document.addEventListener('DOMContentLoaded', function() { setTimeout(arm, 800); });
+  var o = loadStockTable; loadStockTable = function() { o.apply(this, arguments); setTimeout(arm, 300); };
+})();
+var rlkDoTrocOrig46 = rlkDoTroc;
+rlkDoTroc = function() {
+  var a = RLK_AUTRES[rlkVal('au-prod')], q = rlkNum('au-q', 0), uid = rlkVal('dispo-prod');
+  if (!(rlkIsAdmin() && uid && a && q > 0)) { rlkDoTrocOrig46(); return; }
+  var fey = Math.ceil(q * a.p - 1e-9), motif = 'Troc : ' + q + ' × ' + a.n;
+  rlkDoTrocOrig46();
+  setTimeout(function() {
+    sb.from('rlk_fey').insert({user_id: uid, delta: fey, motif: motif}).then(function(r) {
+      if (r.error) { toast('Troc enregistré mais FEY non crédités : ' + rlkErr(r.error)); return; }
+      var sel = document.getElementById('dispo-prod'), nom = sel && sel.selectedIndex > 0 ? sel.options[sel.selectedIndex].text : '';
+      toast('✓ ' + fey + ' FEY crédités' + (nom ? ' à ' + nom : '')); loadStockTable(); if (typeof rlkLoadCompteurs === 'function') rlkLoadCompteurs();
+    });
+  }, 500);
+};
 </script>
 
 
