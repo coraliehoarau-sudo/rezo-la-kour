@@ -702,7 +702,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
     <button class="nav-tab" data-access="member" onclick="navTo('don',this)">Trok</button>
     <button class="nav-tab" data-access="member" onclick="navTo('boutik',this)">Boutik</button>
     <button class="nav-tab" data-access="member" onclick="navTo('blog',this)">Ladilafé</button>
-    <button class="nav-tab" onclick="navTo('biyetri',this)">Biyetri</button>
+    <button class="nav-tab" onclick="navTo('biyetri',this)">Zévenman</button>
     <button class="nav-tab" data-access="member" onclick="navTo('tchat',this)">Tchat <span id="tchat-badge" class="rlk-badge-n" style="display:none"></span></button>
     <button class="nav-tab" data-access="member" onclick="navTo('kont',this)">Mon Kont</button>
     <button class="nav-tab" data-access="admin" id="tab-reglaj" style="display:none" onclick="navTo('reglaj',this)">Réglaj <span id="reglaj-badge" class="rlk-badge-n" style="display:none"></span></button>
@@ -822,7 +822,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
       <ol class="rlk-etapes">
         <li><span><b>Adhérez</b> à l'association.</span></li>
         <li><span><b>Déclarez vos fruits</b> dans l'onglet TROK.</span></li>
-        <li><span><b>Participez aux ateliers</b> dans l'onglet BIYETRI.</span></li>
+        <li><span><b>Participez aux ateliers</b> dans l'onglet ZÉVENMAN.</span></li>
         <li><span><b>Retrouvez vos FEY</b> dans MON KONT.</span></li>
         <li><span><b>Choisissez vos pots</b> à la BOUTIK.</span></li>
       </ol>
@@ -1113,9 +1113,10 @@ html.rlk-grand #rlk-feybar{font-size:16px}
 
 <!-- ══ BIYETRI (agenda des ateliers) ══ -->
 <div id="page-biyetri" class="page">
-  <div class="page-title">Biyetri</div>
+  <div class="page-title">Zévenman</div>
   <div class="page-sub">Les ateliers et événements à venir. Réservez votre place.</div>
   <div id="biy-list"><div class="loading"><div class="spinner"></div>Chargement…</div></div>
+  <div id="pl-zone"></div>
   <div class="rlk-note">L'adresse exacte du jardin n'apparaît qu'une fois votre place réservée.</div>
 </div>
 
@@ -1146,7 +1147,9 @@ html.rlk-grand #rlk-feybar{font-size:16px}
 <div id="page-reglaj" class="page">
   <div class="page-title">Réglaj</div>
   <div class="page-sub">Espace réservé aux administrateurs</div>
-  <div class="rlk-sub" id="rg-nav">
+    <div class="rlk-sub" id="rg-nav2" style="flex-wrap:wrap;overflow:visible;gap:6px"></div>
+  <div class="rlk-sub" id="rg-sub" style="flex-wrap:wrap;overflow:visible;gap:6px;margin-top:2px"></div>
+<div class="rlk-sub" id="rg-nav" style="display:none">
     <button class="btn btn-primary btn-sm" data-s="zaderan" onclick="showReglaj('zaderan')">Zadéran</button>
     <button class="btn btn-ghost btn-sm" data-s="kompoz" onclick="showReglaj('kompoz')">Panyé</button>
     <button class="btn btn-ghost btn-sm" data-s="saison" onclick="showReglaj('saison')">Saison</button>
@@ -1158,7 +1161,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
     <button class="btn btn-ghost btn-sm" data-s="equilibre" onclick="showReglaj('equilibre')">Lékilib</button>
     <button class="btn btn-ghost btn-sm" data-s="commandes" onclick="showReglaj('commandes')">Komand <span id="cmd-badge" class="rlk-badge-n" style="display:none">0</span></button>
     <button class="btn btn-ghost btn-sm" data-s="stock" onclick="showReglaj('stock')">Stok</button>
-    <button class="btn btn-ghost btn-sm" data-s="agenda" onclick="showReglaj('agenda')">Biyetri</button>
+    <button class="btn btn-ghost btn-sm" data-s="agenda" onclick="showReglaj('agenda')">Zévenman</button>
     <button class="btn btn-ghost btn-sm" data-s="messagerie" onclick="showReglaj('messagerie')">Mesaj <span id="msg-badge" class="rlk-badge-n" style="display:none">0</span></button>
     <button class="btn btn-ghost btn-sm" data-s="ladilafe" onclick="showReglaj('ladilafe')">Ladilafé</button>
     <button class="btn btn-ghost btn-sm" data-s="kour" onclick="showReglaj('kour')">Kour</button><button class="btn btn-ghost btn-sm" data-s="echanj" onclick="showReglaj('echanj')">Échanj <span id="ech-badge" class="rlk-badge-n" style="display:none">0</span></button><button class="btn btn-ghost btn-sm" data-s="jounal" onclick="showReglaj('jounal')">Jounal</button><button class="btn btn-ghost btn-sm" data-s="stats" onclick="showReglaj('stats')">Stat</button>
@@ -1198,27 +1201,12 @@ html.rlk-grand #rlk-feybar{font-size:16px}
 
     <div class="card" style="margin-bottom:14px">
       <div class="card-title">Komand produkter</div>
-      <div class="rlk-note">Envoie aux producteurs ce dont le panyé a besoin. À brancher sur les disponibilités ci-dessous.</div>
+      <div class="rlk-note">Envoie aux producteurs ce dont le panyé a besoin. À brancher sur les disponibilités déclarées (onglet Échanj).</div>
       <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="envoyerOrdersAdmin()">Envoyer les orders</button>
       <div id="orders-conf" style="display:none;margin-top:10px" class="alert a-ok">✓ Orders envoyés.</div>
     </div>
 
-    <div class="card" style="margin-bottom:14px"><div class="card-title">Dispo : produits déclarés cette semaine</div>
-      <div id="stock-table-wrap"><div class="rlk-note">Aucune disponibilité saisie cette semaine.</div></div>
-      <div class="rlk-lecture" style="margin-top:14px">
-        <b>Ajuster les FEY d'un adhérent</b> (troc hors fruits, correction d'un atelier)
-        <div class="rlk-note" style="margin:4px 0 10px">Nombre positif pour créditer, négatif pour retirer. Le motif apparaît dans son historique.</div>
-        <select id="cm-adh"><option value="">— Choisir un adhérent —</option></select>
-        <div class="fr2" style="margin-top:8px"><div><label>FEY</label><input type="number" id="cm-n" step="1" placeholder="négatif pour retirer"></div><div><label>Motif</label><input type="text" id="cm-motif" placeholder="2 plants de goyavier"></div></div>
-        <button class="btn btn-primary btn-sm" type="button" onclick="rlkCreditManuel()">Créditer</button>
-      </div>
-      <div class="rlk-lecture" style="margin-top:14px">
-        <b>Saisir le troc d'un adhérent</b>
-        <div class="rlk-note" style="margin:4px 0 10px">Pour un adhérent qui n'utilise pas l'application. La saisie se fait dans l'onglet Trok, au nom de la personne choisie. <b>Plants, compost, bois : les FEY sont crédités tout de suite</b> et affichés dans la liste. Fruits : crédités aussi tout de suite (part du donateur).</div>
-        <select id="dispo-prod" onchange="rlkLoadMesTrocs()"><option value="">— Choisir un adhérent —</option></select>
-        <button class="btn btn-primary btn-sm" type="button" style="margin-top:10px" onclick="rlkTrokPour()">Saisir son troc</button>
-      </div>
-    </div>
+    
 
     <div class="card" style="margin-bottom:14px">
       <div class="card-title">Mise en ligne des paniers</div>
@@ -1230,22 +1218,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
       <div class="rlk-note">Activez seulement quand il y a assez de fruits et légumes et que la composition est publiée. Fermé, le panyé, les abonnements et le « cycle de la semaine » de l'accueil disparaissent. Les paniers déjà commandés ne sont pas touchés.</div>
     </div>
     <div class="rlk-grid" style="margin-bottom:16px">
-      <div class="card">
-        <div class="card-title">Tarif du panyé et abonnements</div>
-        <div class="fr2">
-          <div><label>Prix d'un panyé (FEY)</label><input type="number" id="px-pfey" value="4" step="0.5" min="0"></div>
-          <div><label>&nbsp;</label><button class="btn btn-primary btn-sm" onclick="rlkSaveParams()">Enregistrer</button></div>
-        </div>
-        <div class="fr2">
-          <div><label>Abonnement mensuel : nombre de panyés</label><input type="number" id="px-aboM-nb" value="4" min="1"></div>
-          <div><label>Économie (FEY)</label><input type="number" id="px-aboM-eco" value="1" step="0.5" min="0"></div>
-        </div>
-        <div class="fr2">
-          <div><label>Abonnement trimestriel : nombre de panyés</label><input type="number" id="px-aboT-nb" value="12" min="1"></div>
-          <div><label>Économie (FEY)</label><input type="number" id="px-aboT-eco" value="2" step="0.5" min="0"></div>
-        </div>
-        <div class="rlk-note">Les tarifs affichés dans la Boutik se mettent à jour sur tous les téléphones.</div>
-      </div>
+      
       <div class="card"><div class="card-title">Abonnés</div><div id="abo-list" class="rlk-note">Chargement…</div></div>
     </div>
   </div>
@@ -1298,7 +1271,38 @@ html.rlk-grand #rlk-feybar{font-size:16px}
         </div>
         <div class="rlk-note">Les valeurs s'actualisent ensuite sur tous les téléphones.</div>
       </div>
-      <div class="card">
+      <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Répartition des FEY d'un atelier (hôte et équipe)</div>
+      <div class="rlk-note" style="margin:0 0 10px">Part pour l'hôte (celui qui donne les fruits) et part pour l'équipe (cueilleurs et cuisiniers). Le reste est mis en vente. S'applique aux prochains ateliers enregistrés, pas aux lots déjà faits.</div>
+      <div class="fr2">
+        <div><label>Part hôte (%)</label><input type="number" id="pt-h" min="0" max="100" value="20" oninput="rlkPartsSimul()"></div>
+        <div><label>Part équipe (%)</label><input type="number" id="pt-e" min="0" max="100" value="40" oninput="rlkPartsSimul()"></div>
+      </div>
+      <div class="rlk-note" style="margin:0 0 6px">Simulation :</div>
+      <div class="fr2">
+        <div><label>Pots produits</label><input type="number" id="pt-t" min="0" value="139" oninput="rlkPartsSimul()"></div>
+        <div><label>Personnes dans l'équipe</label><input type="number" id="pt-n" min="1" value="8" oninput="rlkPartsSimul()"></div>
+      </div>
+      <div id="pt-simul" class="rlk-ok"></div>
+      <button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="rlkSaveParts()">Enregistrer la répartition</button>
+    </div>
+<div class="card">
+        <div class="card-title">Tarif du panyé et abonnements (en FEY)</div>
+        <div class="fr2">
+          <div><label>Prix d'un panyé (FEY)</label><input type="number" id="px-pfey" value="4" step="0.5" min="0"></div>
+          <div><label>&nbsp;</label><button class="btn btn-primary btn-sm" onclick="rlkSaveParams()">Enregistrer</button></div>
+        </div>
+        <div class="fr2">
+          <div><label>Abonnement mensuel : nombre de panyés</label><input type="number" id="px-aboM-nb" value="4" min="1"></div>
+          <div><label>Économie (FEY)</label><input type="number" id="px-aboM-eco" value="1" step="0.5" min="0"></div>
+        </div>
+        <div class="fr2">
+          <div><label>Abonnement trimestriel : nombre de panyés</label><input type="number" id="px-aboT-nb" value="12" min="1"></div>
+          <div><label>Économie (FEY)</label><input type="number" id="px-aboT-eco" value="2" step="0.5" min="0"></div>
+        </div>
+        <div class="rlk-note">Les tarifs affichés dans la Boutik se mettent à jour sur tous les téléphones.</div>
+      </div>
+<div class="card">
         <div class="card-title">Mercuriales DAAF</div>
         <div class="rlk-warn">À actualiser chaque mois selon les mercuriales DAAF Réunion. Ajustez les quantités à la main : elles pilotent l'onglet Sak y vo.</div>
       </div>
@@ -1324,21 +1328,7 @@ html.rlk-grand #rlk-feybar{font-size:16px}
 
   <!-- ATELIER & LOTS -->
   <div id="reglaj-atelier" style="display:none">
-    <div class="card" style="margin-bottom:16px">
-      <div class="card-title">Répartition des FEY d'un atelier</div>
-      <div class="rlk-note" style="margin:0 0 10px">Part pour l'hôte (celui qui donne les fruits) et part pour l'équipe (cueilleurs et cuisiniers). Le reste est mis en vente. S'applique aux prochains ateliers enregistrés, pas aux lots déjà faits.</div>
-      <div class="fr2">
-        <div><label>Part hôte (%)</label><input type="number" id="pt-h" min="0" max="100" value="20" oninput="rlkPartsSimul()"></div>
-        <div><label>Part équipe (%)</label><input type="number" id="pt-e" min="0" max="100" value="40" oninput="rlkPartsSimul()"></div>
-      </div>
-      <div class="rlk-note" style="margin:0 0 6px">Simulation :</div>
-      <div class="fr2">
-        <div><label>Pots produits</label><input type="number" id="pt-t" min="0" value="139" oninput="rlkPartsSimul()"></div>
-        <div><label>Personnes dans l'équipe</label><input type="number" id="pt-n" min="1" value="8" oninput="rlkPartsSimul()"></div>
-      </div>
-      <div id="pt-simul" class="rlk-ok"></div>
-      <button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="rlkSaveParts()">Enregistrer la répartition</button>
-    </div>
+    
     <div class="rlk-grid">
       <div class="card">
         <div class="card-title">Combien de personnes à l'atelier ?</div>
@@ -1602,23 +1592,63 @@ html.rlk-grand #rlk-feybar{font-size:16px}
   <div id="reglaj-kour" style="display:none"><div class="card"><div class="card-title">Kour des adhérents <button class="btn btn-ghost btn-xs" style="float:right" type="button" onclick="rlkKourCsv()">Exporter CSV</button></div><div class="rlk-note" style="margin-top:0">Une ligne par adhérent. Touchez une ligne pour voir sa fiche. « À relancer » = questionnaire, jardin ou fruits manquants.</div><input type="text" id="kour-q" placeholder="Rechercher un nom, un quartier, un fruit…" oninput="rlkKourRender()" style="margin-bottom:8px"><select id="kour-com" onchange="rlkKourRender()" style="margin-bottom:8px"></select><div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px;font-size:13px"><label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:13px;margin:0"><input type="checkbox" style="width:auto;margin:0" id="kour-at" onchange="rlkKourRender()"> Accueillent des ateliers</label><label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:13px;margin:0"><input type="checkbox" style="width:auto;margin:0" id="kour-re" onchange="rlkKourRender()"> À relancer</label></div><div class="rlk-note" id="kour-count" style="margin:0 0 8px"></div><div id="kour-body" class="rlk-note">Chargement…</div></div></div>
   <div id="reglaj-echanj" style="display:none">
     <div class="card" style="margin-bottom:14px"><div class="card-title">Échanj : déclarations à valider</div>
-      <div class="rlk-note" style="margin-top:0"><b>Panier / stock</b> : les FEY sont crédités tout de suite (montant prérempli, modifiable). <b>Atelier</b> : rien maintenant, la part de l'hôte arrive avec le lot. <b>Convivial</b> : sort de l'historique de l'adhérent (ni FEY, ni kilos) et passe dans le registre anonyme du bénévolat ci-dessous. <b>Refuser</b> : la ligne est retirée.</div>
+      <div class="rlk-note" style="margin-top:0"><b>Panier / stock</b> : les FEY sont crédités tout de suite (montant fixé par la règle, identique pour tous). <b>Atelier</b> : rien maintenant, la part de l'hôte arrive avec le lot. <b>Convivial</b> : sort de l'historique de l'adhérent (ni FEY, ni kilos) et passe dans le registre anonyme du bénévolat (Bilan > Bénévolat). <b>Refuser</b> : la ligne est retirée.</div>
       <div id="ech-queue"><div class="rlk-note">Chargement…</div></div>
       <button class="btn btn-ghost btn-xs" type="button" style="margin-top:8px" onclick="RLK.echOld=!RLK.echOld;rlkEchLoad()" id="ech-old-btn">Voir aussi les déclarations des 14 derniers jours non classées</button>
     </div>
-    <div class="card" style="margin-bottom:14px"><div class="card-title">Bénévolat des réunions (anonyme)</div>
+    <div class="card" style="margin-bottom:14px"><div class="card-title">Déclarés cette semaine, et saisie d'un troc pour un adhérent</div>
+      <div id="stock-table-wrap"><div class="rlk-note">Aucune disponibilité saisie cette semaine.</div></div>
+      <div class="rlk-lecture" style="margin-top:14px">
+        <b>Saisir le troc d'un adhérent</b>
+        <div class="rlk-note" style="margin:4px 0 10px">Pour un adhérent qui n'utilise pas l'application. La saisie se fait dans l'onglet Trok, au nom de la personne choisie. <b>Plants, compost, bois : les FEY sont crédités tout de suite</b> et affichés dans la liste. Fruits : crédités aussi tout de suite (part du donateur).</div>
+        <select id="dispo-prod" onchange="rlkLoadMesTrocs()"><option value="">— Choisir un adhérent —</option></select>
+        <button class="btn btn-primary btn-sm" type="button" style="margin-top:10px" onclick="rlkTrokPour()">Saisir son troc</button>
+      </div>
+    </div>
+
+    <div class="card"><div class="card-title">Historique d'un adhérent</div>
+      <select id="ech-adh" onchange="rlkEchHist()"><option value="">— Choisir un adhérent —</option></select>
+      <div id="ech-hist" style="margin-top:10px"></div>
+    </div>
+  </div>
+  <div id="reglaj-planning" style="display:none">
+    <div class="card" style="margin-bottom:14px"><div class="card-title">Nouveau planning de présence</div>
+      <div class="rlk-note" style="margin-top:0">Exemple : un stand sur 3 jours. Vous indiquez les dates, les heures et les postes (vente, cuisine, atelier…) avec le nombre minimum de personnes. L'application crée tous les créneaux, et chacun s'inscrit depuis l'onglet Zévenman.</div>
+      <label>Titre</label><input type="text" id="pl-titre" placeholder="Fête de l'agri-kultur, Corbeil">
+      <div class="fr2"><div><label>Lieu</label><input type="text" id="pl-lieu" placeholder="Corbeil"></div><div><label>Infos pour les adhérents</label><input type="text" id="pl-desc" placeholder="tenue, repas, parking…"></div></div>
+      <div class="fr2"><div><label>Premier jour</label><input type="date" id="pl-d1"></div><div><label>Dernier jour</label><input type="date" id="pl-d2"></div></div>
+      <div class="fr2"><div><label>Début (heure)</label><input type="number" id="pl-h1" value="8" min="0" max="23"></div><div><label>Fin (heure, 24 = minuit)</label><input type="number" id="pl-h2" value="24" min="1" max="24"></div></div>
+      <label>Durée d'un créneau</label><select id="pl-dur"><option value="1">1 heure</option><option value="2" selected>2 heures</option><option value="3">3 heures</option><option value="4">4 heures</option></select>
+      <div style="font-weight:700;margin:12px 0 4px">Postes</div>
+      <div id="pl-postes"></div>
+      <button class="btn btn-ghost btn-xs" type="button" onclick="rlkPlPosteAdd()">+ Ajouter un poste</button>
+      <div><button class="btn btn-primary btn-sm" type="button" style="margin-top:12px" onclick="rlkPlCreer()">Créer le planning et ses créneaux</button></div>
+    </div>
+    <div class="card" style="margin-bottom:14px"><div class="card-title">Ajouter un créneau précis (atelier, animation)</div>
+      <div class="fr2"><div><label>Planning</label><select id="pc-pl" onchange="rlkPlCrenPostes()"></select></div><div><label>Poste</label><select id="pc-poste"></select></div></div>
+      <div class="fr2"><div><label>Jour</label><input type="date" id="pc-d"></div><div><label>Nom précis (facultatif)</label><input type="text" id="pc-note" placeholder="Atelier jus, 14h"></div></div>
+      <div class="fr2"><div><label>De (heure)</label><input type="text" id="pc-h1" value="14:00" placeholder="14:00"></div><div><label>À (heure)</label><input type="text" id="pc-h2" value="16:00" placeholder="16:00"></div></div>
+      <div class="fr2"><div><label>Minimum de personnes</label><input type="number" id="pc-min" value="2" min="0"></div><div><label>Maximum (vide = illimité)</label><input type="number" id="pc-max" min="1"></div></div>
+      <button class="btn btn-primary btn-sm" type="button" onclick="rlkPlCrenAjout()">Ajouter ce créneau</button>
+    </div>
+    <div class="card"><div class="card-title">Plannings existants</div><div id="pl-admin-list"><div class="rlk-note">Chargement…</div></div></div>
+  </div>
+  <div id="reglaj-benevolat" style="display:none">
+    <div class="card" style="margin-bottom:14px"><div class="card-title">Heures de présence (plannings) et bénévolat</div>
+      <div class="rlk-note" style="margin-top:0">Toutes les participations aux plannings sont archivées ici, avec le registre anonyme des réunions. Utile pour valoriser le bénévolat. Le traitement comptable est à confirmer avec votre comptable.</div>
+      <div class="fr2"><div><label>Du</label><input type="date" id="bn-d1"></div><div><label>Au</label><input type="date" id="bn-d2"></div></div>
+      <div class="fr2"><div><label>Valeur de l'heure en € (facultatif)</label><input type="number" id="bn-eur" min="0" step="0.5"></div><div><label>&nbsp;</label><label class="rlk-mat-l" style="margin:0"><input type="checkbox" id="bn-futur"> inclure les créneaux à venir</label></div></div>
+      <button class="btn btn-primary btn-sm" type="button" onclick="rlkBenevRapport()">Générer</button> <button class="btn btn-ghost btn-sm" type="button" onclick="rlkBenevCsv()">Exporter CSV</button>
+      <div id="bn-out" style="margin-top:12px"></div>
+    </div>
+<div class="card" style="margin-bottom:14px"><div class="card-title">Bénévolat des réunions (anonyme)</div>
       <div class="rlk-note" style="margin-top:0">Jus, tartes, cakes, apéros de réunion : saisis par l'administrateur, <b>sans nom, sans FEY, hors kilos</b>. Sert à valoriser le bénévolat dans vos bilans. Le traitement comptable est à confirmer avec votre comptable.</div>
       <div class="fr2"><div><label>Date</label><input type="date" id="bv-date"></div><div><label>Nature</label><select id="bv-nat"><option>Jus</option><option>Tarte</option><option>Cake</option><option>Fruits partagés</option><option>Repas ou apéro</option><option>Autre</option></select></div></div>
       <div class="fr2"><div><label>Quantité</label><input type="number" id="bv-q" min="0" step="any" placeholder="ex. 8"></div><div><label>Unité</label><select id="bv-u"><option>parts</option><option>L</option><option>kg</option><option>pièces</option></select></div></div>
       <div class="fr2"><div><label>Valeur estimée en € (facultatif)</label><input type="number" id="bv-eur" min="0" step="0.5"></div><div><label>Note (facultatif)</label><input type="text" id="bv-note" placeholder="réunion du bureau"></div></div>
       <button class="btn btn-primary btn-sm" type="button" onclick="rlkBvAjouter()">Enregistrer</button>
       <div id="bv-liste" style="margin-top:12px"></div>
-    </div>
-    <div class="card"><div class="card-title">Historique d'un adhérent</div>
-      <select id="ech-adh" onchange="rlkEchHist()"><option value="">— Choisir un adhérent —</option></select>
-      <div id="ech-hist" style="margin-top:10px"></div>
-    </div>
-  </div>
+    </div>  </div>
   <div id="reglaj-jounal" style="display:none"><div class="card" style="margin-bottom:14px"><div class="card-title">Jounal d'activité</div><div class="rlk-note" style="margin-top:0">Journal de toutes les opérations (apports, FEY, lots, commandes, adhésions, ateliers) pour le rapport d'activité, le point mensuel du comptable ou un dossier de rescrit. Les adhérents sont désignés par leur n° Yapla.</div><div class="fr2"><div><label>Mois</label><input type="month" id="jn-mois" onchange="rlkJnMois()"></div><div></div></div><div class="fr2"><div><label>Du</label><input type="date" id="jn-d1"></div><div><label>Au</label><input type="date" id="jn-d2"></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px"><button class="btn btn-primary btn-sm" type="button" onclick="rlkJnGenerer()">Générer</button><button class="btn btn-outline btn-sm" type="button" onclick="rlkJnExcel()">Excel</button><button class="btn btn-outline btn-sm" type="button" onclick="rlkJnPdf()">PDF</button><button class="btn btn-outline btn-sm" id="jn-clore" type="button" style="display:none" onclick="rlkJnCloturer()">Clôturer le mois</button></div><div id="jn-out" class="rlk-note">Choisissez un mois, ou une période libre pour un rapport, puis « Générer ». Seul un mois entier et terminé peut être clôturé.</div></div><div class="card"><div class="card-title">Mois clôturés</div><div class="rlk-note" style="margin-top:0">Un mois clôturé est figé avec une empreinte numérique : il ne peut plus être modifié ni supprimé.</div><div id="jn-clot" class="rlk-note">Chargement…</div></div></div>
   <div id="reglaj-stats" style="display:none">
     <div class="card" style="margin-bottom:14px"><div class="card-title">Rapport d'activité</div>
@@ -7025,7 +7055,7 @@ rlkLoadEventsAdmin = function() {
     };
     var a = rows.filter(function(e) { return new Date(e.date_debut).getTime() >= now; }), p = rows.filter(function(e) { return new Date(e.date_debut).getTime() < now; });
     el.innerHTML = rows.length ? '<div style="font-weight:700;margin:4px 0">À venir</div>' + (a.map(row).join('') || '<div class="rlk-note">Aucun événement à venir.</div>')
-      + '<div style="font-weight:700;margin:16px 0 4px">Passés (archivés)</div><div class="rlk-note" style="margin:0 0 6px">Les événements passés quittent Biyetri mais restent ici. « → Nout Zévénman » en fait un article de Ladilafé avec textes et photos.</div>' + (p.map(row).join('') || '<div class="rlk-note">Aucun.</div>') : 'Aucun événement.';
+      + '<div style="font-weight:700;margin:16px 0 4px">Passés (archivés)</div><div class="rlk-note" style="margin:0 0 6px">Les événements passés quittent Zévenman mais restent ici. « → Nout Zévénman » en fait un article de Ladilafé avec textes et photos.</div>' + (p.map(row).join('') || '<div class="rlk-note">Aucun.</div>') : 'Aucun événement.';
   });
 };
 
@@ -9326,7 +9356,7 @@ function rlkEchLoad() {
       var fey = rlkFeyTrok(t), old = !t.statut;
       return '<div style="padding:10px 0;border-bottom:1px solid var(--border)"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span><b>' + rlkEsc(rlkEchNom(t.user_id)) + '</b> · ' + rlkEsc(t.produit) + '</span><span style="white-space:nowrap">' + rlkEchQte(t) + '</span></div>'
         + '<div class="rlk-note" style="margin:2px 0 6px">' + rlkDate(t.created_at) + (old ? ' · ancienne déclaration' : '') + '</div>'
-        + '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><input type="number" id="ech-n-' + t.id + '" min="0" step="1" value="' + fey + '" style="width:80px;margin:0"> <span>FEY</span>'
+        + '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><b>' + fey + ' FEY</b> <span class="rlk-note" style="margin:0">(règle identique pour tous)</span>' + (fey ? '' : ' <span style="color:#b45309">Règle manquante : renseignez « Quantité pour 1 FEY » dans Pri &amp; FEY.</span>')
         + '<button class="btn btn-primary btn-xs" type="button" onclick="rlkEchValider(\'' + t.id + '\',\'stock\')">Panier / stock</button>'
         + '<button class="btn btn-ghost btn-xs" type="button" onclick="rlkEchValider(\'' + t.id + '\',\'atelier\')">Atelier</button>'
         + '<button class="btn btn-ghost btn-xs" type="button" onclick="rlkEchValider(\'' + t.id + '\',\'convivial\')">Convivial</button>'
@@ -9344,7 +9374,7 @@ function rlkEchApres() { rlkEchLoad(); var s = document.getElementById('ech-adh'
 function rlkEchValider(id, mode) {
   var t = RLK.echRows.filter(function(x) { return String(x.id) === String(id); })[0]; if (!t) return;
   if (mode === 'refus') { if (!confirm('Refuser et retirer « ' + t.produit + ' » de ' + rlkEchNom(t.user_id) + ' ?')) return; rlkEchRetireLigne(t).then(function(ok) { if (ok) { toast('✓ Ligne retirée'); rlkEchApres(); } }); return; }
-  var n = mode === 'stock' ? Math.max(0, Math.round(rlkNum('ech-n-' + id, 0))) : 0;
+  var n = mode === 'stock' ? rlkFeyTrok(t) : 0;
   sb.from('rlk_trok').update({statut: mode, fey_credit: n || null}).eq('id', t.id).select().then(function(r) {
     if (r.error || !(r.data || []).length) { toast('Validation refusée : exécutez phase12_echanges.sql dans Supabase'); return; }
     if (!(n > 0)) { toast('✓ ' + (mode === 'atelier' ? 'Noté pour l\'atelier, FEY crédités avec le lot' : mode === 'convivial' ? 'Don convivial enregistré, 0 FEY' : 'Validé, 0 FEY')); rlkEchApres(); return; }
@@ -9366,7 +9396,7 @@ function rlkEchHist() {
       + (tr.length ? '<div style="max-height:320px;overflow:auto">' + tr.map(function(t) {
         return '<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:.85rem"><div style="display:flex;justify-content:space-between;gap:8px"><span>' + rlkDate(t.created_at) + ' · ' + rlkEsc(t.produit) + '</span><span style="white-space:nowrap">' + rlkEchQte(t) + '</span></div>'
           + '<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:2px"><span class="rlk-note" style="margin:0">' + (RLK_ECH_ST[t.statut] || 'Non classé') + (t.fey_credit ? ' · ' + t.fey_credit + ' FEY' : '') + '</span>'
-          + '<button class="btn btn-ghost btn-xs" style="color:var(--red)" type="button" onclick="rlkEchRetirer(\'' + t.id + '\')">Retirer</button></div></div>';
+          + '<span><button class="btn btn-ghost btn-xs" type="button" onclick="rlkEchCorriger(\'' + t.id + '\')">Corriger la quantité</button> <button class="btn btn-ghost btn-xs" style="color:var(--red)" type="button" onclick="rlkEchRetirer(\'' + t.id + '\')">Retirer</button></span></div></div>';
       }).join('') + '</div>' : '<div class="rlk-note">Aucun don enregistré.</div>')
       + '<div style="font-weight:700;margin:12px 0 4px">Mouvements de FEY</div>'
       + (fey.length ? '<div style="max-height:260px;overflow:auto"><table class="rlk-tbl">' + fey.map(function(x) { return '<tr><td>' + rlkDate(x.created_at) + ' · ' + rlkEsc(x.motif || '') + '</td><td style="white-space:nowrap"><b style="color:' + (x.delta < 0 ? 'var(--red)' : 'var(--accent2)') + '">' + (x.delta > 0 ? '+' : '') + x.delta + '</b></td></tr>'; }).join('') + '</table></div>' : '<div class="rlk-note">Aucun mouvement.</div>')
@@ -9471,6 +9501,302 @@ function rlkCadeauCheck() {
 var rlkLoadSoldeOrig51 = rlkLoadSolde;
 rlkLoadSolde = function() { rlkLoadSoldeOrig51.apply(this, arguments); setTimeout(function() { if (!document.getElementById('rlk-cadeau')) rlkCadeauCheck(); }, 1200); };
 document.addEventListener('DOMContentLoaded', function() { setTimeout(function() { if (!document.getElementById('rlk-cadeau')) rlkCadeauCheck(); }, 4000); });
+
+// ═══ v5.2 : Réglaj en 7 entrées, FEY fixés par la règle (aucun crédit libre), correction tracée ═══
+var RLK_RG = [
+  {id: 'zaderan', t: 'Zadéran', fr: 'Adhérents', subs: [['zaderan', 'Adhérents et adhésions'], ['kour', 'Fiches Kour'], ['saison', 'Saison']]},
+  {id: 'echanj', t: 'Échanj', fr: 'Échanges', badge: 'ech-badge', subs: [['echanj', 'Échanges']]},
+  {id: 'prix', t: 'Pri & FEY', fr: 'Valeurs et règles', subs: [['prix', 'Valeurs et règles']]},
+  {id: 'atelier', t: 'Atélié', fr: 'Atelier et stock', subs: [['atelier', 'Lot de transformation'], ['etiquette', 'Étiquettes'], ['stock', 'Stock'], ['protocole', 'Protocole sanitaire']]},
+  {id: 'boutik', t: 'Boutik', fr: 'Boutique et paniers', subs: [['kompoz', 'Panyé de la semaine'], ['articles', 'Articles'], ['commandes', 'Commandes', 'cmd-badge']]},
+  {id: 'biyetri', t: 'Zévenman', fr: 'Agenda, plannings, messages', subs: [['agenda', 'Événements'], ['planning', 'Plannings de présence'], ['messagerie', 'Messages', 'msg-badge'], ['ladilafe', 'Ladilafé']]},
+  {id: 'bilan', t: 'Bilan', fr: 'Bilans et exports', subs: [['jounal', 'Journal'], ['stats', 'Rapport d\'activité'], ['benevolat', 'Bénévolat'], ['equilibre', 'Lékilib']]}
+];
+function rlkRgGroupe(sec) { sec = String(sec).replace('é', 'e'); return RLK_RG.filter(function(g) { return g.subs.some(function(x) { return x[0] === sec; }); })[0] || RLK_RG[0]; }
+function rlkRgBadge(id) { var e = id && document.getElementById(id); return e && e.style.display !== 'none' ? (parseInt(e.textContent, 10) || 0) : 0; }
+function rlkRgNav(sec) {
+  var nav = document.getElementById('rg-nav2'), sub = document.getElementById('rg-sub'); if (!nav || !sub) return;
+  var g = rlkRgGroupe(sec); sec = String(sec).replace('é', 'e');
+  nav.innerHTML = RLK_RG.map(function(x) {
+    var n = x.badge ? rlkRgBadge(x.badge) : x.subs.reduce(function(a, y) { return a + rlkRgBadge(y[2]); }, 0);
+    return '<button class="btn ' + (x === g ? 'btn-primary' : 'btn-ghost') + ' btn-sm" type="button" style="line-height:1.2;text-align:center;flex:1 1 30%;min-width:96px" onclick="showReglaj(\'' + x.subs[0][0] + '\')"><span style="display:flex;flex-direction:column;align-items:center;gap:1px"><span>' + rlkEsc(x.t) + (n ? ' <span class="rlk-badge-n">' + n + '</span>' : '') + '</span><small style="font-weight:400;opacity:.85">' + rlkEsc(x.fr) + '</small></span></button>';
+  }).join('');
+  sub.innerHTML = g.subs.length > 1 ? g.subs.map(function(y) {
+    var n = rlkRgBadge(y[2]);
+    return '<button class="btn ' + (y[0] === sec ? 'btn-primary' : 'btn-ghost') + ' btn-xs" type="button" onclick="showReglaj(\'' + y[0] + '\')">' + rlkEsc(y[1]) + (n ? ' <span class="rlk-badge-n">' + n + '</span>' : '') + '</button>';
+  }).join('') : '';
+}
+var rlkShowReglaj52 = showReglaj;
+showReglaj = function(section) {
+  rlkShowReglaj52(section);
+  if (String(section).replace('é', 'e') === 'echanj') { if (typeof rlkFillAdhSelect === 'function') rlkFillAdhSelect(); if (typeof loadStockTable === 'function') loadStockTable(); }
+  RLK.rgSec = section; rlkRgNav(section);
+};
+setInterval(function() { var p = document.getElementById('page-reglaj'); if (!document.hidden && p && p.classList.contains('active')) rlkRgNav(RLK.rgSec || 'zaderan'); }, 4000);
+document.addEventListener('DOMContentLoaded', function() { setTimeout(function() { rlkRgNav('zaderan'); }, 500); });
+// Aucun crédit libre : plus d'ajustement de FEY sans ligne déclarée
+rlkCreditManuel = function() { toast('Les FEY suivent la règle : corrigez la quantité d\'une ligne dans Échanj'); };
+// Correction d'une ligne : la règle recalcule, la différence est tracée
+function rlkEchCorriger(id) {
+  var t = RLK.echHist[id]; if (!t || !rlkIsAdmin()) return;
+  var v = prompt('Nouvelle quantité pour « ' + t.produit + ' » (actuelle : ' + t.quantite + ' ' + t.unite + ') :'); if (v === null) return;
+  var n = parseFloat(String(v).replace(',', '.')); if (!(n > 0)) { toast('Quantité invalide (pour supprimer la ligne, utilisez Retirer)'); return; }
+  var nt = Object.assign({}, t, {quantite: n, kg: t.kg != null ? Number(t.kg) * n / Number(t.quantite) : null});
+  var credite = t.statut === 'stock', ancien = credite ? (Number(t.fey_credit) || 0) : 0, nouveau = credite ? rlkFeyTrok(nt) : 0, diff = nouveau - ancien;
+  if (!confirm('Passer de ' + t.quantite + ' à ' + n + ' ' + t.unite + (credite ? '. La règle donne ' + nouveau + ' FEY au lieu de ' + ancien + ' (' + (diff >= 0 ? '+' : '') + diff + ' FEY, tracé dans l\'historique).' : '. Aucun FEY n\'est encore crédité pour cette ligne.') + ' Confirmer ?')) return;
+  var upd = {quantite: n}; if (t.kg != null) upd.kg = Math.round(nt.kg * 100) / 100; if (credite) upd.fey_credit = nouveau;
+  sb.from('rlk_trok').update(upd).eq('id', t.id).select().then(function(r) {
+    if (r.error || !(r.data || []).length) { toast('Correction refusée : exécutez phase12_echanges.sql dans Supabase'); return; }
+    rlkTrocMatch(t, t.user_id).then(function(d) { if (d) sb.from('disponibilites').update({quantite: d.unite === 'kg' && t.unite !== 'kg' && nt.kg != null ? Math.round(nt.kg * 100) / 100 : n}).eq('id', d.id).then(function() {}); });
+    var qui = (profile && profile.prenom) || 'admin';
+    if (!diff) { toast('✓ Quantité corrigée'); rlkEchApres(); return; }
+    sb.from('rlk_fey').insert({user_id: t.user_id, delta: diff, motif: 'Correction de quantité : ' + String(t.produit || '').replace(/ \(autre troc\)$/, '') + ' ' + t.quantite + ' → ' + n + ' ' + t.unite + ' (par ' + qui + ')'}).then(function(r2) {
+      toast(r2.error ? 'Quantité corrigée mais FEY non ajustés : ' + rlkErr(r2.error) : '✓ Corrigé : ' + (diff > 0 ? '+' : '') + diff + ' FEY'); rlkEchApres();
+    });
+  });
+}
+
+// ═══ v5.3 : plannings de présence avec créneaux de réservation (Zévenman) ═══
+RLK.pl = {plannings: [], postes: [], creneaux: [], insc: []}; RLK.plOuvert = null; RLK.plFiltre = 'tous'; RLK.plPoste = '';
+var RLK_PL_TZ = 'Indian/Reunion';
+function plH(ts) { var t = new Date(ts).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit', timeZone: RLK_PL_TZ}); return t === '00:00' ? '24h' : t.replace(':00', 'h').replace(':', 'h'); }
+function plJour(ts) { return new Date(ts).toLocaleDateString('fr-CA', {timeZone: RLK_PL_TZ}); }
+function plJourLib(j) { var l = new Date(j + 'T12:00:00+04:00').toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric', month: 'long', timeZone: RLK_PL_TZ}); return l.charAt(0).toUpperCase() + l.slice(1); }
+function plPrenom() { return (profile && profile.prenom) || (currentUser && currentUser.email ? currentUser.email.split('@')[0] : 'Adhérent'); }
+function rlkPlLoad() {
+  var zone = document.getElementById('pl-zone'); if (!zone) return;
+  if (!currentUser) { zone.innerHTML = ''; return; }
+  Promise.all([sb.from('rlk_pl_plannings').select('*').order('date_debut'), sb.from('rlk_pl_postes').select('*').order('ordre'), sb.from('rlk_pl_creneaux').select('*').order('debut').limit(2000), sb.from('rlk_pl_inscriptions').select('*').limit(5000)]).then(function(rs) {
+    if (rs[0].error) { zone.innerHTML = rlkIsAdmin() ? '<div class="rlk-warn">Plannings pas encore activés : exécutez <b>phase14_planning.sql</b> dans Supabase.</div>' : ''; return; }
+    RLK.pl = {plannings: rs[0].data || [], postes: rs[1].data || [], creneaux: rs[2].data || [], insc: rs[3].data || []};
+    var arch = new Date(Date.now() - 2 * 864e5).toISOString().slice(0, 10);
+    RLK.pl.plannings = RLK.pl.plannings.filter(function(p) { return p.date_fin >= arch; });
+    if (RLK.plOuvert == null && RLK.pl.plannings.length === 1) RLK.plOuvert = RLK.pl.plannings[0].id;
+    rlkPlRender();
+  });
+}
+function rlkPlEtat(c) {
+  var n = RLK.pl.insc.filter(function(i) { return i.creneau_id === c.id; }).length, min = c.min_pers || 0;
+  return {n: n, manque: Math.max(0, min - n), complet: c.max_pers != null && n >= c.max_pers};
+}
+function rlkPlRender() {
+  var zone = document.getElementById('pl-zone'); if (!zone) return;
+  var P = RLK.pl, adm = rlkIsAdmin(), uid = currentUser && currentUser.id;
+  if (!P.plannings.length) { zone.innerHTML = ''; return; }
+  zone.innerHTML = '<div class="page-title" style="font-size:1.25rem;margin:26px 0 4px">Plannings de présence</div><div class="rlk-note" style="margin:0 0 10px">Inscrivez-vous sur un créneau. Les prénoms sont visibles de tous pour s\'organiser.</div>'
+    + P.plannings.map(function(pl) {
+      var cr = P.creneaux.filter(function(c) { return c.planning_id === pl.id; }), manques = cr.filter(function(c) { return rlkPlEtat(c).manque > 0; }).length, ouvert = RLK.plOuvert === pl.id;
+      var mine = cr.filter(function(c) { return P.insc.some(function(i) { return i.creneau_id === c.id && i.user_id === uid; }); });
+      var h = '<div class="card" style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start;flex-wrap:wrap"><div><div style="font-weight:700;font-size:1.05rem">' + rlkEsc(pl.titre) + (pl.publie ? '' : ' <span class="badge b-err">Masqué</span>') + '</div><div class="rlk-note" style="margin:2px 0">' + plJourLib(pl.date_debut) + (pl.date_fin !== pl.date_debut ? ' au ' + plJourLib(pl.date_fin).toLowerCase() : '') + (pl.lieu ? ' · ' + rlkEsc(pl.lieu) : '') + '</div></div>'
+        + '<button class="btn ' + (ouvert ? 'btn-ghost' : 'btn-primary') + ' btn-sm" type="button" onclick="RLK.plOuvert=' + (ouvert ? 'null' : '\'' + pl.id + '\'') + ';rlkPlRender()">' + (ouvert ? 'Fermer' : 'Voir et m\'inscrire') + '</button></div>'
+        + (pl.description ? '<div class="rlk-note" style="margin:6px 0 0">' + rlkEsc(pl.description) + '</div>' : '')
+        + '<div style="margin-top:8px">' + (manques ? '<span class="badge b-err">' + manques + ' créneau' + (manques > 1 ? 'x' : '') + ' à compléter</span>' : '<span class="badge b-ok">Tout est couvert</span>') + ' <span class="rlk-note" style="margin:0">' + cr.length + ' créneaux · vous : ' + mine.length + '</span></div>';
+      if (ouvert) h += rlkPlDetail(pl, cr, mine);
+      return h + '</div>';
+    }).join('');
+}
+function rlkPlDetail(pl, cr, mine) {
+  var P = RLK.pl, adm = rlkIsAdmin(), uid = currentUser.id, postes = P.postes.filter(function(x) { return x.planning_id === pl.id; }), nomP = {}; postes.forEach(function(x) { nomP[x.id] = x; });
+  var h = '<div style="margin-top:12px">';
+  if (mine.length) h += '<div class="rlk-ok" style="margin-bottom:10px"><b>Mes créneaux</b><br>' + mine.map(function(c) { return plJourLib(plJour(c.debut)) + ' · ' + plH(c.debut) + ' à ' + plH(c.fin) + ' · ' + rlkEsc((nomP[c.poste_id] || {}).nom || '') + (c.note ? ' (' + rlkEsc(c.note) + ')' : ''); }).join('<br>') + '</div>';
+  var F = RLK.plFiltre;
+  h += '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">' + [['tous', 'Tous'], ['manque', 'Il manque du monde'], ['moi', 'Mes créneaux']].map(function(f) { return '<button type="button" class="rlk-chip' + (F === f[0] ? ' on' : '') + '" onclick="RLK.plFiltre=\'' + f[0] + '\';rlkPlRender()">' + f[1] + '</button>'; }).join('')
+    + '</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"><button type="button" class="rlk-chip' + (!RLK.plPoste ? ' on' : '') + '" onclick="RLK.plPoste=\'\';rlkPlRender()">Tous les postes</button>' + postes.map(function(x) { return '<button type="button" class="rlk-chip' + (RLK.plPoste === x.id ? ' on' : '') + '" onclick="RLK.plPoste=\'' + x.id + '\';rlkPlRender()">' + rlkEsc(x.nom) + '</button>'; }).join('') + '</div>';
+  var jours = {}; cr.forEach(function(c) { (jours[plJour(c.debut)] = jours[plJour(c.debut)] || []).push(c); });
+  var any = false;
+  Object.keys(jours).sort().forEach(function(j) {
+    var liste = jours[j].filter(function(c) {
+      var e = rlkPlEtat(c), est = P.insc.some(function(i) { return i.creneau_id === c.id && i.user_id === uid; });
+      return (!RLK.plPoste || c.poste_id === RLK.plPoste) && (F === 'tous' || (F === 'manque' && e.manque > 0) || (F === 'moi' && est));
+    }).sort(function(a, b) { return new Date(a.debut) - new Date(b.debut) || ((nomP[a.poste_id] || {}).ordre || 0) - ((nomP[b.poste_id] || {}).ordre || 0); });
+    if (!liste.length) return; any = true;
+    h += '<div style="font-weight:700;margin:14px 0 6px">' + plJourLib(j) + '</div>';
+    h += liste.map(function(c) {
+      var e = rlkPlEtat(c), ins = P.insc.filter(function(i) { return i.creneau_id === c.id; }), est = ins.some(function(i) { return i.user_id === uid; });
+      var col = e.manque ? '#B3261E' : '#1b7a4a', txt = e.manque ? 'Il manque ' + e.manque : (e.complet ? 'Complet' : 'Couvert');
+      var act = est ? '<button class="btn btn-ghost btn-xs" type="button" onclick="rlkPlLeave(\'' + (ins.filter(function(i) { return i.user_id === uid; })[0] || {}).id + '\')">Annuler</button>' : (e.complet ? '<span class="badge b-err">Complet</span>' : '<button class="btn btn-primary btn-xs" type="button" onclick="rlkPlJoin(\'' + c.id + '\')">Je m\'inscris</button>');
+      return '<div style="border:1px solid var(--border);border-left:4px solid ' + col + ';border-radius:8px;padding:8px 10px;margin-bottom:6px"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap"><div><b>' + plH(c.debut) + ' à ' + plH(c.fin) + '</b> · ' + rlkEsc((nomP[c.poste_id] || {}).nom || '') + (c.note ? ' <span class="rlk-note" style="margin:0">(' + rlkEsc(c.note) + ')</span>' : '') + '<div style="font-size:.8rem;color:' + col + '">' + txt + ' · ' + e.n + '/' + (c.min_pers || 0) + ' minimum' + (c.max_pers != null ? ', ' + c.max_pers + ' maximum' : '') + '</div></div><div>' + act + '</div></div>'
+        + (ins.length ? '<div style="font-size:.85rem;margin-top:4px">' + ins.map(function(i) { return rlkEsc(i.prenom) + (adm ? ' <a href="#" style="color:var(--red)" onclick="rlkPlRetire(\'' + i.id + '\');return false" title="Retirer">×</a>' : ''); }).join(', ') + '</div>' : '')
+        + rlkPlMatHtml(c, ins, est, adm)
+        + (adm ? '<div style="margin-top:4px;display:flex;gap:10px;flex-wrap:wrap"><a href="#" style="font-size:.8rem" onclick="rlkPlAjoutPers(\'' + c.id + '\');return false">+ ajouter quelqu\'un</a><a href="#" style="font-size:.8rem" onclick="rlkPlMinMax(\'' + c.id + '\');return false">Modifier min/max</a><a href="#" style="font-size:.8rem;color:var(--red)" onclick="rlkPlCrenSuppr(\'' + c.id + '\');return false">Supprimer ce créneau</a></div>' : '') + '</div>';
+    }).join('');
+  });
+  if (!any) h += '<div class="rlk-note">Aucun créneau avec ce filtre.</div>';
+  return h + '</div>';
+}
+function rlkPlJoin(cid) {
+  if (!currentUser) { openModal('m-login'); return; }
+  var c = RLK.pl.creneaux.filter(function(x) { return x.id === cid; })[0]; if (!c) return;
+  sb.from('rlk_pl_inscriptions').insert({creneau_id: cid, user_id: currentUser.id, prenom: plPrenom()}).then(function(r) {
+    if (r.error) { toast(rlkErr(r.error)); rlkPlLoad(); return; }
+    toast('✓ Inscrit : ' + plJourLib(plJour(c.debut)) + ', ' + plH(c.debut) + ' à ' + plH(c.fin)); rlkPlLoad();
+  });
+}
+function rlkPlLeave(id) { if (!confirm('Annuler cette inscription ?')) return; sb.from('rlk_pl_inscriptions').delete().eq('id', id).then(function() { toast('Inscription annulée'); rlkPlLoad(); }); }
+function rlkPlRetire(id) { if (!confirm('Retirer cette personne du créneau ?')) return; sb.from('rlk_pl_inscriptions').delete().eq('id', id).then(function() { rlkPlLoad(); }); }
+function rlkPlAjoutPers(cid) {
+  var n = prompt('Prénom de la personne à inscrire (sans application) :'); if (!n || !n.trim()) return;
+  sb.from('rlk_pl_inscriptions').insert({creneau_id: cid, user_id: null, prenom: n.trim()}).then(function(r) { if (r.error) toast(rlkErr(r.error)); rlkPlLoad(); });
+}
+function rlkPlMinMax(cid) {
+  var c = RLK.pl.creneaux.filter(function(x) { return x.id === cid; })[0]; if (!c) return;
+  var mn = prompt('Minimum de personnes :', c.min_pers); if (mn === null) return;
+  var mx = prompt('Maximum (vide = illimité) :', c.max_pers == null ? '' : c.max_pers); if (mx === null) return;
+  sb.from('rlk_pl_creneaux').update({min_pers: parseInt(mn, 10) || 0, max_pers: mx.trim() === '' ? null : parseInt(mx, 10)}).eq('id', cid).then(function() { rlkPlLoad(); });
+}
+function rlkPlCrenSuppr(cid) { if (!confirm('Supprimer ce créneau et ses inscriptions ?')) return; sb.from('rlk_pl_creneaux').delete().eq('id', cid).then(function() { rlkPlLoad(); }); }
+// ── Administration (Réglaj > Zévenman > Plannings de présence) ──
+RLK.plPostes = [{nom: 'Vente', min: 2, max: ''}, {nom: 'Cuisine', min: 2, max: ''}, {nom: 'Atelier', min: 1, max: ''}];
+function rlkPlPostesRender() {
+  var b = document.getElementById('pl-postes'); if (!b) return;
+  b.innerHTML = RLK.plPostes.map(function(x, i) { return '<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px"><input type="text" value="' + rlkEsc(x.nom) + '" placeholder="Poste" style="flex:2;margin:0" oninput="RLK.plPostes[' + i + '].nom=this.value"><input type="number" min="0" value="' + x.min + '" title="Minimum" style="flex:1;margin:0" oninput="RLK.plPostes[' + i + '].min=this.value"><input type="number" min="1" value="' + x.max + '" placeholder="max" title="Maximum" style="flex:1;margin:0" oninput="RLK.plPostes[' + i + '].max=this.value"><button class="btn btn-ghost btn-xs" type="button" onclick="RLK.plPostes.splice(' + i + ',1);rlkPlPostesRender()">✕</button></div><textarea rows="2" placeholder="Matériel à apporter pour ce poste, une ligne par objet (ex. caisse | 1)" style="margin:0 0 8px" oninput="RLK.plPostes[' + i + '].besoin=this.value">' + rlkEsc(x.besoin || '') + '</textarea>'; }).join('') + '<div class="rlk-note" style="margin:0 0 6px">Nom du poste, minimum de personnes, maximum (facultatif).</div>';
+}
+function rlkPlPosteAdd() { RLK.plPostes.push({nom: '', min: 1, max: ''}); rlkPlPostesRender(); }
+function rlkPlCreer() {
+  var titre = rlkVal('pl-titre').trim(), d1 = rlkVal('pl-d1'), d2 = rlkVal('pl-d2') || d1, h1 = rlkNum('pl-h1', 8), h2 = rlkNum('pl-h2', 24), dur = rlkNum('pl-dur', 2);
+  var postes = RLK.plPostes.filter(function(x) { return String(x.nom).trim(); });
+  if (!titre || !d1 || d2 < d1 || !(h2 > h1) || !postes.length) { toast('Titre, dates, heures et au moins un poste sont obligatoires'); return; }
+  var jours = []; for (var d = new Date(d1 + 'T00:00:00Z'); d.toISOString().slice(0, 10) <= d2; d = new Date(d.getTime() + 864e5)) jours.push(d.toISOString().slice(0, 10));
+  if (jours.length > 14) { toast('14 jours au plus par planning'); return; }
+  sb.from('rlk_pl_plannings').insert({titre: titre, lieu: rlkVal('pl-lieu').trim() || null, description: rlkVal('pl-desc').trim() || null, date_debut: d1, date_fin: d2, publie: true}).select().then(function(r) {
+    if (r.error || !(r.data || []).length) { toast(/rlk_pl_/.test((r.error && r.error.message) || '') ? 'Plannings pas encore activés : exécutez phase14_planning.sql' : rlkErr(r.error || {message: 'Création refusée'})); return; }
+    var pl = r.data[0];
+    sb.from('rlk_pl_postes').insert(postes.map(function(x, i) { var o = {planning_id: pl.id, nom: String(x.nom).trim(), min_pers: parseInt(x.min, 10) || 0, max_pers: x.max === '' || x.max == null ? null : parseInt(x.max, 10), ordre: i}; if ((x.besoin || '').trim()) o.besoin = x.besoin.trim(); return o; })).select().then(function(rp) {
+      if (rp.error) { toast(rlkErr(rp.error)); return; }
+      var rows = [];
+      jours.forEach(function(j) {
+        var deb = Date.parse(j + 'T' + ('0' + h1).slice(-2) + ':00:00+04:00'), fin = h2 >= 24 ? Date.parse(j + 'T00:00:00+04:00') + 864e5 : Date.parse(j + 'T' + ('0' + h2).slice(-2) + ':00:00+04:00');
+        (rp.data || []).forEach(function(po) { for (var t = deb; t < fin; t += dur * 36e5) { var o = {planning_id: pl.id, poste_id: po.id, debut: new Date(t).toISOString(), fin: new Date(Math.min(t + dur * 36e5, fin)).toISOString(), min_pers: po.min_pers, max_pers: po.max_pers}; if (po.besoin) o.besoin = po.besoin; rows.push(o); } });
+      });
+      var chunks = []; for (var k = 0; k < rows.length; k += 400) chunks.push(rows.slice(k, k + 400));
+      Promise.all(chunks.map(function(ch) { return sb.from('rlk_pl_creneaux').insert(ch); })).then(function(rs) {
+        var er = rs.filter(function(x) { return x.error; })[0]; if (er) { toast(rlkErr(er.error)); return; }
+        toast('✓ Planning créé : ' + rows.length + ' créneaux'); ['pl-titre', 'pl-lieu', 'pl-desc'].forEach(function(i) { document.getElementById(i).value = ''; }); rlkPlAdmin();
+      });
+    });
+  });
+}
+function rlkPlAdmin() {
+  var box = document.getElementById('pl-admin-list'); if (!box) return;
+  rlkPlPostesRender();
+  Promise.all([sb.from('rlk_pl_plannings').select('*').order('date_debut', {ascending: false}), sb.from('rlk_pl_postes').select('*').order('ordre'), sb.from('rlk_pl_creneaux').select('id,planning_id').limit(3000)]).then(function(rs) {
+    if (rs[0].error) { box.innerHTML = '<div class="rlk-warn">Plannings pas encore activés : exécutez <b>phase14_planning.sql</b> dans Supabase.</div>'; return; }
+    RLK.plAdm = {pl: rs[0].data || [], po: rs[1].data || [], cr: rs[2].data || []};
+    var sel = document.getElementById('pc-pl'); if (sel) { var cur = sel.value; sel.innerHTML = RLK.plAdm.pl.map(function(p) { return '<option value="' + p.id + '">' + rlkEsc(p.titre) + '</option>'; }).join(''); if (cur) sel.value = cur; rlkPlCrenPostes(); }
+    box.innerHTML = RLK.plAdm.pl.length ? RLK.plAdm.pl.map(function(p) {
+      var n = RLK.plAdm.cr.filter(function(c) { return c.planning_id === p.id; }).length;
+      return '<div style="padding:8px 0;border-bottom:1px solid var(--border)"><b>' + rlkEsc(p.titre) + '</b> <span class="rlk-note" style="margin:0">' + p.date_debut + ' au ' + p.date_fin + ' · ' + n + ' créneaux · ' + (p.publie ? 'publié' : 'masqué') + '</span><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'
+        + '<button class="btn btn-ghost btn-xs" type="button" onclick="rlkPlPublie(\'' + p.id + '\',' + (!p.publie) + ')">' + (p.publie ? 'Masquer' : 'Publier') + '</button>'
+        + '<button class="btn btn-ghost btn-xs" type="button" onclick="rlkPlCsv(\'' + p.id + '\')">Exporter CSV</button>'
+        + '<button class="btn btn-ghost btn-xs" type="button" onclick="RLK.plOuvert=\'' + p.id + '\';navTo(\'biyetri\',document.querySelector(\'[onclick*=&quot;biyetri&quot;]\'))">Voir le suivi</button>'
+        + '<button class="btn btn-ghost btn-xs" style="color:var(--red)" type="button" onclick="rlkPlSuppr(\'' + p.id + '\')">Supprimer</button></div></div>';
+    }).join('') : '<div class="rlk-note">Aucun planning.</div>';
+  });
+}
+function rlkPlCrenPostes() {
+  var id = rlkVal('pc-pl'), s = document.getElementById('pc-poste'); if (!s || !RLK.plAdm) return;
+  s.innerHTML = RLK.plAdm.po.filter(function(x) { return x.planning_id === id; }).map(function(x) { return '<option value="' + x.id + '">' + rlkEsc(x.nom) + '</option>'; }).join('');
+}
+function rlkPlCrenAjout() {
+  var pid = rlkVal('pc-pl'), po = rlkVal('pc-poste'), j = rlkVal('pc-d'), a = rlkVal('pc-h1').trim(), b = rlkVal('pc-h2').trim();
+  var ok = /^\d{1,2}:\d{2}$/; if (!pid || !po || !j || !ok.test(a) || !ok.test(b)) { toast('Planning, poste, jour et heures (ex. 14:00) sont obligatoires'); return; }
+  var pad = function(t) { return ('0' + t).slice(-5); }, deb = Date.parse(j + 'T' + pad(a) + ':00+04:00'), fin = b === '24:00' ? Date.parse(j + 'T00:00:00+04:00') + 864e5 : Date.parse(j + 'T' + pad(b) + ':00+04:00');
+  if (!(fin > deb)) { toast('L\'heure de fin doit suivre celle du début'); return; }
+  sb.from('rlk_pl_creneaux').insert({planning_id: pid, poste_id: po, debut: new Date(deb).toISOString(), fin: new Date(fin).toISOString(), min_pers: rlkNum('pc-min', 1), max_pers: rlkVal('pc-max') === '' ? null : rlkNum('pc-max', 1), note: rlkVal('pc-note').trim() || null}).then(function(r) { toast(r.error ? rlkErr(r.error) : '✓ Créneau ajouté'); if (!r.error) rlkPlAdmin(); });
+}
+function rlkPlPublie(id, v) { sb.from('rlk_pl_plannings').update({publie: v}).eq('id', id).then(function() { rlkPlAdmin(); }); }
+function rlkPlSuppr(id) { if (!confirm('Supprimer ce planning, tous ses créneaux et toutes les inscriptions ? Elles disparaîtront aussi du rapport de bénévolat : exportez d\'abord le CSV (ou choisissez plutôt Masquer).')) return; sb.from('rlk_pl_plannings').delete().eq('id', id).then(function() { toast('Planning supprimé'); rlkPlAdmin(); }); }
+function rlkPlCsv(id) {
+  Promise.all([sb.from('rlk_pl_postes').select('*').eq('planning_id', id), sb.from('rlk_pl_creneaux').select('*').eq('planning_id', id).order('debut'), sb.from('rlk_pl_inscriptions').select('*').limit(5000)]).then(function(rs) {
+    var nomP = {}; (rs[0].data || []).forEach(function(x) { nomP[x.id] = x.nom; });
+    var esc = function(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; };
+    var L = [['Jour', 'Début', 'Fin', 'Poste', 'Précision', 'Minimum', 'Maximum', 'Inscrits', 'Noms'].map(esc).join(';')];
+    (rs[1].data || []).forEach(function(c) { var ins = (rs[2].data || []).filter(function(i) { return i.creneau_id === c.id; }); L.push([plJour(c.debut), plH(c.debut), plH(c.fin), nomP[c.poste_id], c.note, c.min_pers, c.max_pers, ins.length, ins.map(function(i) { return i.prenom; }).join(', ')].map(esc).join(';')); });
+    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + L.join('\n')], {type: 'text/csv'})); a.download = 'planning-presence.csv'; a.click();
+  });
+}
+var rlkLoadEventsOrig53 = rlkLoadEvents;
+rlkLoadEvents = function() { rlkLoadEventsOrig53.apply(this, arguments); rlkPlLoad(); };
+var rlkShowReglaj53 = showReglaj;
+showReglaj = function(section) { rlkShowReglaj53(section); if (String(section) === 'planning') rlkPlAdmin(); };
+document.addEventListener('DOMContentLoaded', function() { setTimeout(rlkPlPostesRender, 600); });
+
+// ═══ v5.4 : matériel à apporter par créneau + rapport de bénévolat ═══
+RLK.plMatOpen = {};
+function rlkPlMatTxt(t) { return String(t || '').split('\n').map(function(x) { return x.trim(); }).filter(Boolean); }
+function rlkPlMatHtml(c, ins, est, adm) {
+  var besoin = rlkMatBesoin(c.besoin), apports = {}, autres = [];
+  ins.forEach(function(i) { rlkPlMatTxt(i.materiel).forEach(function(m) { var k = m.toLowerCase(); (apports[k] = apports[k] || []).push(i.prenom); }); });
+  var couverts = besoin.filter(function(b) { return apports[b.o.toLowerCase()]; }).length, ouvert = !!RLK.plMatOpen[c.id];
+  var nomsBesoin = besoin.map(function(b) { return b.o.toLowerCase(); });
+  ins.forEach(function(i) { rlkPlMatTxt(i.materiel).forEach(function(m) { if (nomsBesoin.indexOf(m.toLowerCase()) < 0) autres.push(i.prenom + ' : ' + m); }); });
+  if (!besoin.length && !autres.length && !adm && !est) return '';
+  var tete = '<div style="margin-top:6px"><a href="#" style="font-size:.85rem" onclick="RLK.plMatOpen[\'' + c.id + '\']=' + (!ouvert) + ';rlkPlRender();return false">Matériel' + (besoin.length ? ' (' + couverts + '/' + besoin.length + ' prévu' + (couverts > 1 ? 's' : '') + ')' : (est || adm ? ' : à renseigner' : '')) + (ouvert ? ' ▲' : ' ▼') + '</a></div>';
+  if (!ouvert) return tete;
+  var mine = (ins.filter(function(i) { return i.user_id === (currentUser && currentUser.id); })[0] || {}), moi = rlkPlMatTxt(mine.materiel).map(function(x) { return x.toLowerCase(); });
+  var h = tete + '<div class="rlk-mat" style="margin-top:6px">';
+  if (besoin.length) h += besoin.map(function(b) {
+    var k = b.o.toLowerCase(), qui = apports[k] || [], on = moi.indexOf(k) >= 0;
+    return '<label class="rlk-mat-l" style="display:flex;gap:6px;align-items:center;' + (qui.length ? 'opacity:.85' : '') + '">' + (est ? '<input type="checkbox" class="plm-cb-' + c.id + '" value="' + rlkEsc(b.o) + '"' + (on ? ' checked' : '') + '>' : '<span>•</span>') + '<span>' + rlkEsc(b.o) + (b.q ? ' <b>× ' + rlkEsc(b.q) + '</b>' : '') + '</span><span style="margin-left:auto;font-size:.8rem;color:' + (qui.length ? '#1b7a4a' : '#B3261E') + '">' + (qui.length ? '✓ ' + rlkEsc(qui.join(', ')) : 'à apporter') + '</span></label>';
+  }).join(''); else h += '<div class="rlk-note" style="margin:0">Aucune liste de matériel pour ce créneau.</div>';
+  if (autres.length) h += '<div style="font-size:.85rem;margin-top:6px"><b>Autres apports :</b> ' + autres.map(rlkEsc).join(' · ') + '</div>';
+  if (est) {
+    var libres = rlkPlMatTxt(mine.materiel).filter(function(m) { return nomsBesoin.indexOf(m.toLowerCase()) < 0; });
+    h += '<div style="margin-top:8px"><label style="font-size:.85rem">Autre matériel que j\'apporte (un objet par ligne)</label><textarea id="plmx-' + c.id + '" rows="2">' + rlkEsc(libres.join('\n')) + '</textarea><button type="button" class="btn btn-primary btn-xs" onclick="rlkPlMatSave(\'' + c.id + '\',\'' + mine.id + '\')">Enregistrer mon matériel</button></div>';
+  } else if (!adm) h += '<div class="rlk-note" style="margin:6px 0 0">Inscrivez-vous sur ce créneau pour cocher ce que vous apportez.</div>';
+  if (adm) h += '<div style="margin-top:8px"><label style="font-size:.85rem">Liste du matériel à prévoir (un objet par ligne, « objet | quantité »)</label><textarea id="plb-' + c.id + '" rows="3">' + rlkEsc(c.besoin || '') + '</textarea><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn btn-ghost btn-xs" onclick="rlkPlBesoinSave(\'' + c.id + '\',false)">Enregistrer pour ce créneau</button><button type="button" class="btn btn-ghost btn-xs" onclick="rlkPlBesoinSave(\'' + c.id + '\',true)">Appliquer à tous les créneaux de ce poste</button></div></div>';
+  return h + '</div>';
+}
+function rlkPlMatSave(cid, iid) {
+  var l = []; document.querySelectorAll('.plm-cb-' + cid + ':checked').forEach(function(x) { l.push(x.value); });
+  rlkPlMatTxt(rlkVal('plmx-' + cid)).forEach(function(t) { if (l.indexOf(t) < 0) l.push(t); });
+  sb.from('rlk_pl_inscriptions').update({materiel: l.join('\n')}).eq('id', iid).select().then(function(r) {
+    if (r.error || !(r.data || []).length) { toast('Fonction à activer : exécutez phase15_materiel_benevolat.sql dans Supabase'); return; }
+    toast(l.length ? '✓ Merci ! Votre matériel est enregistré' : 'Matériel retiré'); rlkPlLoad();
+  });
+}
+function rlkPlBesoinSave(cid, tous) {
+  var c = RLK.pl.creneaux.filter(function(x) { return x.id === cid; })[0]; if (!c) return;
+  var v = rlkVal('plb-' + cid).trim() || null;
+  var q = sb.from('rlk_pl_creneaux').update({besoin: v}); q = tous ? q.eq('poste_id', c.poste_id) : q.eq('id', cid);
+  q.select().then(function(r) { if (r.error) { toast('Fonction à activer : exécutez phase15_materiel_benevolat.sql dans Supabase'); return; } toast('✓ Liste enregistrée' + (tous ? ' pour ' + (r.data || []).length + ' créneaux' : '')); rlkPlLoad(); });
+}
+// ── Rapport de bénévolat ──
+RLK.bn = null;
+function rlkBenevRapport() {
+  var out = document.getElementById('bn-out'); if (!out) return;
+  var an = new Date().getFullYear(), d1 = rlkVal('bn-d1') || (an + '-01-01'), d2 = rlkVal('bn-d2') || (an + '-12-31'), futur = !!(document.getElementById('bn-futur') || {}).checked, vh = rlkNum('bn-eur', 0);
+  if (!rlkVal('bn-d1')) document.getElementById('bn-d1').value = d1; if (!rlkVal('bn-d2')) document.getElementById('bn-d2').value = d2;
+  Promise.all([sb.from('rlk_pl_plannings').select('*'), sb.from('rlk_pl_postes').select('*'), sb.from('rlk_pl_creneaux').select('*').limit(5000), sb.from('rlk_pl_inscriptions').select('*').limit(10000), sb.from('rlk_benevolat').select('*').gte('date', d1).lte('date', d2).limit(2000)]).then(function(rs) {
+    if (rs[0].error) { out.innerHTML = '<div class="rlk-warn">Plannings pas encore activés : exécutez <b>phase14_planning.sql</b>.</div>'; return; }
+    var pl = {}, po = {}, cr = {}; (rs[0].data || []).forEach(function(x) { pl[x.id] = x; }); (rs[1].data || []).forEach(function(x) { po[x.id] = x; }); (rs[2].data || []).forEach(function(x) { cr[x.id] = x; });
+    var now = Date.now(), lignes = [];
+    (rs[3].data || []).forEach(function(i) {
+      var c = cr[i.creneau_id]; if (!c) return; var j = plJour(c.debut); if (j < d1 || j > d2) return; if (!futur && new Date(c.fin).getTime() > now) return;
+      lignes.push({jour: j, debut: c.debut, fin: c.fin, h: (new Date(c.fin) - new Date(c.debut)) / 36e5, planning: (pl[c.planning_id] || {}).titre || '', poste: (po[c.poste_id] || {}).nom || '', nom: i.prenom, cle: i.user_id || ('np:' + String(i.prenom).toLowerCase())});
+    });
+    var reg = rs[4].data || [];
+    RLK.bn = {lignes: lignes, reg: reg};
+    var tot = lignes.reduce(function(a, l) { return a + l.h; }, 0), benev = {}; lignes.forEach(function(l) { benev[l.cle] = 1; });
+    var grp = function(k) { var o = {}; lignes.forEach(function(l) { var x = o[l[k]] = o[l[k]] || {h: 0, n: 0}; x.h += l.h; x.n++; }); return o; };
+    var tab = function(o, lib) { return '<table class="rlk-tbl">' + Object.keys(o).sort(function(a, b) { return o[b].h - o[a].h; }).map(function(k) { return '<tr><td>' + rlkEsc(lib ? lib(k) : k) + '</td><td style="text-align:right;white-space:nowrap">' + rlkFmt(o[k].h, 1) + ' h</td><td style="text-align:right;white-space:nowrap">' + o[k].n + ' créneau' + (o[k].n > 1 ? 'x' : '') + '</td></tr>'; }).join('') + '</table>'; };
+    var par = {}; lignes.forEach(function(l) { var x = par[l.cle] = par[l.cle] || {h: 0, n: 0, nom: l.nom}; x.h += l.h; x.n++; });
+    var mois = {}; lignes.forEach(function(l) { var m = l.jour.slice(0, 7), x = mois[m] = mois[m] || {h: 0, n: 0}; x.h += l.h; x.n++; });
+    var regEur = reg.reduce(function(a, x) { return a + (Number(x.valeur_eur) || 0); }, 0);
+    out.innerHTML = '<div class="rlk-ok"><b>' + rlkFmt(tot, 1) + ' heures de présence</b> · ' + Object.keys(benev).length + ' bénévole' + (Object.keys(benev).length > 1 ? 's' : '') + ' · ' + lignes.length + ' participations<br>Registre des réunions : ' + reg.length + ' don' + (reg.length > 1 ? 's' : '') + (regEur ? ', environ ' + rlkFmt(regEur, 0) + ' € déclarés' : '') + (vh > 0 ? '<br><b>Valorisation : ' + rlkFmt(tot * vh + regEur, 0) + ' €</b> (' + rlkFmt(tot, 1) + ' h × ' + vh + ' € + registre)' : '') + '</div>'
+      + (lignes.length ? '<div style="font-weight:700;margin:12px 0 4px">Par planning</div>' + tab(grp('planning')) + '<div style="font-weight:700;margin:12px 0 4px">Par poste</div>' + tab(grp('poste')) + '<div style="font-weight:700;margin:12px 0 4px">Par mois</div>' + tab(mois) + '<div style="font-weight:700;margin:12px 0 4px">Par personne</div>' + tab(par, function(k) { return par[k].nom; }) : '<div class="rlk-note">Aucune participation sur cette période' + (futur ? '' : ' (les créneaux à venir ne sont pas comptés)') + '.</div>');
+  });
+}
+function rlkBenevCsv() {
+  if (!RLK.bn) { toast('Cliquez d\'abord sur Générer'); return; }
+  var esc = function(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; };
+  var L = [['Type', 'Date', 'Début', 'Fin', 'Heures', 'Planning', 'Poste', 'Nom', 'Nature', 'Quantité', 'Valeur €'].map(esc).join(';')];
+  RLK.bn.lignes.sort(function(a, b) { return new Date(a.debut) - new Date(b.debut); }).forEach(function(l) { L.push(['Présence', l.jour, plH(l.debut), plH(l.fin), l.h, l.planning, l.poste, l.nom, '', '', ''].map(esc).join(';')); });
+  RLK.bn.reg.forEach(function(x) { L.push(['Réunion (anonyme)', x.date, '', '', '', '', '', '', x.nature, (x.quantite || '') + ' ' + (x.unite || ''), x.valeur_eur].map(esc).join(';')); });
+  var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + L.join('\n')], {type: 'text/csv'})); a.download = 'benevolat.csv'; a.click();
+}
+var rlkShowReglaj54 = showReglaj;
+showReglaj = function(section) { rlkShowReglaj54(section); if (String(section) === 'benevolat') { rlkBvLoad(); rlkBenevRapport(); } };
 </script>
 
 
