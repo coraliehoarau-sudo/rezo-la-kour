@@ -1522,7 +1522,14 @@ html.rlk-grand #rlk-feybar{font-size:16px}
 
   <!-- COMMANDES -->
   <div id="reglaj-commandes" style="display:none">
-    <div class="card" style="margin-bottom:14px"><div class="card-title">Stock boutique en direct</div><div class="rlk-note" style="margin-top:0">Le stock est réservé dès que l'adhérent commande (après phase17), et rendu si vous cliquez sur « Annuler ». « À préparer » = commandes en attente à préparer pour le prochain retrait.</div><div id="cmd-stock" class="rlk-note">Chargement…</div></div>
+    <div class="card" style="margin-bottom:14px"><div class="card-title">Stock boutique en direct</div><div class="rlk-note" style="margin-top:0">Deux stocks par produit : « FEY » (pour ceux qui ont cumulé des FEY) et « € » (espèces ou chèque). Le stock est réservé à la commande et rendu en cas d'annulation. « à préparer » = commandes en attente pour le prochain retrait.</div><div id="cmd-stock" class="rlk-note">Chargement…</div></div>
+    <div class="card" style="margin-bottom:14px"><div class="card-title">Facturation</div><div class="rlk-note" style="margin-top:0">Ces informations figurent sur chaque facture. <b>La mention de TVA est obligatoire avant la première facture</b> : faites-la valider par votre comptable ou votre contrôle des impôts.</div>
+      <div class="fr2"><div><label>Nom de l'association</label><input id="fp-nom"></div><div><label>Adresse</label><input id="fp-adr"></div></div>
+      <div class="fr2"><div><label>SIRET</label><input id="fp-siret"></div><div><label>N° RNA</label><input id="fp-rna"></div></div>
+      <div class="fr"><label>Mention de TVA</label><textarea id="fp-tva" rows="2" placeholder="Texte exact à valider avec votre comptable"></textarea></div>
+      <div class="fr"><label>Message de fin de facture et du mail</label><input id="fp-pied"></div>
+      <button class="btn btn-primary btn-sm" type="button" onclick="rlkFactParamsSave()">Enregistrer</button></div>
+    <div class="card" style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center"><div class="card-title" style="margin:0">Factures émises</div><button class="btn btn-outline btn-xs" type="button" onclick="rlkFactCsv()">Exporter pour la comptabilité (CSV)</button></div><div id="fact-list" class="rlk-note">Chargement…</div></div>
     <div class="card"><div class="card-title">Commandes de la Boutik</div><div id="cmd-list" class="rlk-note">Chargement…</div></div>
   </div>
 
@@ -2071,16 +2078,16 @@ html.rlk-grand #rlk-feybar{font-size:16px}
         <b>Retirer des pots du stock</b> (cassés, ouverts, plus stériles…)
         <div class="fr2" style="margin-top:10px">
           <div><label>Nombre de pots retirés</label><input type="number" id="le-retire" min="0" value="0"></div>
-          <div><label>Pris sur le stock</label><select id="le-canal"><option value="app">Échanges (FEY)</option><option value="yapla">Boutique en ligne</option></select></div>
+          <div><label>Pris sur le stock</label><select id="le-canal"><option value="app">Échanges (FEY)</option><option value="yapla">Euros (espèces ou chèque)</option></select></div>
         </div>
         <div class="fr" style="margin-bottom:0"><label>Motif</label><input type="text" id="le-motif" placeholder="Bocaux ouverts, plus stériles"></div>
         <div id="le-hist" class="rlk-note"></div>
       </div>
-      <div class="fr" style="margin-top:12px"><label>Total en stock (échanges + boutique en ligne)</label><input type="number" id="le-tot" min="0"></div>
+      <div class="fr" style="margin-top:12px"><label>Total en stock (FEY + euros)</label><input type="number" id="le-tot" min="0"></div>
       <div class="rlk-note" style="margin-top:-4px">Les deux stocks sont liés : ce que vous ajoutez à l'un est retiré de l'autre.</div>
       <div class="fr2">
         <div><label>Stock échanges (pots)</label><input type="number" id="le-app" min="0"></div>
-        <div><label>Stock boutique en ligne (pots)</label><input type="number" id="le-yap" min="0"></div>
+        <div><label>Stock en euros (pots)</label><input type="number" id="le-yap" min="0"></div>
       </div>
       <div class="fr"><label>Observations</label><input type="text" id="le-obs"></div>
       <div class="fr"><label>Photos du lot</label><div id="le-photos"></div><input type="file" accept="image/*" multiple onchange="rlkLotEditAddPhoto(this)"></div>
@@ -2257,10 +2264,10 @@ html.rlk-grand #rlk-feybar{font-size:16px}
           <select id="art-emoji"><option value="🫙">🫙 Bocal</option><option value="🍯">🍯 Miel</option><option value="🌿">🌿 Végétal</option><option value="🍋">🍋 Boisson</option><option value="🌶️">🌶️ Condiment</option><option value="🌾">🌾 Poudre</option></select></div>
       </div>
       <div class="fr2">
-        <div><label>Stock application (échanges)</label><input type="number" id="art-st-app" value="0" min="0"></div>
-        <div><label>Stock boutique Yapla</label><input type="number" id="art-st-yap" value="0" min="0"></div>
+        <div><label>Stock réservé aux FEY</label><input type="number" id="art-st-app" value="0" min="0"></div>
+        <div><label>Stock en euros (espèces ou chèque)</label><input type="number" id="art-st-yap" value="0" min="0"></div>
       </div>
-      <div class="fr"><label>Total en stock (application + Yapla)</label><input type="number" id="art-st-tot" min="0"></div>
+      <div class="fr"><label>Total en stock (FEY + euros)</label><input type="number" id="art-st-tot" min="0"></div>
       <div class="rlk-note" style="margin-top:-4px">Les deux stocks sont liés : ce que vous ajoutez à l'un est retiré de l'autre. Pour augmenter le stock global, ajoutez au total ou à un stock vide.</div>
       <div class="fr"><label>Photo</label>
         <input type="file" id="art-file" accept="image/*" onchange="rlkArtPhoto(this)">
@@ -4940,7 +4947,7 @@ function rlkLoadCommandes() {
       var lignes = (c.lignes || []).map(function(l) { return l.qty + ' × ' + rlkEsc(l.nom); }).join(', ');
       var acts = '';
       if (c.statut === 'en_attente') acts += '<button class="btn btn-primary btn-xs" onclick="rlkCmdStatut(\'' + c.id + '\',\'prete\')">Marquer prête</button> ';
-      if (c.mode_paiement === 'yapla' && !c.payee_yapla) acts += '<button class="btn btn-outline btn-xs" onclick="rlkCmdStatut(\'' + c.id + '\',\'payee\')">Marquer payée (espèces/chèque)</button> ';
+      if (c.mode_paiement === 'yapla' && !c.payee_yapla) acts += '<button class="btn btn-outline btn-xs" onclick="rlkCmdRegle(\'' + c.id + '\',\'espèces\')">Réglé en espèces</button> <button class="btn btn-outline btn-xs" onclick="rlkCmdRegle(\'' + c.id + '\',\'chèque\')">Réglé par chèque</button> ';
       if (c.statut === 'prete' || c.statut === 'payee') acts += '<button class="btn btn-ghost btn-xs" onclick="rlkCmdStatut(\'' + c.id + '\',\'retiree\')">Retirée</button> ';
       if (c.statut !== 'retiree' && c.statut !== 'annulee') acts += '<button class="btn btn-ghost btn-xs" style="color:#B3261E" onclick="rlkCmdAnnuler(\'' + c.id + '\')">Annuler</button>';
       return '<div class="card" style="margin-bottom:10px;padding:12px"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>' + rlkEsc(rs[1][c.user_id] || 'Adhérent') + '</b><span class="badge ' + (c.statut === 'en_attente' ? 'b-wait' : 'b-ok') + '">' + RLK_STAT_CMD[c.statut] + (c.payee_yapla && c.statut !== 'payee' ? ' · payée' : '') + '</span></div>'
@@ -5114,24 +5121,24 @@ function rlkDbCheck() {
 function rlkPrixFey(a) { return a && a.prix_fey != null ? Number(a.prix_fey) : 1; }
 function loadProduits() {
   var admin = rlkIsAdmin();
-  Promise.all([sb.from('produits').select('*').eq('actif', true).order('created_at'), sb.from('rlk_stock').select('*').eq('canal', 'app'), sb.from('rlk_articles').select('*')]).then(function(rs) {
-    var data = rs[0].data, st = {}, ar = {};
-    ((rs[1] && rs[1].data) || []).forEach(function(s) { st[s.produit_id] = s.quantite; });
+  Promise.all([sb.from('produits').select('*').eq('actif', true).order('created_at'), sb.from('rlk_stock').select('*'), sb.from('rlk_articles').select('*')]).then(function(rs) {
+    var data = rs[0].data, st = {}, sy = {}, ar = {};
+    ((rs[1] && rs[1].data) || []).forEach(function(s) { if (s.canal === 'yapla') sy[s.produit_id] = s.quantite; else if (s.canal === 'app') st[s.produit_id] = s.quantite; });
     ((rs[2] && rs[2].data) || []).forEach(function(a) { ar[a.produit_id] = a; });
     RLK.articles = ar;
     var w = document.getElementById('bk-dbwarn'); if (w) w.innerHTML = (rs[1].error || rs[2].error) ? '<div class="rlk-dbwarn">Les prix en FEY, photos et stocks seront disponibles après la mise à jour de la base (fichier phase1_v2_additif.sql).</div>' : '';
     var grid = document.getElementById('produits-grid'); if (!grid) return;
     if (!data || !data.length) { grid.innerHTML = '<div class="rlk-note" style="grid-column:1/-1">Aucun produit disponible pour le moment.</div>'; return; }
     grid.innerHTML = data.map(function(p) {
-      var a = ar[p.id] || {}, pf = rlkPrixFey(a), stock = st[p.id] != null ? st[p.id] : p.stock;
-      var badge = stock > 5 ? 'b-ok' : stock > 0 ? 'b-wait' : 'b-err';
+      var a = ar[p.id] || {}, pf = rlkPrixFey(a), sFey = st[p.id] != null ? Number(st[p.id]) : Number(p.stock || 0), sEur = sy[p.id] != null ? Number(sy[p.id]) : 0, stock = Math.max(sFey, sEur);
+      var bF = sFey > 5 ? 'b-ok' : sFey > 0 ? 'b-wait' : 'b-err', bE = sEur > 5 ? 'b-ok' : sEur > 0 ? 'b-wait' : 'b-err';
       var nomJs = String(p.nom).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
       var btn = stock > 0 ? '<button class="btn btn-primary btn-xs" onclick="addToCart(\'' + nomJs + '\',' + pf + ',\'' + (p.emoji || '🫙') + '\',\'' + p.id + '\')">+ Panier</button>' : '<span class="badge b-err">Épuisé</span>';
       var adm = '';
       var img = a.photo ? rlkPhotoHtml(a.photo, p.nom) : (p.emoji || '🫙');
-      return '<div class="produit" data-id="' + p.id + '" data-nom="' + String(p.nom).replace(/"/g, '') + '" data-stock="' + stock + '"><div class="produit-img">' + img + '</div><div class="produit-body">'
+      return '<div class="produit" data-id="' + p.id + '" data-nom="' + String(p.nom).replace(/"/g, '') + '" data-stock="' + stock + '" data-fey="' + sFey + '" data-eur="' + sEur + '"><div class="produit-img">' + img + '</div><div class="produit-body">'
         + '<div class="produit-nom">' + rlkEsc(p.nom) + '</div><div class="produit-desc">' + rlkEsc(a.descriptif || p.description || '') + '</div>'
-        + '<div class="produit-prix">' + rlkFmt(pf, 2) + ' FEY <span class="rlk-eur">ou ' + rlkFmt(pf * RLK.fey, 2) + ' €</span></div><div class="produit-footer"><div style="display:flex;gap:6px;align-items:center"><span class="badge ' + badge + '">Stock : ' + stock + '</span>' + btn + '</div></div>' + adm + '</div></div>';
+        + '<div class="produit-prix">' + rlkFmt(pf, 2) + ' FEY <span class="rlk-eur">ou ' + rlkFmt(pf * RLK.fey, 2) + ' €</span></div><div class="produit-footer"><div style="display:flex;gap:6px;align-items:center"><span class="badge ' + bF + '" title="Réservé aux commandes payées en FEY">FEY : ' + sFey + '</span><span class="badge ' + bE + '" title="Pour les commandes payées en euros (espèces ou chèque)">€ : ' + sEur + '</span>' + btn + '</div></div>' + adm + '</div></div>';
     }).join('');
   });
   rlkLoadPanye();
@@ -5167,6 +5174,12 @@ function rlkConfirmOrder() {
   if (!cart.length) { toast('Panier vide'); return; }
   var n = rlkCartN(), mode = rlkVal('cart-mode');
   if (mode === 'fey' && RLK.solde < n) { toast('Solde de FEY insuffisant'); return; }
+  var manque = null; cart.forEach(function(i) {
+    if (manque || !i.id || i.kind === 'abo') return;
+    var el = document.querySelector('.produit[data-id="' + i.id + '"]'); if (!el) return;
+    var dispo = Number(el.getAttribute(mode === 'fey' ? 'data-fey' : 'data-eur')); if (!isNaN(dispo) && i.qty > dispo) manque = {nom: i.nom, dispo: dispo};
+  });
+  if (manque) { toast('Stock ' + (mode === 'fey' ? 'FEY' : 'en euros') + ' insuffisant pour ' + manque.nom + ' (reste ' + manque.dispo + '). ' + (mode === 'fey' ? 'Essayez de payer en euros.' : 'Essayez de payer en FEY.')); return; }
   rlkEngage('Confirmer ma commande (' + rlkFmt(n, 2) + ' FEY)', function() {
     var lignes = cart.map(function(i) { return {id: i.id, nom: i.nom, qty: i.qty, fey: i.fey, kind: i.kind, extra: i.extra}; });
     var abos = cart.filter(function(i) { return i.kind === 'abo'; });
@@ -5249,7 +5262,7 @@ function rlkLoadArticlesAdmin() {
     el.innerHTML = RLK.artRows.length ? RLK.artRows.map(function(p) {
       var a = ar[p.id] || {};
       return '<div class="rlk-art"><div>' + (a.photo && rlkPhotos(a.photo)[0] ? '<img src="' + rlkPhotos(a.photo)[0] + '" alt="">' : '<div class="ph">' + (p.emoji || '🫙') + '</div>') + '</div>'
-        + '<div><b>' + rlkEsc(p.nom) + '</b>' + (p.actif ? '' : ' <span class="badge b-err">masqué</span>') + '<div class="rlk-note" style="margin:2px 0 0">' + rlkFmt(rlkPrixFey(a), 2) + ' FEY (' + rlkFmt(rlkPrixFey(a) * RLK.fey, 2) + ' €) · stock app ' + (st[p.id + 'app'] != null ? st[p.id + 'app'] : p.stock) + ' · stock Yapla ' + (st[p.id + 'yapla'] || 0) + '</div></div>'
+        + '<div><b>' + rlkEsc(p.nom) + '</b>' + (p.actif ? '' : ' <span class="badge b-err">masqué</span>') + '<div class="rlk-note" style="margin:2px 0 0">' + rlkFmt(rlkPrixFey(a), 2) + ' FEY (' + rlkFmt(rlkPrixFey(a) * RLK.fey, 2) + ' €) · stock app ' + (st[p.id + 'app'] != null ? st[p.id + 'app'] : p.stock) + ' · stock euros ' + (st[p.id + 'yapla'] || 0) + '</div></div>'
         + '<div style="display:flex;flex-direction:column;gap:6px"><button class="btn btn-outline btn-xs" onclick="rlkEditArticle(\'' + p.id + '\')">Modifier</button><button class="btn btn-ghost btn-xs" style="color:#B3261E" onclick="rlkDelArticle(\'' + p.id + '\')">Supprimer</button></div></div>';
     }).join('') : 'Aucun article. Ajoutez le premier.';
   });
@@ -9799,25 +9812,27 @@ var rlkShowReglaj54 = showReglaj;
 showReglaj = function(section) { rlkShowReglaj54(section); if (String(section) === 'benevolat') { rlkBvLoad(); rlkBenevRapport(); } };
 
 // ═══ v5.5 : le stock baisse quand la commande est prête, avec contrôle visible ═══
-function rlkStockDeduire(lignes) {
+function rlkStockDeduire(lignes, canal) {
+  canal = canal || 'app';
   var res = [];
   var jobs = (lignes || []).filter(function(l) { return l && l.id && l.kind !== 'abo'; }).map(function(l) {
-    return sb.from('rlk_stock').select('quantite').eq('produit_id', l.id).eq('canal', 'app').maybeSingle().then(function(r) {
+    return sb.from('rlk_stock').select('quantite').eq('produit_id', l.id).eq('canal', canal).maybeSingle().then(function(r) {
       var q = Number(l.qty) || 0;
       if (r.data) {
         var nv = Math.max(0, Number(r.data.quantite) - q);
-        return sb.from('rlk_stock').update({quantite: nv}).eq('produit_id', l.id).eq('canal', 'app').select().then(function(u) {
+        return sb.from('rlk_stock').update({quantite: nv}).eq('produit_id', l.id).eq('canal', canal).select().then(function(u) {
           if (u.error || !(u.data || []).length) { res.push({nom: l.nom, err: true}); return; }
-          sb.from('produits').update({stock: nv}).eq('id', l.id).then(function() {});
+          if (canal === 'app') sb.from('produits').update({stock: nv}).eq('id', l.id).then(function() {});
           res.push({nom: l.nom, de: r.data.quantite, a: nv});
         });
       }
+      if (canal !== 'app') { res.push({nom: l.nom, err: true}); return; }
       return sb.from('produits').select('stock').eq('id', l.id).maybeSingle().then(function(p) {
         if (!p.data) { res.push({nom: l.nom, non: true}); return; }
         var nv = Math.max(0, Number(p.data.stock || 0) - q);
         return sb.from('produits').update({stock: nv}).eq('id', l.id).select().then(function(u) {
           if (u.error || !(u.data || []).length) { res.push({nom: l.nom, err: true}); return; }
-          sb.from('rlk_stock').upsert([{produit_id: l.id, canal: 'app', quantite: nv}], {onConflict: 'produit_id,canal'}).then(function() {});
+          sb.from('rlk_stock').upsert([{produit_id: l.id, canal: canal, quantite: nv}], {onConflict: 'produit_id,canal'}).then(function() {});
           res.push({nom: l.nom, de: p.data.stock, a: nv});
         });
       });
@@ -9834,7 +9849,7 @@ rlkCmdStatut = function(id, statut) {
     if (statut === 'prete' && prev === 'en_attente') {
       if (c.stock_deduit) { toast('Commande prête (stock déjà déduit)'); rlkLoadCommandes(); return; }
       sb.from('rlk_commandes').update({stock_deduit: true}).eq('id', id).then(function() {});
-      rlkStockDeduire(c.lignes).then(function(r) {
+      rlkStockDeduire(c.lignes, c.mode_paiement === 'fey' ? 'app' : 'yapla').then(function(r) {
         var ok = r.filter(function(x) { return !x.err && !x.non; }), bad = r.filter(function(x) { return x.err; });
         toast(bad.length ? '⚠ Commande prête, mais stock NON mis à jour pour : ' + bad.map(function(x) { return x.nom; }).join(', ') + ' (modifiez-le dans Artik)' : (ok.length ? '✓ Prête. Stock : ' + ok.map(function(x) { return x.nom + ' ' + x.de + ' → ' + x.a; }).join(', ') : '✓ Commande prête (aucun produit à déduire)'));
         rlkLoadCommandes(); rlkLoadProduitsSafe();
@@ -9847,14 +9862,14 @@ rlkCmdStatut = function(id, statut) {
 function rlkLoadProduitsSafe() { try { if (typeof loadProduits === 'function') loadProduits(); } catch (e) {} }
 function rlkStockLive() {
   var box = document.getElementById('cmd-stock'); if (!box) return;
-  Promise.all([sb.from('produits').select('id,nom,stock,actif').eq('actif', true).order('nom'), sb.from('rlk_stock').select('*').eq('canal', 'app'), sb.from('rlk_commandes').select('lignes,statut,stock_deduit').eq('statut', 'en_attente').limit(500)]).then(function(rs) {
+  Promise.all([sb.from('produits').select('id,nom,stock,actif').eq('actif', true).order('nom'), sb.from('rlk_stock').select('*'), sb.from('rlk_commandes').select('lignes,statut,stock_deduit,mode_paiement').eq('statut', 'en_attente').limit(500)]).then(function(rs) {
     if (rs[0].error) { box.textContent = rlkErr(rs[0].error); return; }
-    var st = {}, att = {}; (rs[1].data || []).forEach(function(x) { st[x.produit_id] = Number(x.quantite); });
-    var nr = {}; (rs[2].data || []).forEach(function(c) { (c.lignes || []).forEach(function(l) { if (l.id && l.kind !== 'abo') { var q = Number(l.qty) || 0; att[l.id] = (att[l.id] || 0) + q; if (!c.stock_deduit) nr[l.id] = (nr[l.id] || 0) + q; } }); });
-    var rows = rs[0].data || [];
-    box.innerHTML = rows.length ? '<table class="rlk-tbl"><tr><th>Produit</th><th style="text-align:right">En stock</th><th style="text-align:right">À préparer</th><th style="text-align:right">Reste</th><th></th></tr>' + rows.map(function(p) {
-      var s = st[p.id] != null ? st[p.id] : Number(p.stock || 0), a = att[p.id] || 0, r = s - (nr[p.id] || 0);
-      return '<tr><td>' + rlkEsc(p.nom) + '</td><td style="text-align:right"><b>' + s + '</b></td><td style="text-align:right">' + (a || '·') + '</td><td style="text-align:right;color:' + (r < 0 ? '#B3261E' : r <= 3 ? '#b45309' : 'inherit') + '"><b>' + r + '</b></td><td style="text-align:right">' + (s > 0 ? '<button class="btn btn-outline btn-xs" onclick="rlkStockEpuise(\'' + p.id + '\')">Épuisé</button>' : '<span class="badge b-err">Épuisé</span>') + '</td></tr>';
+    var sf = {}, se = {}, af = {}, ae = {}; (rs[1].data || []).forEach(function(x) { (x.canal === 'yapla' ? se : sf)[x.produit_id] = Number(x.quantite); });
+    (rs[2].data || []).forEach(function(c) { (c.lignes || []).forEach(function(l) { if (l.id && l.kind !== 'abo') { var q = Number(l.qty) || 0, t = c.mode_paiement === 'fey' ? af : ae; t[l.id] = (t[l.id] || 0) + q; } }); });
+    var rows = rs[0].data || [], col = function(v) { return '<td style="text-align:right;color:' + (v <= 0 ? '#B3261E' : v <= 3 ? '#b45309' : 'inherit') + '"><b>' + v + '</b></td>'; };
+    box.innerHTML = rows.length ? '<table class="rlk-tbl"><tr><th>Produit</th><th style="text-align:right">Stock FEY</th><th style="text-align:right">à préparer</th><th style="text-align:right">Stock €</th><th style="text-align:right">à préparer</th><th></th></tr>' + rows.map(function(p) {
+      var f = sf[p.id] != null ? sf[p.id] : Number(p.stock || 0), e = se[p.id] != null ? se[p.id] : 0;
+      return '<tr><td>' + rlkEsc(p.nom) + '</td>' + col(f) + '<td style="text-align:right">' + (af[p.id] || '·') + '</td>' + col(e) + '<td style="text-align:right">' + (ae[p.id] || '·') + '</td><td style="text-align:right">' + (f > 0 || e > 0 ? '<button class="btn btn-outline btn-xs" onclick="rlkStockEpuise(\'' + p.id + '\')">Épuisé</button>' : '<span class="badge b-err">Épuisé</span>') + '</td></tr>';
     }).join('') + '</table>' : 'Aucun produit actif.';
   });
 }
@@ -9864,9 +9879,9 @@ rlkLoadCommandes = function() { rlkLoadCommandesOrig55.apply(this, arguments); r
 // ═══ v5.6 : marquer épuisé + plafond du panier au stock affiché ═══
 function rlkStockEpuise(pid) {
   if (!confirm('Marquer ce produit comme épuisé ? Il ne pourra plus être commandé. Pour le remettre en vente, saisissez un nouveau stock dans Artik.')) return;
-  Promise.all([sb.from('rlk_stock').update({quantite: 0}).eq('produit_id', pid).eq('canal', 'app'), sb.from('produits').update({stock: 0}).eq('id', pid)]).then(function(rs) {
+  Promise.all([sb.from('rlk_stock').update({quantite: 0}).eq('produit_id', pid), sb.from('produits').update({stock: 0}).eq('id', pid)]).then(function(rs) {
     if (rs[1].error) { toast(rlkErr(rs[1].error)); return; }
-    sb.from('rlk_stock').upsert([{produit_id: pid, canal: 'app', quantite: 0}], {onConflict: 'produit_id,canal'}).then(function() {
+    sb.from('rlk_stock').upsert([{produit_id: pid, canal: 'app', quantite: 0}, {produit_id: pid, canal: 'yapla', quantite: 0}], {onConflict: 'produit_id,canal'}).then(function() {
       toast('Produit marqué épuisé'); rlkStockLive(); rlkLoadProduitsSafe();
     });
   });
@@ -9894,6 +9909,155 @@ function rlkCmdAnnuler(id) {
     rlkLoadCommandes(); rlkLoadProduitsSafe(); if (typeof rlkLoadSolde === 'function') rlkLoadSolde();
   });
 }
+
+// ═══ v5.9 : factures numérotées pour les paiements en euros, envoyées par mail ═══
+var RLK_FP = {fact_nom: 'fp-nom', fact_adresse: 'fp-adr', fact_siret: 'fp-siret', fact_rna: 'fp-rna', fact_mention_tva: 'fp-tva', fact_pied: 'fp-pied'};
+function rlkFactParamsLoad() {
+  sb.from('rlk_params').select('cle,valeur').like('cle', 'fact\\_%').then(function(r) {
+    (r.data || []).forEach(function(x) { var el = document.getElementById(RLK_FP[x.cle]); if (el) el.value = x.valeur || ''; });
+  });
+}
+function rlkFactParamsSave() {
+  var rows = Object.keys(RLK_FP).map(function(k) { return {cle: k, valeur: rlkVal(RLK_FP[k]).trim()}; });
+  sb.from('rlk_params').upsert(rows, {onConflict: 'cle'}).then(function(r) { toast(r.error ? rlkErr(r.error) : 'Informations de facturation enregistrées'); });
+}
+function rlkCmdRegle(id, mode) {
+  var c = (RLK.cmds || []).filter(function(x) { return x.id === id; })[0]; if (!c) return;
+  sb.from('rlk_params').select('valeur').eq('cle', 'fact_mention_tva').maybeSingle().then(function(m) {
+    if (!m.data || !String(m.data.valeur || '').trim()) { toast('Renseignez d\'abord la mention de TVA dans « Facturation » (en haut de cette page)'); var el = document.getElementById('fp-tva'); if (el) { el.scrollIntoView({block: 'center'}); el.focus(); } return; }
+    if (!confirm('Commande réglée en ' + mode + ' (' + rlkFmt(c.total_eur, 2) + ' €) ?\nUne facture numérotée sera créée et envoyée par mail. Le numéro ne pourra plus être supprimé.')) return;
+    sb.rpc('rlk_emettre_facture', {p_commande: id, p_mode: mode}).then(function(r) {
+      if (r.error) { toast(rlkErr(r.error)); return; }
+      rlkLoadCommandes();
+      rlkFactEnvoyer(r.data, true);
+    });
+  });
+}
+function rlkFactEnvoyer(f, nouvelle) {
+  var pdf = null; try { pdf = rlkFactPdf(f, true); } catch (e) { pdf = null; }
+  sb.functions.invoke('send-facture', {body: {facture_id: f.id, pdf_base64: pdf}}).then(function(r) {
+    var msg = r.error ? (r.error.message || 'erreur') : (r.data && r.data.error);
+    if (msg) toast('Facture ' + f.numero + ' enregistrée, mais mail NON envoyé : ' + msg + '. Utilisez « Renvoyer » dans la liste.');
+    else toast('✓ Facture ' + f.numero + ' envoyée à ' + (f.client_email || 'l\'adhérent'));
+    rlkFactList();
+  });
+}
+function rlkFactPdf(f, b64) {
+  var J = window.jspdf && window.jspdf.jsPDF; if (!J) throw new Error('jsPDF indisponible');
+  var d = new J({unit: 'mm', format: 'a4'}), em = f.emetteur || {}, y = 18, eur = function(n) { return Number(n).toFixed(2).replace('.', ',') + ' EUR'; }, jr = function(x) { return x ? new Date(x + 'T12:00:00').toLocaleDateString('fr-FR') : ''; };
+  d.setFontSize(15); d.setFont('helvetica', 'bold'); d.text(String(em.fact_nom || 'Rézo la Kour'), 15, y);
+  d.setFontSize(9); d.setFont('helvetica', 'normal'); d.text([String(em.fact_adresse || ''), 'SIRET ' + (em.fact_siret || '') + (em.fact_rna ? ' · RNA ' + em.fact_rna : '')], 15, y + 6);
+  d.setFontSize(16); d.setFont('helvetica', 'bold'); d.text('FACTURE', 195, y, {align: 'right'});
+  d.setFontSize(10); d.setFont('helvetica', 'normal'); d.text(['N° ' + f.numero, 'Émise le ' + jr(f.date_emission), 'Date de la vente : ' + jr(f.date_vente)], 195, y + 7, {align: 'right'});
+  y = 52; d.setFont('helvetica', 'bold'); d.text('Client', 15, y); d.setFont('helvetica', 'normal'); d.text([String(f.client_nom || ''), String(f.client_adresse || ''), String(f.client_email || '')], 15, y + 5);
+  y = 78; d.setFillColor(238, 238, 238); d.rect(15, y - 5, 180, 7, 'F'); d.setFont('helvetica', 'bold');
+  d.text('Désignation', 17, y); d.text('Qté', 120, y, {align: 'right'}); d.text('Prix unit.', 150, y, {align: 'right'}); d.text('Total', 193, y, {align: 'right'}); d.setFont('helvetica', 'normal');
+  (f.lignes || []).forEach(function(l) { y += 7; d.text(String(l.nom || '').slice(0, 60), 17, y); d.text(String(l.qty), 120, y, {align: 'right'}); d.text(eur(l.pu), 150, y, {align: 'right'}); d.text(eur(l.total), 193, y, {align: 'right'}); });
+  y += 10; d.line(15, y - 5, 195, y - 5); d.setFont('helvetica', 'bold'); d.setFontSize(11); d.text('Total à payer : ' + eur(f.total_eur), 193, y, {align: 'right'});
+  d.setFont('helvetica', 'normal'); d.setFontSize(9); y += 10;
+  d.text(d.splitTextToSize(String(f.mention_tva || ''), 180), 15, y); y += 10;
+  d.text('Nature de l\'opération : livraison de biens.', 15, y); y += 5;
+  d.text('Facture réglée le ' + jr(f.date_reglement) + ' en ' + f.mode_reglement + '.', 15, y); y += 12;
+  d.setFont('helvetica', 'bold'); d.setFontSize(10); d.text(String(em.fact_pied || 'Merci pour votre achat, à très bientôt.'), 15, y);
+  if (b64) return d.output('datauristring').split(',')[1];
+  d.save(f.numero + '.pdf');
+}
+function rlkFactList() {
+  var box = document.getElementById('fact-list'); if (!box) return;
+  sb.from('rlk_factures').select('*').order('seq', {ascending: false}).limit(200).then(function(r) {
+    if (r.error) { box.textContent = rlkErr(r.error); return; }
+    RLK.facts = r.data || [];
+    box.innerHTML = RLK.facts.length ? '<div style="overflow:auto"><table class="rlk-tbl"><tr><th>N°</th><th>Date</th><th>Client</th><th style="text-align:right">Total</th><th>Mail</th><th></th></tr>' + RLK.facts.map(function(f) {
+      return '<tr><td><b>' + rlkEsc(f.numero) + '</b></td><td>' + rlkDate(f.date_emission) + '</td><td>' + rlkEsc(f.client_nom || '') + '</td><td style="text-align:right">' + rlkFmt(f.total_eur, 2) + ' €</td><td>' + (f.envoye_le ? '<span class="badge b-ok">envoyée</span>' : '<span class="badge b-err" title="' + rlkEsc(f.envoi_erreur || '') + '">non envoyée</span>') + '</td>'
+        + '<td style="white-space:nowrap"><button class="btn btn-ghost btn-xs" onclick="rlkFactDl(\'' + f.id + '\')">PDF</button> <button class="btn btn-ghost btn-xs" onclick="rlkFactRenvoyer(\'' + f.id + '\')">Renvoyer</button> <button class="btn btn-ghost btn-xs" onclick="rlkFactEdit(\'' + f.id + '\')">Modifier</button></td></tr>';
+    }).join('') + '</table></div>' : 'Aucune facture pour le moment.';
+  });
+}
+function rlkFactGet(id) { return (RLK.facts || []).filter(function(x) { return x.id === id; })[0]; }
+function rlkFactDl(id) { var f = rlkFactGet(id); if (f) try { rlkFactPdf(f, false); } catch (e) { toast('PDF indisponible : ' + e.message); } }
+function rlkFactRenvoyer(id) { var f = rlkFactGet(id); if (f && confirm('Renvoyer la facture ' + f.numero + ' à ' + (f.client_email || '(pas d\'adresse mail)') + ' ?')) rlkFactEnvoyer(f, false); }
+function rlkFactEdit(id) {
+  var f = rlkFactGet(id); if (!f) return;
+  var nom = prompt('Nom du client', f.client_nom || ''); if (nom === null) return;
+  var adr = prompt('Adresse du client', f.client_adresse || ''); if (adr === null) return;
+  var mail = prompt('Adresse mail du client', f.client_email || ''); if (mail === null) return;
+  var note = prompt('Note interne (facultatif)', f.notes || ''); if (note === null) return;
+  sb.from('rlk_factures').update({client_nom: nom.trim(), client_adresse: adr.trim(), client_email: mail.trim(), notes: note.trim()}).eq('id', id).then(function(r) { toast(r.error ? rlkErr(r.error) : 'Facture mise à jour (numéro et montants restent verrouillés)'); rlkFactList(); });
+}
+function rlkFactCsv() {
+  var L = [['Numéro', 'Date d\'émission', 'Date de règlement', 'Client', 'Adresse', 'Mode de règlement', 'Total TTC (€)', 'Mention TVA', 'Détail', 'Note'], ].map(function(r) { return r.join(';'); });
+  var esc = function(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; };
+  L = [['Numéro', 'Date d\'émission', 'Date de règlement', 'Client', 'Adresse', 'Mode de règlement', 'Total TTC (€)', 'Mention TVA', 'Détail', 'Note'].map(esc).join(';')];
+  (RLK.facts || []).slice().reverse().forEach(function(f) { L.push([f.numero, f.date_emission, f.date_reglement, f.client_nom, f.client_adresse, f.mode_reglement, String(f.total_eur).replace('.', ','), f.mention_tva, (f.lignes || []).map(function(l) { return l.qty + ' x ' + l.nom; }).join(' ; '), f.notes].map(esc).join(';')); });
+  var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + L.join('\n')], {type: 'text/csv'})); a.download = 'factures.csv'; a.click();
+}
+var rlkLoadCommandesOrig59 = rlkLoadCommandes;
+rlkLoadCommandes = function() { rlkLoadCommandesOrig59.apply(this, arguments); if (!RLK._fpLoaded) { RLK._fpLoaded = true; rlkFactParamsLoad(); } rlkFactList(); };
+
+// ═══ v6.0 : planning présenté comme un agenda (cases par poste et par créneau, clic pour le détail) ═══
+RLK.plDay = RLK.plDay || {}; RLK.plSheet = null;
+function rlkPlJourCourt(j) { return new Date(j + 'T12:00:00+04:00').toLocaleDateString('fr-FR', {weekday: 'short', day: 'numeric', month: 'short', timeZone: RLK_PL_TZ}).replace('.', ''); }
+rlkPlDetail = function(pl, cr, mine) {
+  var P = RLK.pl, uid = currentUser.id, postes = P.postes.filter(function(x) { return x.planning_id === pl.id; }).sort(function(a, b) { return (a.ordre || 0) - (b.ordre || 0); });
+  var jours = {}; cr.forEach(function(c) { (jours[plJour(c.debut)] = jours[plJour(c.debut)] || []).push(c); });
+  var js = Object.keys(jours).sort(); if (!js.length) return '<div class="rlk-note" style="margin-top:10px">Aucun créneau pour le moment.</div>';
+  var today = plJour(new Date().toISOString()), jour = RLK.plDay[pl.id];
+  if (js.indexOf(jour) < 0) { jour = js.indexOf(today) >= 0 ? today : (js.filter(function(j) { return j >= today; })[0] || js[0]); RLK.plDay[pl.id] = jour; }
+  var h = '<div style="margin-top:12px">';
+  if (mine.length) h += '<div class="rlk-ok" style="margin-bottom:10px"><b>Mes créneaux</b><br>' + mine.slice().sort(function(a, b) { return new Date(a.debut) - new Date(b.debut); }).map(function(c) { var po = postes.filter(function(x) { return x.id === c.poste_id; })[0]; return '<a href="#" style="color:inherit" onclick="rlkPlCell(\'' + c.id + '\');return false">' + rlkPlJourCourt(plJour(c.debut)) + ' · ' + plH(c.debut) + ' à ' + plH(c.fin) + ' · ' + rlkEsc(po ? po.nom : '') + '</a>'; }).join('<br>') + '</div>';
+  h += '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">' + js.map(function(j) {
+    var m = jours[j].filter(function(c) { return rlkPlEtat(c).manque > 0; }).length;
+    return '<button type="button" class="rlk-chip' + (j === jour ? ' on' : '') + '" onclick="RLK.plDay[\'' + pl.id + '\']=\'' + j + '\';rlkPlRender()">' + rlkPlJourCourt(j) + (m ? ' <span style="background:#B3261E;color:#fff;border-radius:99px;padding:0 6px;font-size:.72rem">' + m + '</span>' : ' ✓') + '</button>';
+  }).join('') + '</div>';
+  h += '<div style="display:flex;gap:12px;flex-wrap:wrap;font-size:.75rem;margin-bottom:8px"><span><i style="display:inline-block;width:11px;height:11px;border-radius:3px;background:#FDECEA;border:2px solid #B3261E;vertical-align:-1px"></i> Il manque du monde</span><span><i style="display:inline-block;width:11px;height:11px;border-radius:3px;background:#E7F4EC;border:2px solid #1b7a4a;vertical-align:-1px"></i> Couvert</span><span><i style="display:inline-block;width:11px;height:11px;border-radius:3px;background:#fff;border:3px solid #1A3D2B;vertical-align:-1px"></i> Vous êtes inscrit</span></div>';
+  var cells = jours[jour].slice().sort(function(a, b) { return new Date(a.debut) - new Date(b.debut); }), bset = {};
+  cells.forEach(function(c) { bset[+new Date(c.debut)] = 1; bset[+new Date(c.fin)] = 1; });
+  var B = Object.keys(bset).map(Number).sort(function(a, b) { return a - b; }), bi = {}; B.forEach(function(t, i) { bi[t] = i; });
+  var cols = [], col = 2;
+  postes.forEach(function(po) {
+    var l = cells.filter(function(c) { return c.poste_id === po.id; }); if (!l.length) return;
+    var lanes = []; l.forEach(function(c) { var a = +new Date(c.debut), k = 0; while (k < lanes.length && lanes[k] > a) k++; lanes[k] = +new Date(c.fin); c._lane = k; });
+    cols.push({po: po, start: col, n: lanes.length, list: l}); col += lanes.length;
+  });
+  var nb = B.length - 1;
+  h += '<div style="overflow-x:auto"><div style="display:grid;grid-template-columns:42px repeat(' + (col - 2) + ',minmax(86px,1fr));grid-template-rows:auto repeat(' + nb + ',minmax(58px,auto)) 14px;gap:4px;min-width:' + (42 + (col - 2) * 90) + 'px">';
+  cols.forEach(function(k) { h += '<div style="grid-row:1;grid-column:' + k.start + ' / span ' + k.n + ';text-align:center;font-weight:700;font-size:.9rem;padding:4px 0;border-bottom:2px solid var(--border)">' + rlkEsc(k.po.nom) + '</div>'; });
+  B.forEach(function(t, i) { h += '<div style="grid-row:' + (i + 2) + ';grid-column:1;font-size:.74rem;color:#666;text-align:right;padding-right:4px;' + (i < nb ? 'border-top:1px dashed #ddd' : '') + '">' + plH(new Date(t).toISOString()) + '</div>'; });
+  cols.forEach(function(k) {
+    k.list.forEach(function(c) {
+      var e = rlkPlEtat(c), ins = P.insc.filter(function(i) { return i.creneau_id === c.id; }), est = ins.some(function(i) { return i.user_id === uid; });
+      var bg = e.manque ? '#FDECEA' : '#E7F4EC', bd = e.manque ? '#B3261E' : '#1b7a4a', r1 = bi[+new Date(c.debut)] + 2, r2 = bi[+new Date(c.fin)] + 2;
+      h += '<div onclick="rlkPlCell(\'' + c.id + '\')" role="button" tabindex="0" style="grid-row:' + r1 + ' / ' + r2 + ';grid-column:' + (k.start + c._lane) + ';background:' + bg + ';border:2px solid ' + bd + ';' + (est ? 'outline:3px solid #1A3D2B;outline-offset:1px;' : '') + 'border-radius:9px;padding:6px 7px;cursor:pointer;overflow:hidden;display:flex;flex-direction:column;gap:2px;min-height:0">'
+        + '<div style="font-weight:700;font-size:.85rem;line-height:1.15">' + rlkEsc(k.po.nom) + (est ? ' ✔' : '') + '</div>'
+        + (ins.length ? '<div style="font-size:.76rem;line-height:1.2;word-break:break-word">' + ins.map(function(i) { return rlkEsc(i.prenom); }).join(', ') + '</div>' : '')
+        + (e.manque ? '<div style="font-size:.74rem;color:#B3261E;font-weight:700">＋ ' + e.manque + (ins.length ? ' à trouver' : ' personne' + (e.manque > 1 ? 's' : '')) + '</div>' : '') + '</div>';
+    });
+  });
+  h += '</div></div></div>';
+  return h;
+};
+function rlkPlCell(cid) { RLK.plSheet = cid; rlkPlSheetShow(); }
+function rlkPlSheetClose() { RLK.plSheet = null; var s = document.getElementById('pl-sheet'); if (s) s.remove(); }
+function rlkPlSheetShow() {
+  var old = document.getElementById('pl-sheet'); if (old) old.remove();
+  var P = RLK.pl, cid = RLK.plSheet; if (!P || !cid) return;
+  var c = P.creneaux.filter(function(x) { return x.id === cid; })[0]; if (!c) { RLK.plSheet = null; return; }
+  var po = P.postes.filter(function(x) { return x.id === c.poste_id; })[0] || {}, adm = rlkIsAdmin(), uid = currentUser && currentUser.id;
+  var e = rlkPlEtat(c), ins = P.insc.filter(function(i) { return i.creneau_id === cid; }), mon = ins.filter(function(i) { return i.user_id === uid; })[0], est = !!mon;
+  var col = e.manque ? '#B3261E' : '#1b7a4a';
+  var act = est ? '<button class="btn btn-ghost" style="width:100%" type="button" onclick="rlkPlLeave(\'' + mon.id + '\')">Annuler mon inscription</button>' : (e.complet ? '<div class="badge b-err" style="display:block;text-align:center;padding:10px">Complet</div>' : '<button class="btn btn-primary" style="width:100%;padding:12px" type="button" onclick="rlkPlJoin(\'' + c.id + '\')">Je m\'inscris</button>');
+  var h = '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px"><div><div style="font-size:1.15rem;font-weight:800">' + rlkEsc(po.nom || '') + (c.note ? ' <span style="font-weight:400;font-size:.9rem">(' + rlkEsc(c.note) + ')</span>' : '') + '</div><div class="rlk-note" style="margin:2px 0">' + plJourLib(plJour(c.debut)) + ' · ' + plH(c.debut) + ' à ' + plH(c.fin) + '</div></div><button type="button" class="btn btn-ghost btn-xs" onclick="rlkPlSheetClose()" aria-label="Fermer">✕</button></div>'
+    + '<div style="font-size:.85rem;color:' + col + ';font-weight:700;margin:6px 0">' + (e.manque ? 'Il manque ' + e.manque + ' personne' + (e.manque > 1 ? 's' : '') : (e.complet ? 'Complet' : 'Couvert')) + ' · ' + e.n + '/' + (c.min_pers || 0) + ' minimum' + (c.max_pers != null ? ', ' + c.max_pers + ' maximum' : '') + '</div>'
+    + '<div style="margin:8px 0"><b>Inscrits :</b> ' + (ins.length ? ins.map(function(i) { return rlkEsc(i.prenom) + (adm ? ' <a href="#" style="color:var(--red)" onclick="rlkPlRetire(\'' + i.id + '\');return false" title="Retirer">×</a>' : ''); }).join(', ') : '<span class="rlk-note" style="margin:0">personne pour l\'instant</span>') + '</div>'
+    + '<div style="margin:10px 0">' + act + '</div>' + rlkPlMatHtml(c, ins, est, adm)
+    + (adm ? '<div style="margin-top:10px;display:flex;gap:12px;flex-wrap:wrap"><a href="#" style="font-size:.85rem" onclick="rlkPlAjoutPers(\'' + c.id + '\');return false">+ ajouter quelqu\'un</a><a href="#" style="font-size:.85rem" onclick="rlkPlMinMax(\'' + c.id + '\');return false">Modifier min/max</a><a href="#" style="font-size:.85rem;color:var(--red)" onclick="rlkPlCrenSuppr(\'' + c.id + '\');return false">Supprimer ce créneau</a></div>' : '');
+  var d = document.createElement('div'); d.id = 'pl-sheet'; d.setAttribute('style', 'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:2000;display:flex;align-items:flex-end;justify-content:center');
+  d.onclick = function(ev) { if (ev.target === d) rlkPlSheetClose(); };
+  d.innerHTML = '<div style="background:#fff;width:100%;max-width:540px;max-height:88vh;overflow:auto;border-radius:18px 18px 0 0;padding:16px 16px 24px;box-shadow:0 -6px 24px rgba(0,0,0,.2)">' + h + '</div>';
+  document.body.appendChild(d);
+}
+var rlkPlRenderOrig60 = rlkPlRender;
+rlkPlRender = function() { rlkPlRenderOrig60.apply(this, arguments); if (RLK.plSheet) rlkPlSheetShow(); };
 </script>
 
 
